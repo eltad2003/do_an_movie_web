@@ -2,7 +2,7 @@ import React from 'react'
 
 const Login = () => {
     return (
-        <div className='login-form'>
+        <div className='auth-form'>
             {/* login form  */}
             <form>
                 <h2 >Đăng nhập</h2>
@@ -19,7 +19,7 @@ const Login = () => {
                 <button type="button" className='btn w-full'> Đăng nhập bằng Google</button>
                 <div className='flex items-center justify-center'>
                     <p className='text-white/50'>Bạn mới sử dụng ChillFilx?</p>
-                    <a href="" className='text-light-100 font-bold'>Đăng ký ngay.</a>
+                    <a href="/register" className='text-light-100 font-bold'>Đăng ký ngay.</a>
                 </div>
             </form>
 

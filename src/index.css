@@ -57,7 +57,7 @@
         @apply inline-block rounded-xl bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-1 text-lg font-semibold text-dark-100 transition hover:opacity-90 cursor-pointer;
     }
 
-    .login-form {
+    .auth-form {
         @apply flex items-center justify-center h-screen;
 
         & input {
@@ -69,7 +69,19 @@
         }
 
         & form {
-            @apply p-5 space-y-5 bg-dark-100 rounded-xl shadow-md w-[360px] ;
+            @apply p-5 space-y-5 bg-dark-100 rounded-xl shadow-md w-[360px];
+        }
+    }
+
+    .pagination {
+        @apply flex items-center justify-center space-x-2 my-5;
+
+        & button {
+            @apply px-3 py-1 rounded border border-light-100/20 text-light-100 hover:bg-light-100/20 transition cursor-pointer;
+
+            &.active {
+                @apply bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 border-none;
+            }
         }
     }
 }

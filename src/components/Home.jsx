@@ -1,52 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import Loading from './Button/Loading'
+
+import Loading from './UI/Loading'
 import MovieCard from './MovieCard'
 import Search from './Search'
 import { Link } from 'react-router-dom'
+import { useMovies } from '../hooks/useMovies'
+import { useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 
 const Home = () => {
-  const [listMovies, setListMovies] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const { listMovies, isLoading, errorMessage } = useMovies(currentPage)
 
-  const fetchMovies = async () => {
-    setIsLoading(true)
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/danh-sach/phim-moi-cap-nhat-v2?page=1`)
-      if (!res.ok) {
-        throw new Error('Failed to fetch movies')
-      }
-      const data = await res.json()
-      setListMovies(data.items)
-      console.log(data.items);
 
-    } catch (error) {
-      setErrorMessage(error.message)
-    } finally {
-      setIsLoading(false)
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
   }
-  useEffect(() => {
-    fetchMovies()
-  }, [])
-
   return (
     <main>
       <div></div>
       <div className='container mx-auto flex flex-col p-5'>
-
         <header className='space-y-9 mb-20'>
-          <div className='flex justify-between items-center'>
+          <nav className='flex justify-between items-center'>
             <p className='text-white text-2xl font-bold cursor-pointer'>CHILLFLIX</p>
             <Link to="/login" className='btn'>Đăng nhập</Link>
-          </div>
+          </nav>
           <h1>Tìm và thưởng thức những bộ phim hay nhất.</h1>
           <Search />
         </header>
 
         <section className='space-y-9'>
-          <h2 className='text-light-100'>Danh sách phim</h2>
+          <h2 className='text-light-100'>Danh sách phim mới</h2>
           {isLoading ? (
             <Loading />
           ) : errorMessage ? (
@@ -59,7 +43,20 @@ const Home = () => {
             </ul>
           )}
         </section>
-
+        <div className="pagination">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className='w-4 h-4' />
+          </button>
+          <span className='text-light-100'>{currentPage}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            <ChevronRight className='w-4 h-4' />
+          </button>
+        </div>
       </div>
     </main>
   )
