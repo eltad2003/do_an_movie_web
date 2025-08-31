@@ -20,7 +20,7 @@ const DetailMovie = () => {
                 {detailMovie && (
                     <div className='container mx-auto flex flex-col p-5'>
                         <InfoMovie detailMovie={detailMovie} />
-                        <Episodes episodes={episodes} />
+                        <Episodes episodes={episodes} detailMovie={detailMovie} />
                         <Comment />
                     </div>
                 )}

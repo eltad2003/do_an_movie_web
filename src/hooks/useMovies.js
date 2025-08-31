@@ -3,6 +3,7 @@ import { movieService } from '../services/movieService'
 
 export const useMovies = (page = 1) => {
     const [listMovies, setListMovies] = useState([])
+    const [totalPages, setTotalPages] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
 
@@ -12,6 +13,7 @@ export const useMovies = (page = 1) => {
                 setIsLoading(true)
                 const data = await movieService.getMovies(page)
                 setListMovies(data.items || [])
+                setTotalPages(data.pagination.totalPages || 0)
             } catch (err) {
                 setErrorMessage(err.message)
             } finally {
@@ -22,5 +24,5 @@ export const useMovies = (page = 1) => {
         fetchMovies()
     }, [page])
 
-    return { listMovies, isLoading, errorMessage }
+    return { listMovies, totalPages, isLoading, errorMessage }
 }

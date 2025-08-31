@@ -53,9 +53,9 @@ const Comment = () => {
             </div>
 
             {/* Load More */}
-            <button className='mt-6 w-full py-3 border border-gray-700 rounded-lg hover:bg-gray-800 transition text-gray-300'>
+            {/* <button className='btn mt-6 w-full border rounded-lg  '>
                 Xem thêm bình luận
-            </button>
+            </button> */}
         </div>
     )
 }

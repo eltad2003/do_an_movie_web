@@ -12,5 +12,6 @@ export const api = {
             console.error('API Error:', error)
             throw error
         }
-    }
+    },
+
 }

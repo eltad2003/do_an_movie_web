@@ -2,7 +2,8 @@ import { Play } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Episodes = ({ episodes, detailMovie: { slug } }) => {
+const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
+
     const [selectedServer, setSelectedServer] = useState(0)
     const handleChangeServer = (e) => {
         setSelectedServer(e.target.value)
@@ -28,7 +29,7 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
                     <Link
                         to={`/xem-phim/${slug}?ver=${selectedServer}&ep=${ep.slug}`}
                         key={idx}
-                        className='text-sm px-3 py-2 rounded-lg bg-gray-800 inline-flex cursor-pointer gap-2 items-center justify-center hover:bg-gray-700 transition'
+                        className={`text-sm px-3 py-2 rounded-lg ${ep.slug === epSlug ? 'bg-yellow-700' : 'bg-gray-800'} inline-flex cursor-pointer gap-2 items-center justify-center hover:bg-gray-700 transition`}
                     >
                         <Play className='w-4 h-4' />
                         {ep.name}
@@ -39,4 +40,4 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
     )
 }
 
-export default Episodes
+export default ListEpisode
