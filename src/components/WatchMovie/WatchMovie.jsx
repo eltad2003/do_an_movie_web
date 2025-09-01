@@ -20,8 +20,8 @@ const WatchMovie = () => {
       {isLoading && <Loading />}
       {errorMessage && <p className="text-red-500 text-center p-5">{errorMessage}</p>}
       {detailMovie && (
-        <div className='container mx-auto flex flex-col p-5'>
-          <header className='flex items-center gap-3 mb-5'>
+        <div className='wrapper'>
+          <header className='flex items-center gap-3 mb-20'>
             <Link to={`/phim/${detailMovie.slug}`}>
               <button className='text-dark font-bold btn'><ChevronLeft className='w-5 h-5' /></button>
             </Link>

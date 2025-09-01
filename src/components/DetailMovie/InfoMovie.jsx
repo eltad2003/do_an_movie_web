@@ -3,7 +3,7 @@ import React from 'react'
 import InfoItem from './InfoItem'
 import { Link } from 'react-router-dom'
 
-const InfoMovie = ({ detailMovie }) => {
+const InfoMovie = ({ detailMovie, episodes }) => {
     const type = {
         generes: 'Thể loại',
         content: 'Nội dung',
@@ -48,7 +48,7 @@ const InfoMovie = ({ detailMovie }) => {
                             alt="thumb"
                             className="w-full h-auto max-h-[550px] rounded-lg object-cover shadow-lg"
                         />
-                        <Link to={`/xem-phim/${detailMovie.slug}`}>
+                        <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0].server_data[0].slug}`}>
                             <button className="z-10 absolute bottom-4 left-4 cursor-pointer bg-gray-900/60 font-bold gap-2 px-4 py-2 inline-flex items-center text-white rounded-full hover:bg-gray-500/60 transition">
                                 <Play className="w-4 h-4" /> Xem ngay
                             </button>

@@ -18,8 +18,8 @@ const DetailMovie = () => {
                 {isLoading && <Loading />}
                 {errorMessage && <p>Error: {errorMessage}</p>}
                 {detailMovie && (
-                    <div className='container mx-auto flex flex-col p-5'>
-                        <InfoMovie detailMovie={detailMovie} />
+                    <div className='wrapper'>
+                        <InfoMovie detailMovie={detailMovie} episodes={episodes}/>
                         <Episodes episodes={episodes} detailMovie={detailMovie} />
                         <Comment />
                     </div>

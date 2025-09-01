@@ -17,7 +17,7 @@
 
     --breakpoint-xs: 480px;
 
-    --background-image-hero-pattern: url("/hero-bg.png");
+    --background-image-hero-pattern: url("/bg-hero.jpg");
 }
 
 @layer base {
@@ -54,7 +54,15 @@
 
 @layer components {
     .btn {
-        @apply inline-block rounded-xl bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-1 text-lg font-semibold text-dark-100 transition hover:opacity-90 cursor-pointer;
+        @apply inline-block rounded-xl bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-1 text-lg font-semibold text-dark-100 transition hover:opacity-70 cursor-pointer;
+    }
+
+    .pattern {
+        @apply bg-hero-pattern w-full h-full bg-center bg-cover absolute z-0;
+    }
+
+    .wrapper {
+        @apply container mx-auto flex flex-col p-5 z-10 relative
     }
 
     .auth-form {

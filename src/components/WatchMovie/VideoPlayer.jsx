@@ -4,7 +4,7 @@ const VideoPlayer = ({ videoUrl }) => {
 
 
     return (
-        <div className='w-full aspect-video mb-8'>
+        <div className='w-full aspect-video mb-20'>
             <iframe
                 src={videoUrl}
                 className='w-full h-full'

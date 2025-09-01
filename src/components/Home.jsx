@@ -2,10 +2,8 @@
 import Loading from './UI/Loading'
 import MovieCard from './MovieCard'
 import Search from './Search'
-import { Link } from 'react-router-dom'
 import { useMovies } from '../hooks/useMovies'
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Pagination from './Pagination'
 
 
@@ -15,14 +13,15 @@ const Home = () => {
 
   return (
     <main>
-      <div></div>
-      <div className='container mx-auto flex flex-col p-5'>
+      <div className='pattern' />
+      <div className='wrapper'>
+        {/* section search */}
         <header className='space-y-9 mb-20'>
-
           <h1>Tìm và thưởng thức những bộ phim hay nhất.</h1>
           <Search />
         </header>
 
+        {/* section all movie */}
         <section className='space-y-9'>
           <h2 className='text-light-100'>Danh sách phim mới</h2>
           {isLoading ? (
@@ -36,8 +35,9 @@ const Home = () => {
               ))}
             </ul>
           )}
+          <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </section>
-        <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+        
       </div>
     </main>
   )

@@ -26,3 +26,81 @@ export const useMovies = (page = 1) => {
 
     return { listMovies, totalPages, isLoading, errorMessage }
 }
+
+export const useNav = () => {
+    const [categories, setCategories] = useState([])
+    const [countries, setCountries] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [dataCategories, dataCountries] = await Promise.all([
+                    movieService.getCategories(),
+                    movieService.getCountries()
+
+                ])
+                setCategories(dataCategories || [])
+                setCountries(dataCountries || [])
+            } catch (error) {
+                console.error('Error fetching categories:', error)
+            }
+        }
+        fetchData()
+    }, [])
+    return { categories, countries }
+}
+
+export const useMovieByCategory = (slugCat, page = 1) => {
+    const [listMovies, setListMovies] = useState([])
+    const [data, setData] = useState(null)
+    const [totalPages, setTotalPages] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState(null)
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                setIsLoading(true)
+                const data = await movieService.moviesByCategory(slugCat, page)
+                setListMovies(data.data.items || [])
+                setTotalPages(data.data.params.pagination.totalPages || 0)
+                setData(data.data)
+
+            } catch (err) {
+                setErrorMessage(err.message)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchMovies()
+    }, [page, slugCat])
+    return { listMovies, data, totalPages, isLoading, errorMessage }
+}
+export const useMovieByCountry = (slugCountry, page = 1) => {
+    const [listMovies, setListMovies] = useState([])
+    const [data, setData] = useState(null)
+    const [totalPages, setTotalPages] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState(null)
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                setIsLoading(true)
+                const data = await movieService.moviesByCountry(slugCountry, page)
+                setListMovies(data.data.items || [])
+                setTotalPages(data.data.params.pagination.totalPages || 0)
+                setData(data.data)
+
+            } catch (err) {
+                setErrorMessage(err.message)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchMovies()
+    }, [page, slugCountry])
+    return { listMovies, data, totalPages, isLoading, errorMessage }
+}
