@@ -8,6 +8,7 @@ import WatchMovie from './components/WatchMovie/WatchMovie'
 import Register from './components/Auth/Register'
 import Navbar from './components/Layout/navbar'
 import Main from './components/Layout/Main'
+import SearchResults from './components/SearchResults'
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/phim/:slug" element={<DetailMovie />} />
           <Route path="/xem-phim/:slug" element={< WatchMovie />} />
+          <Route path="/tim-kiem" element={<SearchResults />} />
           <Route path="*" element={<NotFound />} />
         </Route>
 

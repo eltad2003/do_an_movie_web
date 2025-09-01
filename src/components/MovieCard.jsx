@@ -1,12 +1,15 @@
 import { Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-const MovieCard = ({ movie: { tmdb, name, poster_url, origin_name, year,slug } }) => {
+const MovieCard = ({ movie: { tmdb, name, poster_url, origin_name, year, slug } }) => {
+    const posterUrl = poster_url?.startsWith('https://phimimg.com/')
+        ? poster_url
+        : `https://phimimg.com/${poster_url || ''}`
 
     return (
         <div className='bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10 hover:shadow-light-100/20 transition cursor-pointer'>
             <Link to={`/phim/${slug}`}>
-                <img src={poster_url} alt="thumb" className='h-auto w-full rounded-lg' />
+                <img src={posterUrl} alt="poster" className='h-auto w-full rounded-lg' />
             </Link>
             <div className='mt-3'>
                 <p className='text-white font-bold line-clamp-1' title={name}>{name}</p>
