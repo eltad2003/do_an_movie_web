@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useNav } from '../../hooks/useMovies'
-import { Cat, Menu } from 'lucide-react'
+
 import DropDown from './Navbar/Dropdown'
+import { useNav } from '../../hooks/useNav'
 
 const Navbar = () => {
   const { categories, countries } = useNav()
@@ -20,7 +20,7 @@ const Navbar = () => {
     )
   }
   return (
-    <nav className='flex justify-between items-center bg-primary sticky top-0 z-50 p-5'>
+    <nav className='flex justify-between items-center bg-primary/90 sticky top-0 z-50 p-5'>
       <div className='lg:flex items-center gap-8 hidden '>
         <a href='/' className='text-white text-2xl font-bold cursor-pointer'>CHILLFLIX</a>
         <DropDown

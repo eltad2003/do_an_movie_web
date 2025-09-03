@@ -7,6 +7,7 @@ import Comment from '../DetailMovie/Comment'
 import InfoMovie from './InfoMovie'
 import VideoPlayer from './VideoPlayer'
 import ListEpisode from './ListEpisode'
+import Episodes from '../DetailMovie/Episodes'
 
 
 const WatchMovie = () => {
@@ -36,7 +37,8 @@ const WatchMovie = () => {
           ))}
 
           <InfoMovie detailMovie={detailMovie} />
-          <ListEpisode episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} />
+          {/* <ListEpisode episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} /> */}
+          <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} />
           <Comment />
 
         </div>

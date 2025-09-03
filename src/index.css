@@ -4,16 +4,16 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary: #030014;
+    --color-primary: #050015;
 
     --color-light-100: #cecefb;
     --color-light-200: #a8b5db;
 
     --color-gray-100: #9ca4ab;
 
-    --color-dark-100: #0f0d23;
-
-    --font-dm-sans: DM Sans, sans-serif;
+    --color-dark-100: #0f0d25;
+    --color-dark-200: #1a1830;
+    /* --font-dm-sans: DM Sans, sans-serif; */
 
     --breakpoint-xs: 480px;
 
@@ -22,9 +22,9 @@
 
 @layer base {
     body {
-        font-family: "DM Sans", serif;
+        font-family: "Roboto", sans-serif;
         font-optical-sizing: auto;
-        background: #030014;
+        background: #050015;
     }
 
     h1 {
@@ -40,7 +40,7 @@
     }
 
     header {
-        @apply sm:mt-10 mt-5;
+        @apply mt-5;
     }
 
     header img {
@@ -54,7 +54,7 @@
 
 @layer components {
     .btn {
-        @apply inline-block rounded-xl bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-1 text-lg font-semibold text-dark-100 transition hover:opacity-70 cursor-pointer;
+        @apply inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-1 font-semibold text-dark-200 transition hover:opacity-80 cursor-pointer;
     }
 
     .pattern {

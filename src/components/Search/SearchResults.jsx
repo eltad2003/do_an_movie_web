@@ -1,9 +1,9 @@
 import React from 'react'
-import { useSearch } from '../hooks/useSearch'
+import { useSearch } from '../../hooks/useSearch'
 import { useSearchParams } from 'react-router-dom'
-import MovieCard from './MovieCard'
-import Loading from './UI/Loading'
-import Filter from './MovieByType/Filter'
+import MovieCard from '../MovieCard'
+import Loading from '../UI/Loading'
+import Filter from '../Filter/Filter'
 
 const SearchResults = () => {
     const [searchParams] = useSearchParams()

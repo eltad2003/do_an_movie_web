@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNav } from '../../hooks/useMovies'
+import { useNav } from '../../hooks/useNav'
 import { ArrowRightIcon, FilterIcon, X } from 'lucide-react'
 
 const Filter = () => {

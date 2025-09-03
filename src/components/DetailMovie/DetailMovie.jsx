@@ -6,25 +6,27 @@ import Episodes from './Episodes'
 import { useDetailMovie } from '../../hooks/useDetailMovie'
 import InfoItem from './InfoItem'
 import InfoMovie from './InfoMovie'
+import Header from './Header'
 
 const DetailMovie = () => {
     const { slug } = useParams()
     const { detailMovie, episodes, isLoading, errorMessage } = useDetailMovie(slug)
 
-
+    if (isLoading) { return <Loading /> }
     return (
         <main>
-            <div >
-                {isLoading && <Loading />}
-                {errorMessage && <p>Error: {errorMessage}</p>}
-                {detailMovie && (
+            {errorMessage && <p>Error: {errorMessage}</p>}
+            {detailMovie && (
+                <div>
+                    <Header detailMovie={detailMovie} episodes={episodes} />
                     <div className='wrapper'>
-                        <InfoMovie detailMovie={detailMovie} episodes={episodes}/>
+                        <InfoMovie detailMovie={detailMovie} episodes={episodes} />
                         <Episodes episodes={episodes} detailMovie={detailMovie} />
                         <Comment />
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+
 
         </main>
     )

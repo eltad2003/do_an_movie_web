@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <footer className="bg-dark-100 text-white py-6">
+        <footer className="bg-dark-100 text-white py-6 mt-20">
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap justify-between items-center">
                     {/* Logo or Brand Name */}
