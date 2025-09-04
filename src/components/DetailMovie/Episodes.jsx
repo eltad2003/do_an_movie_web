@@ -29,8 +29,8 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
         )
     }
     return (
-        <section className='mb-10 bg-dark-100 text-white p-5 rounded-lg'>
-            <h3 className='text-xl font-bold mb-3'>Danh sách tập</h3>
+        <section className='section'>
+            <h2 >Danh sách tập</h2>
             <div className="flex flex-wrap gap-2">
                 {/* select server */}
                 <select

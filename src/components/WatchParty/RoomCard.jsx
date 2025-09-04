@@ -22,7 +22,7 @@ const RoomCard = ({ room }) => {
     }
 
     return (
-        <div className="bg-dark-100 rounded-2xl  transition-all duration-300 hover:scale-105 group">
+        <div className="bg-dark-100 rounded-2xl mb-10  transition-all duration-500 hover:scale-105 group">
             {/* Movie Poster & Info */}
             <div className="relative">
                 <img
@@ -35,11 +35,11 @@ const RoomCard = ({ room }) => {
                 />
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+                <div className="overlay-gradient" />
 
                 {/* Room Status */}
                 <div className="absolute top-3 left-3 flex gap-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(room.status)}`}>
+                    <span className={`px-2 py-1 rounded-full text-sm font-semibold ${getStatusColor(room.status)}`}>
                         {getStatusText(room.status)}
                     </span>
                     {room.isPrivate ? (
@@ -58,7 +58,7 @@ const RoomCard = ({ room }) => {
                 {/* Play Button Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100  ">
                     <div className="bg-white/20 rounded-full p-3 backdrop-blur-sm">
-                        <Play className="w-8 h-8 text-white" />
+                        <Play className="w-8 h-8 cursor-pointer text-white" />
                     </div>
                 </div>
 

@@ -25,6 +25,7 @@
         font-family: "Roboto", sans-serif;
         font-optical-sizing: auto;
         background: #050015;
+
     }
 
     h1 {
@@ -32,11 +33,12 @@
     }
 
     h2 {
-        @apply text-2xl font-bold text-white sm:text-3xl;
+        @apply text-2xl font-semibold text-white mb-3;
     }
 
+
     main {
-        @apply min-h-screen relative bg-primary;
+        @apply min-h-dvh relative bg-primary;
     }
 
     header {
@@ -48,13 +50,13 @@
     }
 
     ul {
-        @apply grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5;
+        @apply grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5;
     }
 }
 
 @layer components {
     .btn {
-        @apply inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-1 font-semibold text-dark-200 transition hover:opacity-80 cursor-pointer;
+        @apply inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-2 font-semibold text-dark-200 transition hover:opacity-80 cursor-pointer;
     }
 
     .pattern {
@@ -62,7 +64,15 @@
     }
 
     .wrapper {
-        @apply container mx-auto flex flex-col p-5 z-10 relative
+        @apply container p-5 md:p-3 mx-auto flex flex-col z-10 relative
+    }
+
+    .section {
+        @apply mb-5 text-white p-5 rounded-lg
+    }
+
+    .overlay-gradient {
+        @apply absolute inset-0 bg-gradient-to-t from-primary via-black/20 to-transparent
     }
 
     .auth-form {

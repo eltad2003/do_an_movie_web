@@ -23,7 +23,7 @@ const InfoMovie = ({ detailMovie: { name, slug, origin_name, content, episode_cu
                     </div>
                 </div>
                 <div className='flex-1'>
-                    <p className="text-gray-300 mb-8">{content}</p>
+                    <p className='text-gray-300 mb-3' dangerouslySetInnerHTML={{ __html: content }} />
                     <Link
                         to={`/phim/${slug}`}
                         className='btn inline-flex items-center text-dark-100 '>

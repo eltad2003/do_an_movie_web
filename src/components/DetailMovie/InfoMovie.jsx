@@ -60,7 +60,7 @@ const InfoMovie = ({ detailMovie, episodes }) => {
             </div>
             {/*infos movie */}
 
-            <div className="bg-dark-100 text-white p-5 rounded-lg mb-10">
+            <div className="section">
                 {/*review*/}
                 <div className='flex gap-2 mb-4 flex-wrap'>
                     <span className='block md:hidden px-3 py-1 rounded-lg bg-yellow-900 text-yellow-100'>Imdb <b>{(detailMovie.tmdb.vote_average) ? detailMovie.tmdb.vote_average.toFixed(1) : 'N/A'}</b></span>
@@ -77,8 +77,8 @@ const InfoMovie = ({ detailMovie, episodes }) => {
                 </div>
 
                 {/* content */}
-                <p className="text-gray-300 mb-8">{detailMovie.content}</p>
-                <div className="grid grid-cols-1 gap-y-4 gap-x-8">
+                <p className="text-gray-300 mb-8" dangerouslySetInnerHTML={{ __html: detailMovie.content }} />
+                <div className="grid grid-cols-1 gap-y-3 ">
                     <InfoItem label={type.year} value={detailMovie.year} />
                     <InfoItem label='Thời lượng' value={detailMovie.time} />
                     <InfoItem label={type.country} value={detailMovie.country.map((c) => c.name).join(', ')} />

@@ -3,19 +3,21 @@ import React from 'react'
 
 const Comment = () => {
     return (
-        <div className='bg-dark-100 text-white p-5 rounded-lg'>
-            <h3 className='text-xl font-bold mb-6'>Bình luận</h3>
+        <section className='section'>
+            <h2 >Bình luận</h2>
 
             {/* Comment Form */}
-            <div className='mb-10'>
+            <div className='mb-10 space-y-4'>
                 <textarea
                     placeholder='Viết bình luận của bạn...'
                     className='w-full p-4 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-light-100/30 resize-none'
                     rows={4}
                 />
-                <button className='ms-auto mt-3 px-3 py-2 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 font-semibold rounded-lg hover:opacity-90 transition inline-flex items-center gap-2'>
-                    <SendHorizontal className='w-4 h-4' /> Gửi bình luận
-                </button>
+                <div className='text-end'>
+                    <button className='btn '>
+                        <SendHorizontal className='w-4 h-4' /> Gửi bình luận
+                    </button>
+                </div>
             </div>
 
             {/* Comments List */}
@@ -56,7 +58,7 @@ const Comment = () => {
             {/* <button className='btn mt-6 w-full border rounded-lg  '>
                 Xem thêm bình luận
             </button> */}
-        </div>
+        </section>
     )
 }
 

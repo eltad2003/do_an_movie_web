@@ -11,13 +11,13 @@ const Header = ({ detailMovie, episodes }) => {
     }
     return (
         <section
-            className="relative h-[75vh] bg-cover bg-center w-full mb-10 hidden md:block"
+            className="relative h-[70vh] bg-cover bg-center w-full mb-10 hidden md:block"
             style={{
                 backgroundImage: `url(${detailMovie.thumb_url})`,
             }}
         >
             {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/100 via-black/30 to-transparent" />
+            <div className="overlay-gradient" />
 
             {/* Content */}
             <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -76,11 +76,11 @@ const Header = ({ detailMovie, episodes }) => {
                                 </button>
                             </Link>
 
-                            <button className="inline-flex gap-2 bg-red-700/70 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg  transition-all duration-300">
-                                <Heart className="w-5 h-5" />Yêu thích
+                            <button className="inline-flex gap-2 bg-red-700 hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-lg">
+                                <Heart className="w-5 h-5 f" />Yêu thích
                             </button>
                             <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="inline-flex gap-2 bg-blue-700/70 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg  transition-all duration-300">
+                                <button className="inline-flex gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg">
                                     <Tv className="w-5 h-5" />
                                     Xem chung
                                 </button>

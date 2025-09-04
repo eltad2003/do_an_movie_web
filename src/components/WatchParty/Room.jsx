@@ -92,8 +92,9 @@ const Room = () => {
         <main >
             <div className='relative h-[70vh]'>
                 <img src="./watch-party.webp" alt="banner" className='w-full h-full bg-center bg-contain' />
-                <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-transparent to-transparent" />
-                <div className='absolute inset-0  text-center mt-20 shadow-2xl'>
+                <div className="overlay-gradient" />
+
+                <div className='absolute inset-0  text-center mt-10 shadow-2xl'>
                     <h1 >
                         Phòng xem chung
                     </h1>
@@ -119,7 +120,7 @@ const Room = () => {
                                     placeholder="Tìm kiếm phòng hoặc phim..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full bg-dark-100 text-white pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                    className="w-full bg-dark-100 text-white pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none"
                                 />
                             </div>
 
@@ -127,7 +128,7 @@ const Room = () => {
                             <select
                                 value={filterType}
                                 onChange={(e) => setFilterType(e.target.value)}
-                                className="bg-dark-100 text-white px-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                className="bg-dark-100  text-white px-4 py-2 rounded-lg border border-gray-700 focus:outline-none"
                             >
                                 <option value="all">Tất cả phòng</option>
                                 <option value="public">Phòng công khai</option>
