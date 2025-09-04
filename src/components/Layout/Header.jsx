@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
-import DropDown from './navbar/Dropdown'
+
 import { useNav } from '../../hooks/useNav'
+import DropDown from './DropDown'
+
 
 const Navbar = () => {
   const { categories, countries } = useNav()
