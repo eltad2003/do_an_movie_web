@@ -6,7 +6,7 @@ const Comment = () => {
         <section className='section'>
             <h2 >Bình luận</h2>
 
-            {/* Comment Form */}
+            {/* comment form */}
             <div className='mb-10 space-y-4'>
                 <textarea
                     placeholder='Viết bình luận của bạn...'
@@ -14,16 +14,16 @@ const Comment = () => {
                     rows={4}
                 />
                 <div className='text-end'>
-                    <button className='btn '>
+                    <button className='btn inline-flex items-center gap-2'>
                         <SendHorizontal className='w-4 h-4' /> Gửi bình luận
                     </button>
                 </div>
             </div>
 
-            {/* Comments List */}
+            {/* comments list */}
             <div className='space-y-6'>
                 {/* Sample Comment */}
-                <div className='border-b border-gray-700 pb-4'>
+                <div className='border-b border-gray-700 pb-5'>
                     <div className='flex items-start gap-3'>
                         <div className='w-10 h-10 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] rounded-full flex items-center justify-center text-dark-100 font-bold'>
                             U
@@ -38,7 +38,7 @@ const Comment = () => {
                     </div>
                 </div>
 
-                <div className='border-b border-gray-700 pb-4'>
+                <div className='border-b border-gray-700 pb-5'>
                     <div className='flex items-start gap-3'>
                         <div className='w-10 h-10 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] rounded-full flex items-center justify-center text-dark-100 font-bold'>
                             M

@@ -16,9 +16,12 @@ const WatchMovie = () => {
   const epSlug = searchParams.get('ep')
   const serverVersion = searchParams.get('ver') || 0
   const { detailMovie, episodes, isLoading, errorMessage } = useDetailMovie(slug)
+
+  if (isLoading) { return <Loading /> }
+
   return (
     <main>
-      {isLoading && <Loading />}
+
       {errorMessage && <p className="text-red-500 text-center p-5">{errorMessage}</p>}
       {detailMovie && (
         <div className='wrapper'>
@@ -37,7 +40,6 @@ const WatchMovie = () => {
           ))}
 
           <InfoMovie detailMovie={detailMovie} />
-          {/* <ListEpisode episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} /> */}
           <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} />
           <Comment />
 

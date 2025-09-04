@@ -90,28 +90,27 @@ const Room = () => {
 
     return (
         <main >
-            <div className='relative h-[70vh]'>
+            <div className='relative h-[50vh] md:h-[75vh] '>
                 <img src="./watch-party.webp" alt="banner" className='w-full h-full bg-center bg-contain' />
                 <div className="overlay-gradient" />
 
-                <div className='absolute inset-0  text-center mt-10 shadow-2xl'>
+                <div className='absolute inset-0 mt-3 p-3 '>
                     <h1 >
                         Phòng xem chung
                     </h1>
-                    <p className="text-white/70 text-lg">
-                        Tham gia hoặc tạo phòng để xem phim cùng bạn bè. Chia sẻ cảm xúc và thảo luận trong thời gian thực.
+                    <p className="text-white/70 text-center mx-auto">
+                        Tham gia hoặc tạo phòng để xem phim cùng bạn bè. Chia sẻ cảm xúc và thảo luận
                     </p>
                 </div>
             </div>
-            {/* <div className="pattern"></div> */}
             <div className="wrapper">
                 {/* Controls */}
                 <section className="mb-8">
-                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div className="flex gap-3 items-center justify-between">
 
                         {/* Search & Filter */}
 
-                        <div className="flex flex-col sm:flex-row gap-3 flex-1">
+                        <div className="flex gap-3 flex-1">
                             {/* Search */}
                             <div className="relative flex-1 max-w-md">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -140,7 +139,6 @@ const Room = () => {
                         <Link to="/xem-chung/tao-phong">
                             <button className="btn">
                                 <Plus className="w-5 h-5" />
-                                Tạo phòng mới
                             </button>
                         </Link>
                     </div>

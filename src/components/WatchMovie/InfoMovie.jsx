@@ -1,14 +1,14 @@
 import { ChevronRight } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import InfoGenres from '../DetailMovie/InfoGenres'
+import InfoGenres from '../DetailMovie/Info/InfoGenres'
 
 const InfoMovie = ({ detailMovie: { name, slug, origin_name, content, episode_current, poster_url, category } }) => {
     return (
-        <div className='mb-20'>
-            <div className='flex items-start gap-5 flex-col md:flex-row'>
-                <div className='flex items-start gap-3'>
-                    <img src={poster_url} alt="poster" className='w-full h-auto max-h-[350px] max-w-[120px] rounded-lg object-cover shadow-lg' />
+        <div className='mb-20 hidden md:block'>
+            <div className='flex items-start gap-3 flex-col lg:flex-row'>
+                <div className='flex items-start gap-3 flex-1'>
+                    <img src={poster_url} alt="poster" className='w-full h-auto max-h-[350px] max-w-[150px] rounded-lg object-cover shadow-lg' />
                     <div className='space-y-3'>
                         <div>
                             <h2>{name}</h2>

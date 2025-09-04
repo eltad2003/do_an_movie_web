@@ -14,6 +14,7 @@ const Login = () => {
                     <label htmlFor="password">Mật khẩu</label>
                     <input type="password" id="password" name="password" required />
                 </div>
+
                 <button type="submit" className='btn w-full'>Đăng nhập</button>
                 <p className='text-center text-light-100'>Hoặc</p>
                 <button type="button" className='btn w-full'> Đăng nhập bằng Google</button>

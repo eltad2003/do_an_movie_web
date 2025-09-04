@@ -4,8 +4,7 @@ import { Play, SendHorizontal, Star } from 'lucide-react'
 import Comment from './Comment'
 import Episodes from './Episodes'
 import { useDetailMovie } from '../../hooks/useDetailMovie'
-import InfoItem from './InfoItem'
-import InfoMovie from './InfoMovie'
+import InfoMovie from './Info/InfoMovie'
 import Header from './Header'
 
 const DetailMovie = () => {
@@ -20,7 +19,7 @@ const DetailMovie = () => {
                 <div>
                     <Header detailMovie={detailMovie} episodes={episodes} />
                     <div className='wrapper'>
-                        <InfoMovie detailMovie={detailMovie} episodes={episodes} />
+                        <InfoMovie detailMovie={detailMovie} />
                         <Episodes episodes={episodes} detailMovie={detailMovie} />
                         <Comment />
                     </div>

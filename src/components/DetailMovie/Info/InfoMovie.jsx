@@ -4,7 +4,7 @@ import InfoItem from './InfoItem'
 import { Link } from 'react-router-dom'
 import InfoGenres from './InfoGenres'
 
-const InfoMovie = ({ detailMovie, episodes }) => {
+const InfoMovie = ({ detailMovie }) => {
     const type = {
         generes: 'Thể loại',
         content: 'Nội dung',
@@ -18,49 +18,9 @@ const InfoMovie = ({ detailMovie, episodes }) => {
     return (
 
         <section>
-            {/*mobile */}
-            <div className='block md:hidden'>
-                <section className='flex justify-between mb-10'>
-                    <h2 className='text-gradient'>{detailMovie.name} <span className='text-white'>- {detailMovie.origin_name}</span></h2>
-                    <span className='hidden px-3 py-1 rounded-lg bg-yellow-900 text-yellow-100 md:inline-flex md:items-center gap-1 text-sm'>
-                        <Star className='w-4 h-4' />
-                        {detailMovie.tmdb.vote_average ? (
-                            <>
-                                <b>{`${detailMovie.tmdb.vote_average.toFixed(1)} /10`}</b>
-                                <span className='text-white/50 '>({detailMovie.tmdb.vote_count})</span>
-                            </>
-                        ) : 'N/A'}
-
-                    </span>
-                </section>
-
-
-                <div className="flex gap-3 mb-10">
-                    <div className="hidden lg:block ">
-                        <img
-                            src={detailMovie.poster_url}
-                            alt="poster"
-                            className="w-full h-auto max-h-[550px] rounded-lg object-cover shadow-lg"
-                        />
-                    </div>
-                    <div className="relative ">
-                        <img
-                            src={detailMovie.thumb_url}
-                            alt="thumb"
-                            className="w-full h-auto max-h-[550px] rounded-lg object-cover shadow-lg"
-                        />
-                        <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0].server_data[0].slug}`}>
-                            <button className="z-10 absolute bottom-4 left-4 cursor-pointer bg-gray-900/60 font-bold gap-2 px-4 py-2 inline-flex items-center text-white rounded-full hover:bg-gray-500/60 transition">
-                                <Play className="w-4 h-4" /> Xem ngay
-                            </button>
-                        </Link>
-                    </div>
-                </div>
-
-            </div>
             {/*infos movie */}
-
             <div className="section">
+                <h2 >Thông tin phim</h2>
                 {/*review*/}
                 <div className='flex gap-2 mb-4 flex-wrap'>
                     <span className='block md:hidden px-3 py-1 rounded-lg bg-yellow-900 text-yellow-100'>Imdb <b>{(detailMovie.tmdb.vote_average) ? detailMovie.tmdb.vote_average.toFixed(1) : 'N/A'}</b></span>
