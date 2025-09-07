@@ -1,15 +1,21 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useDebounce } from "react-use"
 
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState("")
+    const [debounceSearchQuery, setDebounceSearchQuery] = useState("")
     const navigate = useNavigate()
+
+    useDebounce(() => {
+        setDebounceSearchQuery(searchQuery)
+        console.log(debounceSearchQuery);
+    }, 500, [searchQuery])
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value)
-        console.log(searchQuery);
     }
-    
+
     const handleSubmitSearch = (e) => {
         e.preventDefault()
         if (searchQuery.trim()) {
@@ -38,8 +44,9 @@ const Search = () => {
                     value={searchQuery}
                     onChange={handleSearchChange}
                     onKeyDown={handlePress}
+                    required
                 />
-                <button type="submit" className=" absolute end-2.5 bottom-2.5 btn">Tìm kiếm</button>
+                <button type="submit" className=" absolute end-2.5 bottom-2.5 btn disabled:cursor-not-allowed" disabled={!searchQuery.trim()}>Tìm kiếm</button>
             </div>
         </form>
 

@@ -27,9 +27,9 @@ const WatchMovie = () => {
         <div className='wrapper'>
           <header className='flex items-center gap-3 mb-10'>
             <Link to={`/phim/${detailMovie.slug}`}>
-              <button className='btn'><ChevronLeft className='w-5 h-5' /></button>
+              <button className='btn text-sm'><ChevronLeft className='w-4 h-4' /></button>
             </Link>
-            <h3 className='text-lg font-bold text-white flex-wrap '>Xem phim {detailMovie.name}</h3>
+            <h3 className='text-sm md:text-lg font-bold text-white flex-wrap '>Xem phim {detailMovie.name}</h3>
           </header>
 
           {episodes[serverVersion].server_data.map(ep => ep.slug === epSlug && (

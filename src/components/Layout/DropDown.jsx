@@ -18,7 +18,7 @@ const DropDown = ({ text, data, isDropdownOpen, onToggle, slug }) => {
             </button>
 
             {isDropdownOpen && (
-                <div className='absolute top-full left-0 right-0 z-50 bg-dark-200 backdrop-blur-md rounded-lg mt-3 grid grid-cols-3 lg:grid-cols-4 w-full md:w-auto lg:w-[600px] overflow-y-auto '>
+                <div className='absolute p-1 top-full left-0 right-0 z-50 bg-primary backdrop-blur-md rounded-lg mt-5 grid grid-cols-3 lg:grid-cols-4 md:w-auto lg:w-[600px] overflow-y-auto '>
                     {data && data.length > 0 ? (
                         data.map((item) => (
                             <Link

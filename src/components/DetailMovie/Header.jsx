@@ -11,57 +11,30 @@ const Header = ({ detailMovie, episodes }) => {
     }
     return (
         <section
-            className="relative h-[70vh] bg-cover bg-center w-full mb-3"
+            className={`relative h-[70vh] bg-cover bg-center w-full mb-5 lg:mb-10 `}
             style={{
                 backgroundImage: `url(${detailMovie.thumb_url})`,
             }}
         >
-            {/* Overlay gradient */}
+            {/* overlay gradient */}
             <div className="overlay-gradient" />
             {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0  p-3 md:p-8">
-                <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
-
-                    <div className="flex-shrink-0 hidden md:block mb-3">
+            <div className="absolute bottom-0 left-0 right-0 p-3 lg:p-10 ">
+                <div className="flex items-end gap-6">
+                    {/* poster */}
+                    <div className="flex-shrink-0 hidden lg:block">
                         <img
                             src={detailMovie.poster_url}
                             alt="poster"
-                            className="w-56 h-auto rounded-lg shadow-lg object-cover"
+                            className="w-56 h-full rounded-lg object-cover shadow-primary "
                         />
                     </div>
 
-                    {/* Mobile Title */}
-                    <div className="block md:hidden space-y-4 p-3">
-                        <h1 className='text-start text-3xl font-bold'>{detailMovie.name}</h1>
-                        <p className="text-xl font-semibold text-white/80">{detailMovie.origin_name}</p>
-
-
-                        <div className="flex items-center flex-wrap gap-3">
-
-                            <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0]?.server_data[0]?.slug}`}>
-                                <button className="bg-white/20 rounded-full p-3 backdrop-blur-sm">
-                                    <Play className="w-8 h-8 cursor-pointer text-white" />
-                                </button>
-                            </Link>
-                            <Link>
-                                <button className="inline-flex gap-1 bg-red-700 text-white  font-semibold px-3 py-1 rounded-lg">
-                                    <Heart className="w-5 h-5 " />Yêu thích
-                                </button></Link>
-                            <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="inline-flex gap-1 bg-blue-700 text-white  font-semibold px-3 py-1 rounded-lg">
-                                    <Tv className="w-5 h-5" />
-                                    Xem chung
-                                </button>
-                            </Link>
-                        </div>
-                    </div>
-
-
-                    {/* Movie Info */}
-                    <div className="space-y-4 hidden md:block">
-                        <div>
-                            <h1 className='text-start mb-3 md:text-6xl font-bold'>{detailMovie.name}</h1>
-                            <p className="text-2xl font-semibold text-white/80 mb-4">{detailMovie.origin_name}</p>
+                    {/* movie info */}
+                    <div className="space-y-4 hidden lg:block">
+                        <div >
+                            <h1 className='text-start text-shadow-lg/50'>{detailMovie.name}</h1>
+                            <h2>{detailMovie.origin_name}</h2>
                         </div>
 
                         {/* Rating & Info badges */}
@@ -92,19 +65,40 @@ const Header = ({ detailMovie, episodes }) => {
                         </div>
 
                         {/* Action buttons */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="action-button">
                             <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0]?.server_data[0]?.slug}`}>
-                                <button className="btn h-full transform hover:scale-105 inline-flex gap-1 bg-light-100 hover:bg-light-200 text-dark-200 font-semibold px-4 py-2 rounded-lg">
-                                    <Play className="w-5 h-5" />
-                                    Xem ngay
+                                <button className="bg-light-100 shadow-light-100/50 shadow-2xl">
+                                    <Play className="w-5 h-5 animate-pulse" />Xem ngay
                                 </button>
                             </Link>
 
-                            <button className="inline-flex gap-1 bg-red-700 hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-lg">
-                                <Heart className="w-5 h-5 f" />Yêu thích
+                            <button className=" bg-pink-700 shadow-pink-700/50 shadow-2xl text-white">
+                                <Heart className="w-5 h-5 " />Yêu thích
                             </button>
                             <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="inline-flex gap-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg">
+                                <button className="bg-blue-700 shadow-blue-700/50 shadow-2xl text-white">
+                                    <Tv className="w-5 h-5" />Xem chung
+                                </button>
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* title in mobile*/}
+                    <div className="block lg:hidden space-y-3 p-1">
+                        <h1 className='text-start text-shadow-lg/50'>{detailMovie.name}</h1>
+                        <p className="font-semibold text-white/80">{detailMovie.origin_name}</p>
+                        <div className="action-button">
+                            <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0]?.server_data[0]?.slug}`}>
+                                <button className="bg-white/30 rounded-full p-3 backdrop-blur-xs">
+                                    <Play className="w-10 h-10 text-white" />
+                                </button>
+                            </Link>
+                            <Link>
+                                <button className=" bg-pink-700 text-white">
+                                    <Heart className="w-5 h-5 " />Yêu thích
+                                </button></Link>
+                            <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
+                                <button className=" bg-blue-700 text-white">
                                     <Tv className="w-5 h-5" />
                                     Xem chung
                                 </button>

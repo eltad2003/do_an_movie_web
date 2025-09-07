@@ -5,12 +5,13 @@ import Loading from '../UI/Loading';
 import Pagination from '../UI/Pagination';
 import { useMovieByCategory } from '../../hooks/useMovies';
 import Filter from '../Filter/Filter';
+import Skeleton from '../UI/Skeleton';
 
 const ByCategory = () => {
     const { slugCat } = useParams();
     const [currentPage, setCurrentPage] = useState(1)
     const { listMovies, data, totalPages, isLoading, errorMessage } = useMovieByCategory(slugCat, currentPage)
-    if (isLoading) return <Loading />
+    if (isLoading) return <Skeleton />
 
     return (
         <main>

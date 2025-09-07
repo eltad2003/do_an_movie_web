@@ -10,6 +10,7 @@ const SearchResults = () => {
     const query = searchParams.get('q') || ''
     const { searchResults, isLoading, errorMessage } = useSearch(query)
 
+
     if (isLoading) {
         return <Loading text="Đang tìm kiếm..." />
     }

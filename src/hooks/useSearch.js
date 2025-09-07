@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { movieService } from "../services/movieService"
+import { updateSearchCount } from "../utils/appwrite"
 
 export const useSearch = (query) => {
     const [searchResults, setSearchResults] = useState([])
@@ -12,6 +13,10 @@ export const useSearch = (query) => {
             try {
                 const data = await movieService.searchMovies(query)
                 setSearchResults(data.data.items || [])
+
+                if (query && data.data.items?.length > 0) {
+                    await updateSearchCount(query, data.data.items[0])
+                }
             } catch (error) {
                 console.error("Error fetching search results:", error)
                 setErrorMessage("Failed to fetch search results")

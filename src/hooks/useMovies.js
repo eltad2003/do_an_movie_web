@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { movieService } from '../services/movieService'
 
+
 export const useMovies = (page = 1) => {
     const [listMovies, setListMovies] = useState([])
     const [totalPages, setTotalPages] = useState(0)
@@ -14,6 +15,7 @@ export const useMovies = (page = 1) => {
                 const data = await movieService.getMovies(page)
                 setListMovies(data.items || [])
                 setTotalPages(data.pagination.totalPages || 0)
+           
             } catch (err) {
                 setErrorMessage(err.message)
             } finally {
@@ -26,8 +28,6 @@ export const useMovies = (page = 1) => {
 
     return { listMovies, totalPages, isLoading, errorMessage }
 }
-
-
 
 export const useMovieByCategory = (slugCat, page = 1) => {
     const [listMovies, setListMovies] = useState([])

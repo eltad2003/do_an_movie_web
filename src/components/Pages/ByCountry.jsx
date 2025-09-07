@@ -4,12 +4,13 @@ import Loading from '../UI/Loading';
 import { useMovieByCountry } from '../../hooks/useMovies';
 import Pagination from '../UI/Pagination';
 import MovieCard from '../MovieCard';
+import Skeleton from '../UI/Skeleton';
 
 const ByCountry = () => {
     const { slugCountry } = useParams();
     const [currentPage, setCurrentPage] = useState(1)
     const { listMovies, data, totalPages, isLoading, errorMessage } = useMovieByCountry(slugCountry, currentPage)
-    if (isLoading) return <Loading />
+    if (isLoading) return <Skeleton />
     return (
         <main>
             {errorMessage && <p>Error: {errorMessage}</p>}

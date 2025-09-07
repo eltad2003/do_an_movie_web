@@ -26,13 +26,6 @@ const Navbar = () => {
     )
   }
 
-  // const handleBackdropClick = (e) => {
-  //   if (e.target === e.currentTarget) {
-  //     setIsOpenSideBar(false)
-  //     setOpenDropdown(null)
-  //   }
-  // }
-
   useEffect(() => {
     setIsOpenSideBar(false)
     setOpenDropdown(null)
@@ -74,16 +67,13 @@ const Navbar = () => {
           CHILLFLIX
         </Link>
       </div>
+      <Link to="/login" >
+        <button className='btn'>Đăng nhập</button>
+      </Link>
 
       {isOpenSideBar && (
         <div className='absolute top-full left-0 right-0 w-full bg-dark-200 rounded-b-lg p-5 flex flex-col gap-8 lg:hidden z-50'>
-          <DropDown
-            text='Thể loại'
-            slug='the-loai'
-            data={categories}
-            isDropdownOpen={openDropdown === 'category'}
-            onToggle={() => handleDropdownToggle('category')}
-          />
+
           <DropDown
             text='Quốc gia'
             slug='quoc-gia'
@@ -93,13 +83,18 @@ const Navbar = () => {
           />
           <Type to="/phim-bo" label="Phim bộ" />
           <Type to="/phim-le" label="Phim lẻ" />
+          <DropDown
+            text='Thể loại'
+            slug='the-loai'
+            data={categories}
+            isDropdownOpen={openDropdown === 'category'}
+            onToggle={() => handleDropdownToggle('category')}
+          />
           <Type to="/hoat-hinh" label="Hoạt hình" />
           <Type to="/tv-shows" label="TV Shows" />
           <Type to="/xem-chung" label="Xem chung" />
         </div>
       )}
-
-      <Link to="/login" className='btn '>Đăng nhập</Link>
     </nav>
 
   )

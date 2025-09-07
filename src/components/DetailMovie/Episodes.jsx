@@ -69,7 +69,7 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
                         key={idx}
                         className='text-sm px-3 py-2 rounded-lg bg-gray-800 inline-flex cursor-pointer gap-2 items-center justify-center hover:bg-gray-700 transition hover:text-light-100'
                     >
-                        <Play className='w-4 h-4 fill-current' />
+                        <Play className='w-4 h-4' />
                         {ep.name}
                     </Link>
                 ))}
