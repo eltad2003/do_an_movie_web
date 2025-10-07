@@ -127,7 +127,7 @@ const Room = () => {
                             <select
                                 value={filterType}
                                 onChange={(e) => setFilterType(e.target.value)}
-                                className="bg-dark-100  text-white px-4 py-2 rounded-lg border border-gray-700 focus:outline-none"
+                                className="bg-dark-100 text-white px-4 py-2 rounded-lg border border-gray-700 focus:outline-none"
                             >
                                 <option value="all">Tất cả phòng</option>
                                 <option value="public">Phòng công khai</option>

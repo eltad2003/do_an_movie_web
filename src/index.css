@@ -76,14 +76,14 @@
     }
 
     .auth-form {
-        @apply flex items-center justify-center h-screen;
+        @apply flex items-center justify-center min-h-[80dvh];
 
         & input {
-            @apply w-full mb-3 px-4 py-3 rounded bg-light-100/10 border border-light-100/20 text-light-100 placeholder-light-100/50 focus:outline-none focus:ring-2 focus:ring-light-100/30;
+            @apply w-full mb-3 px-4 py-2 rounded bg-light-100/10 border border-light-100/20 text-light-100 placeholder-light-100/50 focus:outline-none focus:ring-2 focus:ring-light-100/30;
         }
 
         & label {
-            @apply text-light-100 mb-2 block;
+            @apply text-white mb-2 block;
         }
 
         & form {

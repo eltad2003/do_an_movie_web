@@ -1,22 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-
-
-
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useNav } from '../../hooks/useNav'
 import DropDown from './DropDown'
-import { Menu, X } from 'lucide-react'
+import { LogOut, Menu, User, X } from 'lucide-react'
+import { AuthContext } from '../../context/AuthContext'
 
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext)
+  const navigate = useNavigate()
   const { categories, countries } = useNav()
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isOpenSideBar, setIsOpenSideBar] = useState(false)
+  const [isOpenProfile, setIsOpenProfile] = useState(false)
   const location = useLocation()
 
   const handleDropdownToggle = (name) => {
     setOpenDropdown(openDropdown === name ? null : name)
   }
+
+  const handleLogout = useCallback(async () => {
+    await logout()
+    setIsOpenProfile(false)
+    navigate('/')
+  }, [logout, navigate])
 
   const Type = ({ to, label }) => {
     return (
@@ -28,6 +35,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsOpenSideBar(false)
+    setIsOpenProfile(false)
     setOpenDropdown(null)
   }, [location.pathname])
 
@@ -67,13 +75,23 @@ const Navbar = () => {
           CHILLFLIX
         </Link>
       </div>
-      <Link to="/login" >
-        <button className='btn'>Đăng nhập</button>
-      </Link>
+
+      {user ? (
+        <button className='btn' onClick={() => setIsOpenProfile(!isOpenProfile)}><User /></button>
+      ) : (
+        <Link to="/login" >
+          <button className='btn'>Đăng nhập</button>
+        </Link>
+      )}
+      {isOpenProfile && (
+        <div className='absolute top-full right-0 mr-2 w-48 bg-primary rounded-lg shadow-lg p-4 z-50'>
+          <Link to="/profile" className='block  text-white hover:text-light-100 mb-3'>Hồ sơ</Link>
+          <Link onClick={handleLogout} className='inline-flex gap-2 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
+        </div>
+      )}
 
       {isOpenSideBar && (
-        <div className='absolute top-full left-0 right-0 w-full bg-dark-200 rounded-b-lg p-5 flex flex-col gap-8 lg:hidden z-50'>
-
+        <div className='absolute top-full left-0 right-0 w-full bg-dark-200 rounded-b-lg p-3 flex flex-col gap-8 lg:hidden z-50'>
           <DropDown
             text='Quốc gia'
             slug='quoc-gia'
@@ -81,8 +99,6 @@ const Navbar = () => {
             isDropdownOpen={openDropdown === 'country'}
             onToggle={() => handleDropdownToggle('country')}
           />
-          <Type to="/phim-bo" label="Phim bộ" />
-          <Type to="/phim-le" label="Phim lẻ" />
           <DropDown
             text='Thể loại'
             slug='the-loai'
@@ -90,6 +106,8 @@ const Navbar = () => {
             isDropdownOpen={openDropdown === 'category'}
             onToggle={() => handleDropdownToggle('category')}
           />
+          <Type to="/phim-bo" label="Phim bộ" />
+          <Type to="/phim-le" label="Phim lẻ" />
           <Type to="/hoat-hinh" label="Hoạt hình" />
           <Type to="/tv-shows" label="TV Shows" />
           <Type to="/xem-chung" label="Xem chung" />

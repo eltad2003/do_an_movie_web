@@ -11,20 +11,20 @@ const DropDown = ({ text, data, isDropdownOpen, onToggle, slug }) => {
         <div className='relative'>
             <button
                 onClick={onToggle}
-                className='flex items-center gap-2 text-white hover:text-light-100 transition-colors cursor-pointer '
+                className='flex items-center gap-1 text-white hover:text-light-100 transition-colors cursor-pointer '
             >
                 {text}
                 <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isDropdownOpen && (
-                <div className='absolute p-1 top-full left-0 right-0 z-50 bg-primary backdrop-blur-md rounded-lg mt-5 grid grid-cols-3 lg:grid-cols-4 md:w-auto lg:w-[600px] overflow-y-auto '>
+                <div className='absolute p-2 top-full left-0 right-0 z-50 bg-primary backdrop-blur-md rounded-lg mt-3 grid grid-cols-3 lg:grid-cols-4 md:w-auto lg:w-[600px] overflow-y-auto '>
                     {data && data.length > 0 ? (
                         data.map((item) => (
                             <Link
                                 key={item.slug}
                                 to={`/${slug}/${item.slug}`}
-                                className='block px-4 py-2 text-white hover:text-light-100 hover:bg-gray-700/50 transition-colors rounded'
+                                className='block p-2 text-white hover:text-light-100 hover:bg-gray-700/50 transition-colors rounded'
                                 onClick={closeDropdown}
                             >
                                 {item.name}

@@ -13,7 +13,7 @@ const client = new Client()
 const tablesDB = new TablesDB(client)
 
 export const updateSearchCount = async (query, movie) => {
-    console.log(PROJECT_ID, DATABASE_ID, TABLE_ID);
+    console.log(PROJECT_ID, DATABASE_ID, TABLE_ID, ENDPOINT);
 
     //check table if exist
     //if exist update count + 1

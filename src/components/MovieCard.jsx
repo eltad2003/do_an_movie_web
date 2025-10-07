@@ -6,7 +6,7 @@ const MovieCard = ({ movie: { tmdb, name, poster_url, origin_name, year, slug } 
 
 
     return (
-        <div className='bg-dark-100 p-5 rounded-2xl  hover:shadow-2xl trasition-all duration-300 cursor-pointer'>
+        <div className='bg-dark-100 p-5 rounded-2xl hover:shadow-2xl trasition-all duration-300 cursor-pointer'>
             <Link to={`/phim/${slug}`}>
                 <img src={formatPosterUrl(poster_url)} alt="poster" className='h-auto w-full rounded-lg' loading='lazy' />
             </Link>
