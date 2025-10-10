@@ -14,6 +14,7 @@ import ByCountry from './components/Pages/ByCountry'
 import WatchParty from './components/WatchParty/WatchParty'
 import Room from './components/WatchParty/Room'
 import CreateRoom from './components/WatchParty/CreateRoom'
+import Profile from './components/Profile/Profile'
 
 
 const App = () => {
@@ -37,7 +38,13 @@ const App = () => {
           <Route path="/xem-chung/tao-phong" element={<CreateRoom />} />
 
           <Route path="/tim-kiem" element={<SearchResults />} />
+          <Route path='/profile' element={<Profile />} />
           <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="quan-ly-phim" element={<ManageMovie />} />
+          <Route path="quan-ly-nguoi-dung" element={<ManageUser />} />
         </Route>
 
       </Routes>

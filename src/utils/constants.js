@@ -7,7 +7,12 @@ export const ROUTES = {
   SEARCH: '/tim-kiem',
   CATEGORY: '/the-loai/:slug',
   COUNTRY: '/quoc-gia/:slug',
-  NOT_FOUND: '/404'
+  NOT_FOUND: '/404',
+  PROFILE: '/profile',
+  ADMIN: '/admin',
+  DASHBOARD: '/admin/dashboard',
+  MANAGE_MOVIES: '/admin/quan-ly-phim',
+  MANAGE_USERS: '/admin/quan-ly-nguoi-dung',
 }
 
 export const API_ENDPOINTS = {

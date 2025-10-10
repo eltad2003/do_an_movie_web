@@ -72,7 +72,7 @@
     }
 
     .overlay-gradient {
-        @apply absolute inset-0 bg-gradient-to-t from-primary via-black/10 to-transparent
+        @apply absolute inset-0 bg-gradient-to-t from-primary via-black/70 to-transparent
     }
 
     .auth-form {
