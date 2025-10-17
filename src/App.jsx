@@ -15,6 +15,11 @@ import WatchParty from './components/WatchParty/WatchParty'
 import Room from './components/WatchParty/Room'
 import CreateRoom from './components/WatchParty/CreateRoom'
 import Profile from './components/Profile/Profile'
+import AdminLayout from './components/Admin/AdminLayout'
+import Dashboard from './components/Admin/Dashboard'
+import ManageMovie from './components/Admin/ManageMovie/ManageMovie'
+import ManageUser from './components/Admin/ManageUser'
+import ManageDetailMovie from './components/Admin/ManageMovie/ManageDetailMovie'
 
 
 const App = () => {
@@ -41,9 +46,11 @@ const App = () => {
           <Route path='/profile' element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="quan-ly-phim" element={<ManageMovie />} />
+          <Route path="quan-ly-phim/:id" element={<ManageDetailMovie />} />
           <Route path="quan-ly-nguoi-dung" element={<ManageUser />} />
         </Route>
 

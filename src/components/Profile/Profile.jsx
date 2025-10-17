@@ -1,11 +1,12 @@
 import { LockOpen, User } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import ChangePassword from './ChangePassword'
+import { AuthContext } from '../../context/AuthContext'
 
 const Profile = () => {
+    const { user } = useContext(AuthContext)
     const [userInfo, setUserInfo] = useState({
-        name: 'Nguyễn Văn A',
-        email: 'user@example.com'
+        ...user.user
     })
     const [isEditing, setIsEditing] = useState(false)
 

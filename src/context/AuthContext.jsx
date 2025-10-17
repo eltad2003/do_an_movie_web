@@ -4,9 +4,10 @@ export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
-        const token = JSON.parse(localStorage.getItem('user'))
-        return token ?? null
+        const storage = JSON.parse(localStorage.getItem('user'))
+        return storage ?? null
     })
+    
     const login = async (username, password) => {
         try {
             const res = await fetch(`${import.meta.env.VITE_BE}/authenticate`, {
