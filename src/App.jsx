@@ -22,6 +22,7 @@ import ManageUser from './components/Admin/ManageUser'
 import ManageDetailMovie from './components/Admin/ManageMovie/ManageDetailMovie'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const App = () => {
   return (
@@ -44,15 +45,21 @@ const App = () => {
           <Route path="/xem-chung/tao-phong" element={<CreateRoom />} />
 
           <Route path="/tim-kiem" element={<SearchResults />} />
-          <Route path='/profile' element={<Profile />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path='/profile' element={<Profile />} />
+          </Route>
+
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="quan-ly-phim" element={<ManageMovie />} />
-          <Route path="quan-ly-phim/:id" element={<ManageDetailMovie />} />
-          <Route path="quan-ly-nguoi-dung" element={<ManageUser />} />
+        <Route element={<ProtectedRoute roleAdmin={true} />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="quan-ly-phim" element={<ManageMovie />} />
+            <Route path="quan-ly-phim/:id" element={<ManageDetailMovie />} />
+            <Route path="quan-ly-nguoi-dung" element={<ManageUser />} />
+          </Route>
         </Route>
 
       </Routes>

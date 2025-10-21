@@ -87,6 +87,9 @@ const Navbar = () => {
             {isOpenProfile && (
                 <div className='absolute top-full right-0 m-1 w-48 bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
                     <Link to="/profile" className='block text-white hover:text-light-100 mb-3'>Hồ sơ</Link>
+                    {user && user.user.roleName === 'ROLE_ADMIN' && (
+                        <Link to="/admin" className='block text-white hover:text-light-100 mb-3'>Quản trị</Link>
+                    )}
                     <Link onClick={handleLogout} className='inline-flex gap-2 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
                 </div>
             )}
