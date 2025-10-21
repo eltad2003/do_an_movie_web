@@ -43,7 +43,7 @@ const Register = () => {
     }
     return (
         <div className='auth-form'>
-            <form>
+            <form onSubmit={handleRegister}>
                 <h2>Đăng ký</h2>
                 <div>
                     <label htmlFor="fullname">Tên đăng nhập</label>
@@ -51,7 +51,7 @@ const Register = () => {
                 </div>
                 <div>
                     <label htmlFor="fullname">Tên đầy đủ</label>
-                    <input type="text" name="name" placeholder="Nhập họ và tên" required onChange={handleChange} />
+                    <input type="text" name="name" placeholder="Nhập họ và tên" onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="email">Email</label>
@@ -71,7 +71,7 @@ const Register = () => {
                     {error && <p className='text-red-500 text-sm'>{error}</p>}
                 </div>
 
-                <button type="submit" className='btn w-full' onClick={handleRegister}>Đăng ký</button>
+                <button type="submit" className='btn w-full' >Đăng ký</button>
                 <p className='text-center text-light-100'>Hoặc</p>
                 <button type="button" className='btn w-full'>Đăng nhập bằng Google</button>
                 <div className='flex items-center justify-center gap-1'>

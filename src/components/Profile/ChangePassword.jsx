@@ -1,7 +1,8 @@
 import { LockOpen } from 'lucide-react'
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
-const ChangePassword = () => {
+const ChangePassword = ({ token }) => {
     const [passwordData, setPasswordData] = useState({
         currentPassword: '',
         newPassword: '',
@@ -14,27 +15,36 @@ const ChangePassword = () => {
             [e.target.name]: e.target.value
         })
     }
-    const handleChangePassword = () => {
-        if (passwordData.newPassword !== passwordData.confirmPassword) {
-            alert('Mật khẩu xác nhận không khớp!')
-            return
-        }
+    const handleChangePassword = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/change-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(passwordData)
+            })
+            //if new password and confirm password not match
+            //if current password is incorrect
+            if (!res.ok) {
+                const errorMessage = await res.text()
+                toast.error(errorMessage)
+                return
+            }
+            setPasswordData({
+                currentPassword: '',
+                newPassword: '',
+                confirmPassword: ''
+            })
+            setShowChangePassword(false)
+            toast.success('Mật khẩu đã được đổi thành công!')
+        } catch (error) {
+            toast.error(error)
 
-        if (passwordData.newPassword.length < 6) {
-            alert('Mật khẩu mới phải có ít nhất 6 ký tự!')
-            return
         }
-
-        // Logic đổi mật khẩu
-        console.log('Changing password')
-        setPasswordData({
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-        })
-        setShowChangePassword(false)
-        alert('Mật khẩu đã được đổi thành công!')
     }
+
     return (
         <section className="section mb-10">
             {!showChangePassword ? (
@@ -47,7 +57,7 @@ const ChangePassword = () => {
                     </button>
                 </div>
             ) : (
-                <div className="space-y-6">
+                <form onSubmit={handleChangePassword} className="space-y-6">
                     <div>
                         <div className="flex items-center mb-6 gap-3">
                             <LockOpen />
@@ -96,7 +106,7 @@ const ChangePassword = () => {
 
                     <div className="flex flex-col sm:flex-row gap-3 pt-4">
                         <button
-                            onClick={handleChangePassword}
+                            type='submit'
                             className="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105"
                         >
                             Đổi mật khẩu
@@ -108,7 +118,7 @@ const ChangePassword = () => {
                             Hủy
                         </button>
                     </div>
-                </div>
+                </form>
             )}
         </section>
 

@@ -79,8 +79,6 @@ const ManageMovie = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [filterStatus, setFilterStatus] = useState('ALL')
     const [filterYear, setFilterYear] = useState('ALL')
-    const [selectedMovies, setSelectedMovies] = useState([])
-    const [showDropdown, setShowDropdown] = useState(null)
     const [showAddMovie, setShowAddMovie] = useState(false)
 
 

@@ -1,37 +1,60 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-
+import { toast } from 'react-toastify'
+import logoGoogle from '/google-color.svg'
 const Login = () => {
-    const { login } = useContext(AuthContext)
+    const { login, loginGoogle } = useContext(AuthContext)
     const [creds, setCreds] = useState({
         username: '',
         password: ''
     })
-    const [error, setError] = useState(null)
     const navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault()
-        const res = await login(creds.username, creds.password)
-        if (!res.success) {
-            setError(res.message)
-        }
-        else {
-            alert('Đăng nhập thành công')
-            navigate('/')
+        try {
+            const res = await login(creds.username, creds.password)
+            if (!res.success) {
+                toast.error(res.message)
+            }
+            else {
+                toast.success(res.message)
+                navigate('/')
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error('Đã có lỗi xảy ra. Vui lòng thử lại.')
         }
     }
     const handleChange = (e) => {
         setCreds({ ...creds, [e.target.name]: e.target.value })
     }
 
+    const handleLoginGoogle = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await loginGoogle()
+            if (!res.success) {
+                toast.error(res.message)
+            }
+            else {
+                navigate('/')
+                toast.success(res.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error('Đã có lỗi xảy ra. Vui lòng thử lại.')
+        }
+
+    }
+
     return (
         <div className='auth-form'>
-            <form>
+            <form onSubmit={handleLogin}>
                 <h2 >Đăng nhập</h2>
                 <div>
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">Tên đăng nhập</label>
                     <input type="text" name="username" required={true} onChange={handleChange} />
                 </div>
                 <div>
@@ -39,12 +62,14 @@ const Login = () => {
                     <input type="password" name="password" required onChange={handleChange} />
                 </div>
                 <div>
-                    {error && <p className='text-red-500 text-sm'>{error}</p>}
+                    <a href="/forgot-password" className='text-light-100 hover:underline'>Quên mật khẩu?</a>
                 </div>
 
-                <button type="submit" className='btn w-full' onClick={handleLogin}>Đăng nhập</button>
-                <p className='text-center text-light-100'>Hoặc</p>
-                <button type="button" className='btn w-full'> Đăng nhập bằng Google</button>
+                <button type="submit" className='btn w-full'>Đăng nhập</button>
+                <p className='text-center text-light-100/50'>Hoặc</p>
+                <button type="button" className='btn w-full inline-flex items-center justify-center' onClick={handleLoginGoogle}>
+                    <img src={logoGoogle} alt="Google" className='w-5 h-5' />  Đăng nhập bằng Google
+                </button>
                 <div className='flex items-center justify-center gap-1'>
                     <p className='text-white/50'>Bạn mới sử dụng ChillFilx?</p>
                     <a href="/register" className='text-light-100 font-bold'>Đăng ký ngay.</a>

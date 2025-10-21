@@ -20,7 +20,8 @@ import Dashboard from './components/Admin/Dashboard'
 import ManageMovie from './components/Admin/ManageMovie/ManageMovie'
 import ManageUser from './components/Admin/ManageUser'
 import ManageDetailMovie from './components/Admin/ManageMovie/ManageDetailMovie'
-
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const App = () => {
   return (
@@ -55,6 +56,18 @@ const App = () => {
         </Route>
 
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </BrowserRouter>
   )
 }

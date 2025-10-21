@@ -1,47 +1,89 @@
 import { LockOpen, User } from 'lucide-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ChangePassword from './ChangePassword'
 import { AuthContext } from '../../context/AuthContext'
+import Loading from '../UI/Loading'
+import { toast } from 'react-toastify'
 
 const Profile = () => {
     const { user } = useContext(AuthContext)
-    const [userInfo, setUserInfo] = useState({
-        ...user.user
-    })
+    const [userInfo, setUserInfo] = useState(null)
+
     const [isEditing, setIsEditing] = useState(false)
 
+    const fetchUserInfo = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/users/me`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                }
+            })
+            if (!res.ok) {
+                throw new Error('Failed to fetch user info')
+            }
+            const data = await res.json()
+            setUserInfo(data)
+            console.log(data);
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
     const handleInfoChange = (e) => {
         setUserInfo({
             ...userInfo,
             [e.target.name]: e.target.value
         })
     }
-    const handleSaveInfo = () => {
-        // Logic lưu thông tin người dùng
-        console.log('Saving user info:', userInfo)
-        setIsEditing(false)
-        alert('Thông tin đã được cập nhật!')
+    const handleSaveInfo = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/users/me`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                },
+                body: JSON.stringify({
+                    name: userInfo.name,
+                    email: userInfo.email,
+                    username: userInfo.username
+                })
+            })
+            if (!res.ok) {
+                toast.error(await res.text())
+                return
+            }
+            const data = await res.json()
+            setUserInfo(data)
+            setIsEditing(false)
+            toast.success('Cập nhật thông tin thành công!')
+        } catch (error) {
+            console.error(error)
+            toast.error('Cập nhật thông tin thất bại!')
+        }
     }
 
+    useEffect(() => {
+        fetchUserInfo()
+    }, [])
+
+    if (!userInfo) {
+        return <Loading />
+    }
 
     return (
         <main >
-            <div className="container mx-auto p-5 max-w-2xl">
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <h1>Thông tin cá nhân</h1>
-                </div>
-
-                {/* Thông tin cơ bản */}
-                <section className="section mb-10">
-                    <div className="flex items-center mb-6 gap-3">
+            <div className="container mx-auto p-5 max-w-3xl">
+                <section className="section">
+                    <div className="flex justify-center items-center mb-6 gap-3">
                         <User />
                         <h2>Thông tin cơ bản</h2>
                     </div>
-
                     <div className="space-y-6">
                         <div>
-                            <label className="block text-sm font-medium text-light-100 mb-2">
+                            <label className="block text-sm font-semibold text-light-100 mb-2">
                                 Tên đầy đủ
                             </label>
                             {isEditing ? (
@@ -54,14 +96,34 @@ const Profile = () => {
                                     placeholder="Nhập tên đầy đủ"
                                 />
                             ) : (
-                                <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700">
+                                <div className='inline-flex gap-3 items-center'>
                                     {userInfo.name}
+                                    <span className='text-sm font-medium px-2.5 py-0.5 bg-green-500 rounded-full'>{userInfo.roleName}</span>
                                 </div>
                             )}
                         </div>
+                        {/* <div>
+                            <label className="block text-sm font-semibold text-light-100 mb-2">
+                                Tên đăng nhập
+                            </label>
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    name="username"
+                                    value={userInfo.username}
+                                    onChange={handleInfoChange}
+                                    className="w-full px-4 py-3 text-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                                    placeholder="Nhập tên đầy đủ"
+                                />
+                            ) : (
+                                <div className='inline-flex gap-3 items-center'>
+                                    {userInfo.username}
 
+                                </div>
+                            )}
+                        </div> */}
                         <div>
-                            <label className="block text-sm font-medium text-light-100 mb-2">
+                            <label className="block text-sm font-semibold text-light-100 mb-2">
                                 Email
                             </label>
                             {isEditing ? (
@@ -74,7 +136,7 @@ const Profile = () => {
                                     placeholder="Nhập email"
                                 />
                             ) : (
-                                <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700">
+                                <div>
                                     {userInfo.email}
                                 </div>
                             )}
@@ -109,35 +171,9 @@ const Profile = () => {
                     </div>
                 </section>
 
-                {/* Đổi mật khẩu */}
-                <ChangePassword />
-
-                {/* Thông tin bổ sung */}
-                {/* <div className="mt-6 bg-white rounded-xl shadow-lg p-6">
-                    <div className="flex items-center mb-6">
-                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-                            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <h2 className="text-2xl font-semibold text-gray-800">Trạng thái tài khoản</h2>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                            <div className="text-green-600 font-semibold mb-1">Tài khoản</div>
-                            <div className="text-green-800 text-sm">Đã xác thực</div>
-                        </div>
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                            <div className="text-blue-600 font-semibold mb-1">Email</div>
-                            <div className="text-blue-800 text-sm">Đã xác thực</div>
-                        </div>
-                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
-                            <div className="text-purple-600 font-semibold mb-1">Thành viên từ</div>
-                            <div className="text-purple-800 text-sm">Tháng 10, 2024</div>
-                        </div>
-                    </div>
-                </div> */}
+                {/* change password*/}
+                <ChangePassword token={user.accessToken} />
+              
             </div>
         </main>
     )
