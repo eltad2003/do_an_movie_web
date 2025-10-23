@@ -18,11 +18,13 @@ import Profile from './components/Profile/Profile'
 import AdminLayout from './components/Admin/AdminLayout'
 import Dashboard from './components/Admin/Dashboard'
 import ManageMovie from './components/Admin/ManageMovie/ManageMovie'
-import ManageUser from './components/Admin/ManageUser'
+import ManageUser from './components/Admin/ManageUser/ManageUser'
 import ManageDetailMovie from './components/Admin/ManageMovie/ManageDetailMovie'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ProtectedRoute from './components/ProtectedRoute'
+import ManageActor from './components/Admin/ManageActor'
+import ManageCategory from './components/Admin/ManageCategory'
 
 const App = () => {
   return (
@@ -53,12 +55,15 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        <Route element={<ProtectedRoute roleAdmin={true} />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="quan-ly-phim" element={<ManageMovie />} />
             <Route path="quan-ly-phim/:id" element={<ManageDetailMovie />} />
             <Route path="quan-ly-nguoi-dung" element={<ManageUser />} />
+            <Route path="quan-ly-the-loai" element={<ManageCategory />} />
+            <Route path="quan-ly-dien-vien" element={<ManageActor />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
 

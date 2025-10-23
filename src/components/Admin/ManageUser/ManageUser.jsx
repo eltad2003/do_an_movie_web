@@ -1,110 +1,74 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     Search,
-    Filter,
-    UserPlus,
-    Edit,
     Trash2,
     Eye,
     Shield,
     User,
     Mail,
-    Calendar,
-    MoreHorizontal,
-    ChevronDown
+
 } from 'lucide-react'
+import { AuthContext } from '../../../context/AuthContext'
+import { toast } from 'react-toastify'
+
 
 const ManageUser = () => {
-    const users = [
-        {
-            "id": 1,
-            "username": "eltad2003@gmail.com",
-            "email": "eltad2003@gmail.com",
-            "name": "B21DCCN212 - Lê Hoàng Đạt",
-            "provider": "GOOGLE",
-            "roleName": "ROLE_USER",
-            "createdAt": "2024-01-15",
-            "avatar": "https://i.pravatar.cc/150?img=1"
-        },
-        {
-            "id": 4,
-            "username": "test",
-            "email": "test@gmail.com",
-            "name": "ADMIN",
-            "provider": "LOCAL",
-            "roleName": "ROLE_ADMIN",
-            "createdAt": "2024-01-10",
-            "avatar": "https://i.pravatar.cc/150?img=2"
-        },
-        {
-            "id": 5,
-            "username": "test1",
-            "email": "test1@gmail.com",
-            "name": null,
-            "provider": "LOCAL",
-            "roleName": "ROLE_USER",
-            "createdAt": "2024-02-01",
-            "avatar": "https://i.pravatar.cc/150?img=3"
-        },
-        {
-            "id": 6,
-            "username": "test3",
-            "email": "test3@gmail.com",
-            "name": null,
-            "provider": "LOCAL",
-            "roleName": "ROLE_USER",
-            "createdAt": "2024-02-05",
-            "avatar": "https://i.pravatar.cc/150?img=4"
-        },
-        {
-            "id": 7,
-            "username": "test4",
-            "email": "test4@gmail.com",
-            "name": null,
-            "provider": "LOCAL",
-            "roleName": "ROLE_USER",
-            "createdAt": "2024-02-10",
-            "avatar": "https://i.pravatar.cc/150?img=5"
-        },
-        {
-            "id": 8,
-            "username": "test10",
-            "email": "test10@gmail.com",
-            "name": null,
-            "provider": "LOCAL",
-            "roleName": "ROLE_USER",
-            "createdAt": "2024-02-15",
-            "avatar": "https://i.pravatar.cc/150?img=6"
-        },
-        {
-            "id": 9,
-            "username": "test5",
-            "email": "test5@gmail.com",
-            "name": "test5",
-            "provider": "LOCAL",
-            "roleName": "ROLE_USER",
-            "createdAt": "2024-02-20",
-            "avatar": "https://i.pravatar.cc/150?img=7"
-        }
-    ]
-
+    const { user } = useContext(AuthContext)
+    const [users, setUsers] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [filterRole, setFilterRole] = useState('ALL')
-    const [filterProvider, setFilterProvider] = useState('ALL')
     const [selectedUsers, setSelectedUsers] = useState([])
-    const [showDropdown, setShowDropdown] = useState(null)
 
 
-    // Filter users based on search and filters
+    const fetchAllUser = async () => {
+
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/admin/users`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                }
+            })
+            const data = await res.json()
+            setUsers(data)
+        } catch (error) {
+            console.error('Error fetching users:', error)
+        }
+    }
+
+    const handleDeleteUser = async (id) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa người dùng này không?')) {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_BE}/admin/users/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.accessToken}`
+                    }
+                })
+                if (res.ok) {
+                    fetchAllUser()
+                    toast.success('Xóa người dùng thành công')
+                } else {
+                    console.error('Error deleting user:', await res.text())
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error)
+            }
+        }
+    }
+
+    // Filter 
     const filteredUsers = users.filter(user => {
+        //search by username, email, name
         const matchSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase()))
-
+        //filter by role
         const matchRole = filterRole === 'ALL' || user.roleName === filterRole
-        const matchProvider = filterProvider === 'ALL' || user.provider === filterProvider
 
-        return matchSearch && matchRole && matchProvider
+        return matchSearch && matchRole
     })
 
     const handleSelectAll = (e) => {
@@ -151,11 +115,16 @@ const ManageUser = () => {
         )
     }
 
+    useEffect(() => {
+        fetchAllUser()
+    }, [])
+
+
     return (
-        <div className="min-h-screen">
+        <div className="min-h-dvh">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-                <h1 className="text-3xl font-bold mb-2">Quản lý người dùng</h1>
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-5">
+                <h1 className="text-3xl font-bold mb-2">Quản lý Người Dùng</h1>
             </div>
 
             <div className="p-10">
@@ -186,20 +155,6 @@ const ManageUser = () => {
                                 <option value="ROLE_USER">User</option>
                             </select>
 
-                            <select
-                                value={filterProvider}
-                                onChange={(e) => setFilterProvider(e.target.value)}
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                                <option value="ALL">Tất cả nhà cung cấp</option>
-                                <option value="LOCAL">Local</option>
-                                <option value="GOOGLE">Google</option>
-                            </select>
-
-                            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-                                <UserPlus size={18} />
-                                Thêm user
-                            </button>
                         </div>
                     </div>
 
@@ -226,6 +181,7 @@ const ManageUser = () => {
                 {/* Users Table */}
                 <div className=" rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div className="overflow-x-auto">
+
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b border-gray-200">
                                 <tr>
@@ -266,12 +222,13 @@ const ManageUser = () => {
                                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                             />
                                         </td>
+                                        {/* avatar: "https://i.pravatar.cc/150?img={id}" */}
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
                                                 <img
-                                                    src={user.avatar}
-                                                    alt={user.name || user.username}
-                                                    className="w-10 h-10 rounded-full mr-3 border-2 border-gray-200"
+                                                    src={`https://i.pravatar.cc/150?u=${user.id}`}
+                                                    alt={user.name}
+                                                    className="w-12 h-12 rounded-full mr-3 border-2 border-gray-200"
                                                 />
                                                 <div>
                                                     <div className=" text-gray-900" title='Tên'>
@@ -295,49 +252,34 @@ const ManageUser = () => {
                                         </td>
 
                                         <td className="px-6 py-4 text-center">
-                                            <div className="relative">
-                                                <button
-                                                    onClick={() => setShowDropdown(showDropdown === user.id ? null : user.id)}
-                                                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-                                                >
-                                                    <MoreHorizontal size={16} />
+                                            <div className="py-1">
+                                                <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 hover:rounded-lg">
+                                                    <Eye size={16} className="mr-2" />
+                                                    Xem chi tiết
                                                 </button>
-
-                                                {showDropdown === user.id && (
-                                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-40">
-                                                        <div className="py-1">
-                                                            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                                <Eye size={16} className="mr-2" />
-                                                                Xem chi tiết
-                                                            </button>
-                                                            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                                <Edit size={16} className="mr-2" />
-                                                                Chỉnh sửa
-                                                            </button>
-                                                            <button className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                                                                <Trash2 size={16} className="mr-2" />
-                                                                Xóa
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                )}
-
+                                                <button
+                                                    onClick={() => handleDeleteUser(user.id)}
+                                                    className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-300 hover:rounded-lg">
+                                                    <Trash2 size={16} className="mr-2" />
+                                                    Xóa
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+                        {/* Empty State */}
+                        {filteredUsers.length === 0 && (
+                            <div className="text-center py-12">
+                                <User size={48} className="mx-auto text-gray-300 mb-4" />
+                                <h3 className="text-lg  text-gray-900 mb-2">Không tìm thấy người dùng</h3>
+                                <p className="text-gray-500">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Empty State */}
-                    {filteredUsers.length === 0 && (
-                        <div className="text-center py-12">
-                            <User size={48} className="mx-auto text-gray-300 mb-4" />
-                            <h3 className="text-lg  text-gray-900 mb-2">Không tìm thấy người dùng</h3>
-                            <p className="text-gray-500">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
-                        </div>
-                    )}
+
                 </div>
 
                 {/* Pagination */}

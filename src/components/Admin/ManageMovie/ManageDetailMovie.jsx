@@ -78,12 +78,12 @@ const ManageDetailMovie = () => {
                     </div>
                 </div>
             </div>
-            <div className='border border-gray-300  rounded-lg p-6 mx-6 mt-6 '>
+            <div className=' rounded-lg p-6 mx-6 mt-6 '>
                 {/* Tab Navigation */}
-                <div className='mb-10 flex gap-4 border-b border-gray-300 pb-4'>
-                    <h3 className={`text-blue-500 font-semibold cursor-pointer ${typeHeader === 'info' ? 'text-gray-500' : ''}`} onClick={() => setTypeHeader('info')}>Thông tin phim</h3>
-                    <h3 className={`text-blue-500 font-semibold cursor-pointer ${typeHeader === 'episodes' ? 'text-gray-500' : ''}`} onClick={() => setTypeHeader('episodes')}>Danh sách video phim</h3>
-                    <h3 className={`text-blue-500 font-semibold cursor-pointer ${typeHeader === 'reviews' ? 'text-gray-500' : ''}`} onClick={() => setTypeHeader('reviews')}>Review</h3>
+                <div className='mb-10 flex gap-4'>
+                    <h3 className={`text-blue-500 font-semibold cursor-pointer ${typeHeader === 'info' ? 'text-gray-500 pb-2 border-b-3 border-gray-500 ' : ''}`} onClick={() => setTypeHeader('info')}>Thông tin phim</h3>
+                    <h3 className={`text-blue-500 font-semibold cursor-pointer ${typeHeader === 'episodes' ? 'text-gray-500 pb-2 border-b-3 border-gray-500' : ''}`} onClick={() => setTypeHeader('episodes')}>Danh sách video phim</h3>
+                    <h3 className={`text-blue-500 font-semibold cursor-pointer ${typeHeader === 'reviews' ? 'text-gray-500 pb-2 border-b-3 border-gray-500' : ''}`} onClick={() => setTypeHeader('reviews')}>Review</h3>
                 </div>
                 {typeHeader === 'info' ? (
                     <div className="mb-10">

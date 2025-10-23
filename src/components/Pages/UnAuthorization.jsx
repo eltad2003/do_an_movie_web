@@ -16,6 +16,7 @@ const UnAuthorization = () => {
                     Về trang chủ
                 </Link>
             </div>
+
         </main>
     )
 }

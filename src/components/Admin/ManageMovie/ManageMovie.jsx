@@ -119,13 +119,9 @@ const ManageMovie = () => {
     return (
         <div className='bg-white min-h-screen'>
             {/* Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold mb-2">Quản lý phim</h1>
-                        <p className="text-purple-100">Quản lý nội dung và thông tin phim</p>
-                    </div>
-                    <div className="flex items-center space-x-6">
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-5">
+                <h1 className="text-3xl font-bold mb-2">Quản lý phim</h1>
+                {/* <div className="flex items-center space-x-6">
                         <div className="text-right">
                             <div className="text-2xl font-bold">{movies.length}</div>
                             <div className="text-sm text-purple-100">Tổng số phim</div>
@@ -134,8 +130,7 @@ const ManageMovie = () => {
                             <div className="text-2xl font-bold">{movies.filter(m => m.status === 'released').length}</div>
                             <div className="text-sm text-purple-100">Đã phát hành</div>
                         </div>
-                    </div>
-                </div>
+                    </div> */}
             </div>
 
             <div className="p-6">

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useNav } from '../../hooks/useNav'
 import DropDown from './DropDown'
-import { LogOut, Menu, User, X } from 'lucide-react'
+import { LogOut, Menu, Shield, User, UserPen, X } from 'lucide-react'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
 
@@ -86,11 +86,11 @@ const Navbar = () => {
             )}
             {isOpenProfile && (
                 <div className='absolute top-full right-0 m-1 w-48 bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
-                    <Link to="/profile" className='block text-white hover:text-light-100 mb-3'>Hồ sơ</Link>
+                    <Link to="/profile" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><UserPen />Hồ sơ</Link>
                     {user && user.user.roleName === 'ROLE_ADMIN' && (
-                        <Link to="/admin" className='block text-white hover:text-light-100 mb-3'>Quản trị</Link>
+                        <Link to="/admin" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Shield />Quản trị</Link>
                     )}
-                    <Link onClick={handleLogout} className='inline-flex gap-2 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
+                    <Link onClick={handleLogout} className='inline-flex gap-4 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
                 </div>
             )}
 
