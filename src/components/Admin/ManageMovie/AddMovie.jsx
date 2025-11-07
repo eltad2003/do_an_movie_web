@@ -15,7 +15,8 @@ import {
     Globe,
     Users,
     FileText,
-    Tag
+    Tag,
+    ChartBarStacked
 } from 'lucide-react'
 
 const AddMovie = ({ onBack }) => {
@@ -29,14 +30,17 @@ const AddMovie = ({ onBack }) => {
         trailer_url: '',
         duration: '',
         actors: [],
-        language: '',
-        subtitle: false,
+        director: [],
+        category: [],
+        country: '',
+
         year: new Date().getFullYear(),
-        rating: 0,
         status: 'updating'
     })
 
     const [newActor, setNewActor] = useState('')
+    const [newDirector, setNewDirector] = useState('')
+    const [newCategory, setNewCategory] = useState('')
     const [posterPreview, setPosterPreview] = useState('')
     const [thumbPreview, setThumbPreview] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -59,7 +63,7 @@ const AddMovie = ({ onBack }) => {
     }
 
     const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target
+        const { name, value } = e.target
 
         if (name === 'name') {
             setMovieData(prev => ({
@@ -70,7 +74,7 @@ const AddMovie = ({ onBack }) => {
         } else {
             setMovieData(prev => ({
                 ...prev,
-                [name]: type === 'checkbox' ? checked : value
+                [name]: value
             }))
         }
     }
@@ -102,10 +106,43 @@ const AddMovie = ({ onBack }) => {
         }
     }
 
+    const addDirector = () => {
+        if (newDirector.trim() && !movieData.director.includes(newDirector.trim())) {
+            setMovieData(prev => ({
+                ...prev,
+                director: [...prev.director, newDirector.trim()]
+            }))
+            setNewDirector('')
+        }
+    }
+
+    const addCategory = () => {
+        if (newCategory.trim() && !movieData.category.includes(newCategory.trim())) {
+            setMovieData(prev => ({
+                ...prev,
+                category: [...prev.category, newCategory.trim()]
+            }))
+            setNewCategory('')
+        }
+    }
+
+    const removeCategory = (index) => {
+        setMovieData(prev => ({
+            ...prev,
+            category: prev.category.filter((_, i) => i !== index)
+        }))
+    }
+
     const removeActor = (index) => {
         setMovieData(prev => ({
             ...prev,
             actors: prev.actors.filter((_, i) => i !== index)
+        }))
+    }
+    const removeDirector = (index) => {
+        setMovieData(prev => ({
+            ...prev,
+            director: prev.director.filter((_, i) => i !== index)
         }))
     }
 
@@ -189,16 +226,7 @@ const AddMovie = ({ onBack }) => {
                                         onChange={(e) => handleImageUpload('poster', e.target.files[0])}
                                     />
 
-                                    <input
-                                        type="url"
-                                        placeholder="Hoặc nhập URL poster"
-                                        value={movieData.poster_url}
-                                        onChange={(e) => {
-                                            setMovieData(prev => ({ ...prev, poster_url: e.target.value }))
-                                            setPosterPreview(e.target.value)
-                                        }}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                                    />
+
                                 </div>
                             </div>
 
@@ -227,7 +255,6 @@ const AddMovie = ({ onBack }) => {
                                             </div>
                                         )}
                                     </div>
-
                                     <input
                                         id="thumb-upload"
                                         type="file"
@@ -236,16 +263,6 @@ const AddMovie = ({ onBack }) => {
                                         onChange={(e) => handleImageUpload('thumb', e.target.files[0])}
                                     />
 
-                                    <input
-                                        type="url"
-                                        placeholder="Hoặc nhập URL thumbnail"
-                                        value={movieData.thumb_url}
-                                        onChange={(e) => {
-                                            setMovieData(prev => ({ ...prev, thumb_url: e.target.value }))
-                                            setThumbPreview(e.target.value)
-                                        }}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                                    />
                                 </div>
                             </div>
                         </div>
@@ -303,6 +320,21 @@ const AddMovie = ({ onBack }) => {
                                         />
                                     </div>
 
+                                    <div className="md:col-span-2">
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Mô tả phim
+                                        </label>
+
+                                        <textarea
+                                            name="description"
+                                            value={movieData.description}
+                                            onChange={handleInputChange}
+                                            rows={6}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                                            placeholder="Nhập mô tả chi tiết về nội dung phim..."
+                                        />
+                                    </div>
+
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             <Calendar className="inline mr-1" size={16} />
@@ -341,37 +373,23 @@ const AddMovie = ({ onBack }) => {
                                             Ngôn ngữ
                                         </label>
                                         <select
-                                            name="language"
-                                            value={movieData.language}
+                                            name="country"
+                                            value={movieData.country}
                                             onChange={handleInputChange}
                                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                                         >
-                                            <option value="">Chọn ngôn ngữ</option>
-                                            <option value="Vietnamese">Tiếng Việt</option>
-                                            <option value="English">Tiếng Anh</option>
-                                            <option value="Korean">Tiếng Hàn</option>
-                                            <option value="Japanese">Tiếng Nhật</option>
-                                            <option value="Chinese">Tiếng Trung</option>
+                                            <option value="" >Chọn quốc gia</option>
+                                            <option value="Việt Nam">Việt Nam</option>
+                                            <option value="Anh">Anh</option>
+                                            <option value="Hàn Quốc">Hàn Quốc</option>
+                                            <option value="Nhật Bản">Nhật Bản</option>
+                                            <option value="Trung Quốc">Trung Quốc</option>
+                                            <option value="Mỹ">Mỹ</option>
                                             <option value="Other">Khác</option>
                                         </select>
                                     </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            <Star className="inline mr-1" size={16} />
-                                            Đánh giá (0-10)
-                                        </label>
-                                        <input
-                                            type="number"
-                                            name="rating"
-                                            value={movieData.rating}
-                                            onChange={handleInputChange}
-                                            min="0"
-                                            max="10"
-                                            step="0.1"
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                                        />
-                                    </div>
+
 
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -390,40 +408,60 @@ const AddMovie = ({ onBack }) => {
                                         </select>
                                     </div>
 
-                                    <div>
-                                        <label className="flex items-center mt-6">
-                                            <input
-                                                type="checkbox"
-                                                name="subtitle"
-                                                checked={movieData.subtitle}
-                                                onChange={handleInputChange}
-                                                className="mr-2 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                                            />
-                                            <span className="text-sm font-medium text-gray-700">Có phụ đề</span>
-                                        </label>
+
+                                </div>
+                            </div>
+
+                            {/* director */}
+                            <div className="p-3">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                    <Users className="mr-2" size={20} />
+                                    Đạo diễn
+                                </h3>
+
+                                <div className="space-y-4" >
+                                    <div className="flex gap-2">
+                                        <input
+
+                                            type="text"
+                                            placeholder="Nhập tên đạo diễn"
+                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                                            value={newDirector}
+                                            onChange={(e) => setNewDirector(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addDirector())}
+                                        />
+                                        <button
+                                            tabIndex={-1}
+                                            onClick={addDirector}
+                                            type="button"
+                                            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                                        >
+                                            <Plus size={20} />
+                                        </button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {movieData.director.map((direc, index) => (
+                                            <span
+                                                key={index}
+                                                className="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm"
+                                            >
+                                                {direc}
+                                                <button
+                                                    tabIndex={-1}
+                                                    type="button"
+                                                    onClick={() => removeDirector(index)}
+                                                    className="ml-2 text-purple-600 hover:text-purple-800"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Description */}
-                            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                                    <FileText className="mr-2" size={20} />
-                                    Mô tả phim
-                                </h3>
-
-                                <textarea
-                                    name="description"
-                                    value={movieData.description}
-                                    onChange={handleInputChange}
-                                    rows={6}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                                    placeholder="Nhập mô tả chi tiết về nội dung phim..."
-                                />
-                            </div>
-
                             {/* Actors */}
-                            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <div className="p-3">
                                 <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                                     <Users className="mr-2" size={20} />
                                     Diễn viên
@@ -440,6 +478,7 @@ const AddMovie = ({ onBack }) => {
                                             onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addActor())}
                                         />
                                         <button
+                                            tabIndex={-1}
                                             type="button"
                                             onClick={addActor}
                                             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
@@ -456,8 +495,55 @@ const AddMovie = ({ onBack }) => {
                                             >
                                                 {actor}
                                                 <button
+                                                    tabIndex={-1}
                                                     type="button"
                                                     onClick={() => removeActor(index)}
+                                                    className="ml-2 text-purple-600 hover:text-purple-800"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Category */}
+                            <div className="p-3">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                    <ChartBarStacked className="mr-2" size={20} />
+                                    Danh mục
+                                </h3>
+
+                                <div className="space-y-4">
+                                    <div className="flex gap-2">
+                                        <input
+                                            placeholder='Nhập thể loại'
+                                            type="text"
+                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                                            value={newCategory}
+                                            onChange={(e) => setNewCategory(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCategory())}
+                                        />
+                                        <button
+                                            tabIndex={-1}
+                                            onClick={addCategory}
+                                            type="button"
+                                            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                                        >
+                                            <Plus size={20} />
+                                        </button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {movieData.category.map((cat, index) => (
+                                            <span
+                                                key={index}
+                                                className="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm"
+                                            >
+                                                {cat}
+                                                <button
+                                                    tabIndex={-1}
+                                                    type="button"
+                                                    onClick={() => removeCategory(index)}
                                                     className="ml-2 text-purple-600 hover:text-purple-800"
                                                 >
                                                     <X size={14} />
@@ -496,13 +582,7 @@ const AddMovie = ({ onBack }) => {
                         >
                             Hủy
                         </button>
-                        <button
-                            type="button"
-                            className="px-6 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center gap-2"
-                        >
-                            <Eye size={18} />
-                            Xem trước
-                        </button>
+
                         <button
                             type="submit"
                             disabled={isSubmitting}

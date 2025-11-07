@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import AddMovie from './AddMovie'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const ManageMovie = () => {
     const [movies, setMovies] = useState([
@@ -73,9 +74,62 @@ const ManageMovie = () => {
             status: "released",
             created_at: "2024-01-10",
             updated_at: "2024-01-15"
+        },
+        {
+            id: "35341840eedadf2f7",
+            name: "The Dark Knight",
+            origin_name: "The Dark Knight",
+            slug: "the-dark-knight",
+            type: "Phim lẻ",
+            description: "Batman phải đối mặt với Joker...",
+            poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+            thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+            trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
+            duration: "2 tiếng 36 phút",
+            director: ["Anthony Russo", "Joe Russo"],
+            actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+            country: "Mỹ",
+            subtitle: true,
+            year: 2019,
+            category: [
+                { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
+                { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
+                { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
+            ],
+            rating: 8.4,
+            views: 1250000,
+            status: "released",
+            created_at: "2024-01-15",
+            updated_at: "2024-01-20"
+        },
+        {
+            id: "45341840eedadf2f8",
+            name: "Ghost in the Shell",
+            origin_name: "Ghost in the Shell",
+            slug: "ghost-in-the-shell",
+            type: "Phim lẻ",
+            description: "Ghost in the Shell phải đối mặt với những hậu quả...",
+            poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+            thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+            trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
+            duration: "2 tiếng 36 phút",
+            director: ["Anthony Russo", "Joe Russo"],
+            actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+            country: "Mỹ",
+            subtitle: true,
+            year: 2019,
+            category: [
+                { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
+                { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
+                { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
+            ],
+            rating: 8.4,
+            views: 1250000,
+            status: "released",
+            created_at: "2024-01-15",
+            updated_at: "2024-01-20"
         }
     ])
-
     const [searchTerm, setSearchTerm] = useState('')
     const [filterStatus, setFilterStatus] = useState('ALL')
     const [filterYear, setFilterYear] = useState('ALL')
@@ -114,6 +168,13 @@ const ManageMovie = () => {
         if (views >= 1000000) return `${(views / 1000000).toFixed(1)}M`
         if (views >= 1000) return `${(views / 1000).toFixed(1)}K`
         return views.toString()
+    }
+
+    const handleDeleteMovie = (movieId) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa phim này không?')) {
+            toast.success('Xóa phim thành công')
+            setMovies(movies.filter(movie => movie.id !== movieId))
+        }
     }
 
     return (
@@ -196,19 +257,19 @@ const ManageMovie = () => {
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phim</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Năm phát hành</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Đánh giá</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Thể loại</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lượt xem</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trạng thái</th>
-                                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Thao tác</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Phim</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Năm phát hành</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Đánh giá</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Thể loại</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Lượt xem</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Trạng thái</th>
+                                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {filteredMovies.map((movie) => (
                                     <tr key={movie.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-3">
                                             <div className="flex items-center">
                                                 <img
                                                     src={movie.thumb_url}
@@ -224,8 +285,8 @@ const ManageMovie = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-gray-900">{movie.year}</td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-3 text-gray-900">{movie.year}</td>
+                                        <td className="px-6 py-3">
                                             <div className="flex items-center">
                                                 <Star size={16} className="text-yellow-400 fill-current mr-1" />
                                                 {movie.rating}
@@ -241,19 +302,22 @@ const ManageMovie = () => {
                                                 </span>
                                             ))}
                                         </td>
-                                        <td className="px-6 py-4 text-gray-900">{formatViews(movie.views)}</td>
-                                        <td className="px-6 py-4">{getStatusBadge(movie.status)}</td>
-                                        <td className="px-6 py-4 text-center">
+                                        <td className="px-6 py-3 text-gray-900">{formatViews(movie.views)}</td>
+                                        <td className="px-6 py-3">{getStatusBadge(movie.status)}</td>
+                                        <td className="px-6 py-3 text-center">
                                             <div className="flex items-center justify-center gap-2">
                                                 <Link
-                                                    className="p-2 cursor-pointer text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-full transition-colors"
+                                                    className="p-2 cursor-pointer text-purple-400 hover:text-purple-600 hover:bg-purple-50 rounded-full transition-colors"
                                                     to={`/admin/quan-ly-phim/${movie.id}`}>
                                                     <Eye size={16} />
                                                 </Link>
-                                                <Link className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors">
+                                                <Link className="p-2 cursor-pointer text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors">
                                                     <Edit size={16} />
                                                 </Link>
-                                                <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors">
+                                                <button
+                                                    className="p-2 cursor-pointer text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                                                    onClick={() => handleDeleteMovie(movie.id)}
+                                                >
                                                     <Trash2 size={16} />
                                                 </button>
                                             </div>

@@ -2,6 +2,7 @@ import { ArrowLeft, Calendar, ChartBarStacked, Clock, FileText, Film, Globe, Ima
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import MangeEpisodes from './MangeEpisodes'
+import ManageReview from './ManageReview'
 
 const ManageDetailMovie = () => {
     const { id } = useParams()
@@ -68,9 +69,9 @@ const ManageDetailMovie = () => {
                 <div className="flex items-center">
                     <Link
                         to="/admin/quan-ly-phim"
-                        className="mr-4 p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                        className="mr-3 rounded-lg hover:scale-130 duration-200"
                     >
-                        <ArrowLeft size={24} />
+                        <ArrowLeft size={25} />
                     </Link>
                     <div>
                         <h1 className="text-3xl font-bold">Phim {id}</h1>
@@ -78,6 +79,7 @@ const ManageDetailMovie = () => {
                     </div>
                 </div>
             </div>
+            
             <div className=' rounded-lg p-6 mx-6 mt-6 '>
                 {/* Tab Navigation */}
                 <div className='mb-10 flex gap-4'>
@@ -336,7 +338,7 @@ const ManageDetailMovie = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* Actors */}
+                                {/* Category */}
                                 <div className="p-3">
                                     <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                                         <ChartBarStacked className="mr-2" size={20} />
@@ -387,10 +389,21 @@ const ManageDetailMovie = () => {
                                     <input
                                         type="url"
                                         name="trailer_url"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                                        className="w-full mb-5 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                                         placeholder="https://www.youtube.com/watch?v=..."
                                         value={editMovie.trailer_url}
                                     />
+                                    {editMovie.trailer_url && (
+                                        <div className='w-full aspect-video'>
+                                            <iframe
+                                                src={editMovie.trailer_url.replace('watch?v=', 'embed/')}
+                                                className='w-full h-full rounded-lg'
+                                                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                                                allowFullScreen
+                                                title="Movie Trailer"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
 
                             </div>
@@ -400,7 +413,7 @@ const ManageDetailMovie = () => {
                 ) : typeHeader === 'episodes' ? (
                     <MangeEpisodes episodes={movie.episodes} />
                 ) : (
-                    null
+                    <ManageReview />
                 )}
 
             </div>

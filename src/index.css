@@ -56,7 +56,7 @@
 
 @layer components {
     .btn {
-        @apply gap-2 rounded-lg bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-2 font-semibold text-dark-100 transition hover:opacity-80 cursor-pointer;
+        @apply gap-2 rounded-lg bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] px-3 py-2 font-semibold text-dark-100 transition hover:opacity-70 cursor-pointer;
     }
 
     .pattern {
@@ -122,6 +122,10 @@
 
 @utility bg-gradient {
     @apply bg-linear-to-r from-[#D6C7FF] to-[#AB8BFF];
+}
+
+@utility bg-google {
+    background: linear-gradient(to right, #EA4335, #FBBC05, #34A853, #4285F4)
 }
 
 @utility fancy-text {

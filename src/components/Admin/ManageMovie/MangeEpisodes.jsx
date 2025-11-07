@@ -15,10 +15,10 @@ const MangeEpisodes = ({ episodes }) => {
                 <table className='w-full'>
                     <thead className='bg-gray-50 border-b border-gray-200'>
                         <tr>
-                            <th className='px-6 py-3 text-left text-gray-500 uppercase'>STT</th>
-                            <th className='px-6 py-3 text-left text-gray-500 uppercase'>Tên tập</th>
-                            <th className='px-6 py-3 text-left text-gray-500 uppercase'>URL video</th>
-                            <th className='px-6 py-3 text-left text-gray-500 uppercase'>Thao tác</th>
+                            <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>STT</th>
+                            <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>Tên tập</th>
+                            <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>URL video</th>
+                            <th className='px-6 py-3 text-xs text-center font-semibold uppercase'>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -30,7 +30,7 @@ const MangeEpisodes = ({ episodes }) => {
                                     <a href={episode.video_url} className='hover:underline text-blue-500'>{episode.video_url}</a>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <div className='flex items-center gap-2'>
+                                    <div className='flex items-center justify-center gap-2'>
                                         <button className="p-2 rounded-lg cursor-pointer bg-yellow-500 text-white hover:bg-yellow-600"> <Upload size={18} /></button>
                                         <button className="p-2 rounded-lg cursor-pointer bg-blue-500 text-white hover:bg-blue-600"> <Edit size={18} /></button>
                                         <button className="p-2 rounded-lg cursor-pointer bg-red-500 text-white hover:bg-red-600"> <Trash2 size={18} /></button>

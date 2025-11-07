@@ -86,15 +86,15 @@ const ManageUser = () => {
     const getRoleBadge = (roleName) => {
         if (roleName === 'ROLE_ADMIN') {
             return (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full  bg-red-100 text-red-800">
-                    <Shield size={14} className="mr-1" />
+                <span className="inline-flex gap-1 items-center px-2.5 py-0.5 rounded-full bg-red-200 text-red-800">
+                    <Shield size={14} />
                     Admin
                 </span>
             )
         }
         return (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full  bg-blue-100 text-blue-800">
-                <User size={14} className="mr-1" />
+            <span className="inline-flex gap-1 items-center px-2.5 py-0.5 rounded-full bg-blue-200 text-blue-800">
+                <User size={14} />
                 User
             </span>
         )
@@ -103,13 +103,13 @@ const ManageUser = () => {
     const getProviderBadge = (provider) => {
         if (provider === 'GOOGLE') {
             return (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full  bg-green-200 text-green-800">
+                <span className="bg-google px-2.5 py-1 rounded-full text-white font-semibold text-sm">
                     Google
                 </span>
             )
         }
         return (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full  bg-gray-100 text-gray-800">
+            <span className="px-2.5 py-1 rounded-full text-gray-800 bg-gray-100 font-semibold">
                 Local
             </span>
         )
@@ -193,20 +193,20 @@ const ManageUser = () => {
                                             className="border-gray-300 text-blue-600 focus:ring-blue-500"
                                         />
                                     </th>
-                                    <th className="px-6 text-left text-gray-500 uppercase">
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
                                         Người dùng
                                     </th>
-                                    <th className="px-6 text-left text-gray-500 uppercase">
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
                                         Email
                                     </th>
-                                    <th className="px-6 text-left text-gray-500 uppercase">
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
                                         Vai trò
                                     </th>
-                                    <th className="px-6 text-left text-gray-500 uppercase">
+                                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
                                         Nhà cung cấp
                                     </th>
 
-                                    <th className="px-6 text-center text-gray-500 uppercase">
+                                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase">
                                         Thao tác
                                     </th>
                                 </tr>

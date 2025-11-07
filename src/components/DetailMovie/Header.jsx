@@ -33,8 +33,8 @@ const Header = ({ detailMovie, episodes }) => {
                     {/* movie info */}
                     <div className="space-y-4 hidden lg:block">
                         <div >
-                            <h1 className='text-start text-shadow-lg/50'>{detailMovie.name}</h1>
-                            <h2>{detailMovie.origin_name}</h2>
+                            <h1 className='text-start'>{detailMovie.name}</h1>
+                            <h2 className='font-semibold text-gray-400'>{detailMovie.origin_name}</h2>
                         </div>
 
                         {/* Rating & Info badges */}
@@ -85,7 +85,7 @@ const Header = ({ detailMovie, episodes }) => {
 
                     {/* title in mobile*/}
                     <div className="block lg:hidden space-y-3 p-1">
-                        <h1 className='text-start text-shadow-lg/50'>{detailMovie.name}</h1>
+                        <h1 className='text-start'>{detailMovie.name}</h1>
                         <p className="font-semibold text-white/80">{detailMovie.origin_name}</p>
                         <div className="action-button">
                             <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0]?.server_data[0]?.slug}`}>

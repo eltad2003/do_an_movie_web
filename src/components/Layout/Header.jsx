@@ -62,8 +62,7 @@ const Navbar = () => {
                     isDropdownOpen={openDropdown === 'country'}
                     onToggle={() => handleDropdownToggle('country')}
                 />
-                <Type to="/hoat-hinh" label="Hoạt hình" />
-                <Type to="/tv-shows" label="TV Shows" />
+
                 <Type to="/xem-chung" label="Xem chung" />
             </div>
 
@@ -112,8 +111,7 @@ const Navbar = () => {
                     />
                     <Type to="/phim-bo" label="Phim bộ" />
                     <Type to="/phim-le" label="Phim lẻ" />
-                    <Type to="/hoat-hinh" label="Hoạt hình" />
-                    <Type to="/tv-shows" label="TV Shows" />
+
                     <Type to="/xem-chung" label="Xem chung" />
                 </div>
             )}
