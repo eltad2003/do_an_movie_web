@@ -3,23 +3,24 @@ import React, { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../context/AuthContext'
 import { generateSlug } from '../../utils/helpers'
-import { useActors } from '../../hooks/useManage'
+import { useDirectors } from '../../hooks/useManage'
 
-const ManageActor = () => {
+const ManageDirector = () => {
     const { user } = useContext(AuthContext)
-    const { actors, setActors } = useActors()
-    const [newActor, setNewActor] = useState({ name: '', slug: '' })
+    const { directors, setDirectors } = useDirectors()
+    const [newDirector, setNewDirector] = useState({ name: '', slug: '' })
     const [showModal, setShowModal] = useState(false)
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
-        setNewActor({ ...newActor, [name]: value, slug: generateSlug(value) })
+        setNewDirector({ ...newDirector, [name]: value, slug: generateSlug(value) })
     }
 
-    const handleDeleteActor = async (id) => {
-        if (window.confirm('Bạn có chắc chắn muốn xóa diễn viên này không?')) {
+    const handleDeleteDirector = async (id) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa đạo diễn này không?')) {
             try {
-                const res = await fetch(`${import.meta.env.VITE_BE}/admin/actors/${id}`, {
+                const res = await fetch(`${import.meta.env.VITE_BE}/admin/directors/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -27,38 +28,38 @@ const ManageActor = () => {
                     }
                 })
                 if (!res.ok) {
-                    throw new Error('Failed to delete actor')
+                    throw new Error('Failed to delete Director')
                 }
-                setActors(actors.filter(actor => actor.id !== id))
-                toast.success('Xóa diễn viên thành công với id: ' + id)
+                setDirectors(directors.filter(director => director.id !== id))
+                toast.success('Xóa đạo diễn thành công với id: ' + id)
             } catch (error) {
-                console.error('Error deleting actor:', error)
-                toast.error('Xóa diễn viên thất bại')
+                console.error('Error deleting Director:', error)
+                toast.error('Xóa đạo diễn thất bại')
             }
         }
     }
 
-    const addActor = async (e) => {
+    const addDirector = async (e) => {
         e.preventDefault()
         try {
-            const res = await fetch(`${import.meta.env.VITE_BE}/admin/actors`, {
+            const res = await fetch(`${import.meta.env.VITE_BE}/admin/directors`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.accessToken}`
                 },
-                body: JSON.stringify(newActor)
+                body: JSON.stringify(newDirector)
             })
             if (!res.ok) {
-                throw new Error('Failed to add actor')
+                throw new Error('Failed to add Director')
             }
-            setActors([...actors, await res.json()])
-            setNewActor({ name: '', slug: '' })
+            setDirectors([...directors, await res.json()])
+            setNewDirector({ name: '', slug: '' })
             setShowModal(false)
-            toast.success('Thêm diễn viên thành công')
+            toast.success('Thêm đạo diễn thành công')
         } catch (error) {
-            console.error('Error adding actor:', error)
-            toast.error('Thêm diễn viên thất bại')
+            console.error('Error adding Director:', error)
+            toast.error('Thêm đạo diễn thất bại')
         }
     }
 
@@ -67,38 +68,38 @@ const ManageActor = () => {
     return (
         <div className="min-h-dvh">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-5">
-                <h1 className="text-3xl font-bold mb-2">Quản lý Diễn viên</h1>
+                <h1 className="text-3xl font-bold mb-2">Quản lý Đạo Diễn</h1>
             </div>
             <div className='p-10 rounded-lg'>
                 <button
                     onClick={() => setShowModal(!showModal)}
                     className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
                 >
-                    Thêm diễn viên
+                    Thêm đạo diễn
                 </button>
                 <div className='overflow-auto rounded-lg shadow-sm border border-gray-200'>
                     <table className='w-full'>
                         <thead className='bg-gray-50 border-b border-gray-200'>
                             <tr>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>STT</th>
-                                <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>Tên diễn viên</th>
+                                <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>Tên đạo diễn</th>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>Slug</th>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-center'>Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-200'>
-                            {actors.length > 0 ? actors.map((actor, index) => (
+                            {directors.length > 0 ? directors.map((director, index) => (
                                 <tr key={index}>
-                                    <td className='px-6 py-4'>{actor.id}</td>
-                                    <td className='px-6 py-4'>{actor.name}</td>
-                                    <td className='px-6 py-4'>{actor.slug}</td>
+                                    <td className='px-6 py-4'>{director.id}</td>
+                                    <td className='px-6 py-4'>{director.name}</td>
+                                    <td className='px-6 py-4'>{director.slug}</td>
                                     <td className='px-6 py-4'>
                                         <div className="flex items-center justify-center gap-2">
                                             <button className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
                                                 <Edit size={16} />
                                             </button>
                                             <button
-                                                onClick={() => handleDeleteActor(actor.id)}
+                                                onClick={() => handleDeleteDirector(director.id)}
                                                 className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors'>
                                                 <Trash2 size={16} />
                                             </button>
@@ -107,7 +108,7 @@ const ManageActor = () => {
                                 </tr>
                             )) : (
                                 <tr>
-                                    <td colSpan="4" className='px-6 py-4 text-center'>Không có diễn viên nào</td>
+                                    <td colSpan="4" className='px-6 py-4 text-center'>Không có đạo diễn nào</td>
                                 </tr>
                             )}
                         </tbody>
@@ -118,17 +119,17 @@ const ManageActor = () => {
 
                         <div className="bg-white rounded-lg w-96">
                             <div className='bg-green-600 font-semibold text-white text-center rounded-t-lg'>
-                                <h2 className="text-xl font-semibold mb-4">Thêm diễn viên</h2>
+                                <h2 className="text-xl font-semibold mb-4">Thêm đạo diễn</h2>
                             </div>
 
-                            <form className='p-6' onSubmit={addActor}>
+                            <form className='p-6' onSubmit={addDirector}>
                                 <div className="mb-4">
-                                    <label className="block font-semibold text-gray-700 mb-2">Tên diễn viên</label>
+                                    <label className="block font-semibold text-gray-700 mb-2">Tên đạo diễn</label>
                                     <input
                                         type="text"
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         name='name'
-                                        value={newActor.name}
+                                        value={newDirector.name}
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -138,7 +139,7 @@ const ManageActor = () => {
                                         type="text"
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         name='slug'
-                                        value={newActor.slug}
+                                        value={newDirector.slug}
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -161,4 +162,4 @@ const ManageActor = () => {
     )
 }
 
-export default ManageActor
+export default ManageDirector

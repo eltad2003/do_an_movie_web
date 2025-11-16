@@ -21,7 +21,6 @@ const ManageUser = () => {
 
 
     const fetchAllUser = async () => {
-
         try {
             const res = await fetch(`${import.meta.env.VITE_BE}/admin/users`, {
                 method: 'GET',

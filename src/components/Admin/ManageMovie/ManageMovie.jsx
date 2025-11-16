@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     Search,
     Filter,
@@ -18,131 +18,132 @@ import {
 import AddMovie from './AddMovie'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { AuthContext } from '../../../context/AuthContext'
+import Loading from '../../UI/Loading'
 
 const ManageMovie = () => {
-    const [movies, setMovies] = useState([
-        {
-            id: "15341840eedadf2f5",
-            name: "Biệt Đội Siêu Anh Hùng 4: Hồi Kết",
-            origin_name: "Avengers: Endgame",
-            slug: "biet-doi-sieu-anh-hung-4-hoi-ket",
-            type: "Phim bộ",
-            description: "Sau những sự kiện tàn khốc trong Infinity War...",
-            poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-            thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-            trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
-            duration: "2 tiếng 36 phút",
-            director: ["Anthony Russo", "Joe Russo"],
-            actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
-            country: "Mỹ",
-            subtitle: true,
-            year: 2019,
-            category: [
-                { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
-            ],
-            rating: 8.4,
-            views: 1250000,
-            status: "released",
-            created_at: "2024-01-15",
-            updated_at: "2024-01-20"
-        },
-        {
-            id: "25341840eedadf2f6",
-            name: "Spider-Man: No Way Home",
-            origin_name: "Spider-Man: No Way Home",
-            slug: "spider-man-no-way-home",
-            type: "Phim lẻ",
-            description: "Peter Parker phải đối mặt với những hậu quả...",
-            poster_url: "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-            thumb_url: "https://image.tmdb.org/t/p/w200/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-            trailer_url: "https://www.youtube.com/watch?v=JfVOs4VSpmA",
-            duration: "2 tiếng 28 phút",
-            director: ["Jon Watts"],
-            actors: ["Tom Holland", "Zendaya", "Benedict Cumberbatch"],
-            country: "Mỹ",
-            subtitle: true,
-            year: 2021,
-            category: [
-                { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" },
-            ],
-            rating: 8.2,
-            views: 980000,
-            status: "released",
-            created_at: "2024-01-10",
-            updated_at: "2024-01-15"
-        },
-        {
-            id: "35341840eedadf2f7",
-            name: "The Dark Knight",
-            origin_name: "The Dark Knight",
-            slug: "the-dark-knight",
-            type: "Phim lẻ",
-            description: "Batman phải đối mặt với Joker...",
-            poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-            thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-            trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
-            duration: "2 tiếng 36 phút",
-            director: ["Anthony Russo", "Joe Russo"],
-            actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
-            country: "Mỹ",
-            subtitle: true,
-            year: 2019,
-            category: [
-                { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
-            ],
-            rating: 8.4,
-            views: 1250000,
-            status: "released",
-            created_at: "2024-01-15",
-            updated_at: "2024-01-20"
-        },
-        {
-            id: "45341840eedadf2f8",
-            name: "Ghost in the Shell",
-            origin_name: "Ghost in the Shell",
-            slug: "ghost-in-the-shell",
-            type: "Phim lẻ",
-            description: "Ghost in the Shell phải đối mặt với những hậu quả...",
-            poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-            thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-            trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
-            duration: "2 tiếng 36 phút",
-            director: ["Anthony Russo", "Joe Russo"],
-            actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
-            country: "Mỹ",
-            subtitle: true,
-            year: 2019,
-            category: [
-                { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-                { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
-            ],
-            rating: 8.4,
-            views: 1250000,
-            status: "released",
-            created_at: "2024-01-15",
-            updated_at: "2024-01-20"
-        }
-    ])
+    // const [movies, setMovies] = useState([
+    //     {
+    //         id: "15341840eedadf2f5",
+    //         name: "Biệt Đội Siêu Anh Hùng 4: Hồi Kết",
+    //         origin_name: "Avengers: Endgame",
+    //         slug: "biet-doi-sieu-anh-hung-4-hoi-ket",
+    //         type: "Phim bộ",
+    //         description: "Sau những sự kiện tàn khốc trong Infinity War...",
+    //         poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+    //         thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+    //         trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
+    //         duration: "2 tiếng 36 phút",
+    //         director: ["Anthony Russo", "Joe Russo"],
+    //         actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+    //         country: "Mỹ",
+    //         subtitle: true,
+    //         year: 2019,
+    //         category: [
+    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
+    //         ],
+    //         rating: 8.4,
+    //         views: 1250000,
+    //         status: "released",
+    //         created_at: "2024-01-15",
+    //         updated_at: "2024-01-20"
+    //     },
+    //     {
+    //         id: "25341840eedadf2f6",
+    //         name: "Spider-Man: No Way Home",
+    //         origin_name: "Spider-Man: No Way Home",
+    //         slug: "spider-man-no-way-home",
+    //         type: "Phim lẻ",
+    //         description: "Peter Parker phải đối mặt với những hậu quả...",
+    //         poster_url: "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+    //         thumb_url: "https://image.tmdb.org/t/p/w200/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+    //         trailer_url: "https://www.youtube.com/watch?v=JfVOs4VSpmA",
+    //         duration: "2 tiếng 28 phút",
+    //         director: ["Jon Watts"],
+    //         actors: ["Tom Holland", "Zendaya", "Benedict Cumberbatch"],
+    //         country: "Mỹ",
+    //         subtitle: true,
+    //         year: 2021,
+    //         category: [
+    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" },
+    //         ],
+    //         rating: 8.2,
+    //         views: 980000,
+    //         status: "released",
+    //         created_at: "2024-01-10",
+    //         updated_at: "2024-01-15"
+    //     },
+    //     {
+    //         id: "35341840eedadf2f7",
+    //         name: "The Dark Knight",
+    //         origin_name: "The Dark Knight",
+    //         slug: "the-dark-knight",
+    //         type: "Phim lẻ",
+    //         description: "Batman phải đối mặt với Joker...",
+    //         poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+    //         thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+    //         trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
+    //         duration: "2 tiếng 36 phút",
+    //         director: ["Anthony Russo", "Joe Russo"],
+    //         actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+    //         country: "Mỹ",
+    //         subtitle: true,
+    //         year: 2019,
+    //         category: [
+    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
+    //         ],
+    //         rating: 8.4,
+    //         views: 1250000,
+    //         status: "released",
+    //         created_at: "2024-01-15",
+    //         updated_at: "2024-01-20"
+    //     },
+    //     {
+    //         id: "45341840eedadf2f8",
+    //         name: "Ghost in the Shell",
+    //         origin_name: "Ghost in the Shell",
+    //         slug: "ghost-in-the-shell",
+    //         type: "Phim lẻ",
+    //         description: "Ghost in the Shell phải đối mặt với những hậu quả...",
+    //         poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+    //         thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
+    //         trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
+    //         duration: "2 tiếng 36 phút",
+    //         director: ["Anthony Russo", "Joe Russo"],
+    //         actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+    //         country: "Mỹ",
+    //         subtitle: true,
+    //         year: 2019,
+    //         category: [
+    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
+    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
+    //         ],
+    //         rating: 8.4,
+    //         views: 1250000,
+    //         status: "released",
+    //         created_at: "2024-01-15",
+    //         updated_at: "2024-01-20"
+    //     }
+    // ])
+    const { user } = useContext(AuthContext)
+    const [movies, setMovies] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [filterStatus, setFilterStatus] = useState('ALL')
     const [filterYear, setFilterYear] = useState('ALL')
     const [showAddMovie, setShowAddMovie] = useState(false)
 
 
-    if (showAddMovie) {
-        return <AddMovie onBack={() => setShowAddMovie(false)} />
-    }
 
     const filteredMovies = movies.filter(movie => {
         const matchSearch = movie.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            movie.origin_name.toLowerCase().includes(searchTerm.toLowerCase())
+            movie.originName.toLowerCase().includes(searchTerm.toLowerCase())
         const matchStatus = filterStatus === 'ALL' || movie.status === filterStatus
         const matchYear = filterYear === 'ALL' || movie.year.toString() === filterYear
 
@@ -151,12 +152,12 @@ const ManageMovie = () => {
 
     const getStatusBadge = (status) => {
         const statusConfig = {
-            'released': { bg: 'bg-green-100', text: 'text-green-800', label: 'Đã phát hành' },
-            'coming_soon': { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Sắp chiếu' },
-            'updating': { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Đang cập nhật' }
+            'RELEASED': { bg: 'bg-green-100', text: 'text-green-800', label: 'Đã phát hành' },
+            'COMING_SOON': { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Sắp chiếu' },
+            'UPDATING': { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Đang cập nhật' }
         }
 
-        const config = statusConfig[status] || statusConfig['updating']
+        const config = statusConfig[status] || statusConfig['UPDATING']
         return (
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
                 {config.label}
@@ -170,13 +171,57 @@ const ManageMovie = () => {
         return views.toString()
     }
 
-    const handleDeleteMovie = (movieId) => {
+    const handleDeleteMovie = async (movieId) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa phim này không?')) {
-            toast.success('Xóa phim thành công')
-            setMovies(movies.filter(movie => movie.id !== movieId))
+            try {
+                const res = await fetch(`${import.meta.env.VITE_BE}/admin/movies/${movieId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.accessToken}`
+                    }
+                })
+                if (!res.ok) {
+                    throw new Error('Failed to delete movie')
+                }
+                toast.success('Xóa phim thành công')
+                setMovies(movies.filter(movie => movie.id !== movieId))
+            } catch (error) {
+                console.error('Error deleting movie:', error)
+                toast.error('Xóa phim thất bại')
+            }
         }
     }
 
+
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_BE}/admin/movies`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.accessToken}`
+                    }
+                });
+                const data = await res.json();
+                setMovies(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            }
+        }
+        fetchMovies();
+    }, []);
+
+    if (showAddMovie) {
+        return <AddMovie onBack={() => setShowAddMovie(false)} />
+    }
+    if (!movies) {
+        return <Loading />
+    }
     return (
         <div className='bg-white min-h-screen'>
             {/* Header */}
@@ -218,9 +263,9 @@ const ManageMovie = () => {
                                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                             >
                                 <option value="ALL">Tất cả trạng thái</option>
-                                <option value="released">Đã phát hành</option>
-                                <option value="coming_soon">Sắp chiếu</option>
-                                <option value="updating">Đang cập nhật</option>
+                                <option value="RELEASED">Đã phát hành</option>
+                                <option value="COMING_SOON">Sắp chiếu</option>
+                                <option value="UPDATING">Đang cập nhật</option>
                             </select>
 
                             <select
@@ -272,16 +317,14 @@ const ManageMovie = () => {
                                         <td className="px-6 py-3">
                                             <div className="flex items-center">
                                                 <img
-                                                    src={movie.thumb_url}
+                                                    src={movie.thumbUrl}
                                                     alt={movie.name}
                                                     className="w-16 h-12 rounded object-cover mr-4"
-                                                    onError={(e) => {
-                                                        e.target.src = 'https://via.placeholder.com/64x48?text=No+Image'
-                                                    }}
+
                                                 />
                                                 <div>
                                                     <div className="font-medium text-gray-900">{movie.name}</div>
-                                                    <div className="text-sm text-gray-500">{movie.origin_name}</div>
+                                                    <div className="text-sm text-gray-500">{movie.originName}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -289,36 +332,37 @@ const ManageMovie = () => {
                                         <td className="px-6 py-3">
                                             <div className="flex items-center">
                                                 <Star size={16} className="text-yellow-400 fill-current mr-1" />
-                                                {movie.rating}
+                                                {movie.rating || 'N/A'}
                                             </div>
                                         </td>
-                                        <td>
-                                            {movie.category.map(cat => (
-                                                <span
-                                                    key={cat.id}
-                                                    className="inline-block bg-light-100 text-xs px-2 py-1 rounded-full mr-1 mb-1"
-                                                >
-                                                    {cat.name}
-                                                </span>
-                                            ))}
+                                        <td className="px-6 py-3">
+                                            {movie.categories && movie.categories.length > 0 ? (
+                                                movie.categories.map(cat => (
+                                                    <span
+                                                        key={cat.id}
+                                                        className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1"
+                                                    >
+                                                        {cat.name}
+                                                    </span>
+                                                ))
+                                            ) : (
+                                                <span className="text-gray-400 text-sm">Chưa có</span>
+                                            )}
                                         </td>
-                                        <td className="px-6 py-3 text-gray-900">{formatViews(movie.views)}</td>
+                                        <td className="px-6 py-3 text-gray-900">{formatViews(movie.views || 0)}</td>
                                         <td className="px-6 py-3">{getStatusBadge(movie.status)}</td>
                                         <td className="px-6 py-3 text-center">
                                             <div className="flex items-center justify-center gap-2">
                                                 <Link
-                                                    className="p-2 cursor-pointer text-purple-400 hover:text-purple-600 hover:bg-purple-50 rounded-full transition-colors"
+                                                    className="p-2 cursor-pointer text-purple-600 hover:text-purple-700 hover:bg-purple-100 rounded-full transition-colors"
                                                     to={`/admin/quan-ly-phim/${movie.id}`}>
-                                                    <Eye size={16} />
-                                                </Link>
-                                                <Link className="p-2 cursor-pointer text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors">
-                                                    <Edit size={16} />
+                                                    <Eye size={18} />
                                                 </Link>
                                                 <button
-                                                    className="p-2 cursor-pointer text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                                                    className="p-2 cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-100 rounded-full transition-colors"
                                                     onClick={() => handleDeleteMovie(movie.id)}
                                                 >
-                                                    <Trash2 size={16} />
+                                                    <Trash2 size={18} />
                                                 </button>
                                             </div>
                                         </td>

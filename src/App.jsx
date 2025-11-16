@@ -25,6 +25,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import ProtectedRoute from './components/ProtectedRoute'
 import ManageActor from './components/Admin/ManageActor'
 import ManageCategory from './components/Admin/ManageCategory'
+import ManageCountry from './components/Admin/ManageCountry'
+import ManageDirector from './components/Admin/ManageDirector'
 
 const App = () => {
   return (
@@ -62,7 +64,9 @@ const App = () => {
             <Route path="quan-ly-phim/:id" element={<ManageDetailMovie />} />
             <Route path="quan-ly-nguoi-dung" element={<ManageUser />} />
             <Route path="quan-ly-the-loai" element={<ManageCategory />} />
+            <Route path='quan-ly-quoc-gia' element={<ManageCountry />} />
             <Route path="quan-ly-dien-vien" element={<ManageActor />} />
+            <Route path="quan-ly-dao-dien" element={<ManageDirector />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

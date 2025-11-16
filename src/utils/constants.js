@@ -13,6 +13,9 @@ export const ROUTES = {
   DASHBOARD: '/admin/dashboard',
   MANAGE_MOVIES: '/admin/quan-ly-phim',
   MANAGE_USERS: '/admin/quan-ly-nguoi-dung',
+  MANAGE_CATEGORIES: '/admin/quan-ly-the-loai',
+  MANAGE_COUNTRIES: '/admin/quan-ly-quoc-gia',
+  MANAGE_ACTORS: '/admin/quan-ly-dien-vien'
 }
 
 export const API_ENDPOINTS = {

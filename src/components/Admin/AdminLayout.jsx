@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-// import { useContext } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
@@ -10,7 +9,8 @@ import {
     Clapperboard,
     Tag,
     Drama,
-    LogOut
+    LogOut,
+    Earth
 } from 'lucide-react'
 
 function AdminLayout() {
@@ -29,7 +29,9 @@ function AdminLayout() {
         { icon: Users, label: 'Quản lý Người Dùng', path: '/admin/quan-ly-nguoi-dung' },
         { icon: Clapperboard, label: 'Quản lý Phim', path: '/admin/quan-ly-phim' },
         { icon: Tag, label: 'Quản lý Thể Loại', path: '/admin/quan-ly-the-loai' },
-        { icon: Drama, label: 'Quản lý Diễn Viên', path: '/admin/quan-ly-dien-vien' }
+        { icon: Earth, label: 'Quản lý Quốc Gia', path: '/admin/quan-ly-quoc-gia' },
+        { icon: Drama, label: 'Quản lý Diễn Viên', path: '/admin/quan-ly-dien-vien' },
+        { icon: Drama, label: 'Quản lý Đạo Diễn', path: '/admin/quan-ly-dao-dien' },
 
     ]
 
