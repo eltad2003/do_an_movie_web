@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const InfoGenres = ({ detailMovie: { category } }) => {
+const InfoGenres = ({ detailMovie: { categories } }) => {
     return (
         <div className="flex gap-1 mb-4 flex-wrap">
-            {category.map((cat) => (
+            {categories.map((cat) => (
                 <Link
                     to={`/the-loai/${cat.slug}`}
                     key={cat.id}

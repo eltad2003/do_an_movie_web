@@ -3,17 +3,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Header = ({ detailMovie, episodes }) => {
-    const type = {
-        single: 'Phim lẻ',
-        hoathinh: 'Hoạt hình',
-        series: 'Phim bộ',
 
-    }
     return (
         <section
             className={`relative h-[70vh] bg-cover bg-center w-full mb-5 lg:mb-10 `}
             style={{
-                backgroundImage: `url(${detailMovie.thumb_url})`,
+                backgroundImage: `url(${detailMovie.thumbUrl})`,
             }}
         >
             {/* overlay gradient */}
@@ -24,7 +19,7 @@ const Header = ({ detailMovie, episodes }) => {
                     {/* poster */}
                     <div className="flex-shrink-0 hidden lg:block">
                         <img
-                            src={detailMovie.poster_url}
+                            src={detailMovie.posterUrl}
                             alt="poster"
                             className="w-56 h-full rounded-lg object-cover shadow-primary "
                         />
@@ -34,17 +29,16 @@ const Header = ({ detailMovie, episodes }) => {
                     <div className="space-y-4 hidden lg:block">
                         <div >
                             <h1 className='text-start'>{detailMovie.name}</h1>
-                            <h2 className='font-semibold text-gray-400'>{detailMovie.origin_name}</h2>
+                            <h2 className='font-semibold text-gray-400'>{detailMovie.originName}</h2>
                         </div>
 
                         {/* Rating & Info badges */}
                         <div className="flex flex-wrap items-center gap-3">
                             <span className="px-3 py-1 rounded-lg bg-yellow-900/80 text-yellow-100 inline-flex items-center gap-1 text-sm font-semibold">
                                 <Star className="w-4 h-4 fill-current" />
-                                {detailMovie.tmdb.vote_average ? (
+                                {detailMovie.rating ? (
                                     <>
-                                        <b>{detailMovie.tmdb.vote_average.toFixed(1)}/10</b>
-                                        <span className="text-white/50">({detailMovie.tmdb.vote_count})</span>
+                                        <b>{detailMovie.rating.toFixed(1)}/10</b>
                                     </>
                                 ) : 'N/A'}
                             </span>
@@ -54,20 +48,20 @@ const Header = ({ detailMovie, episodes }) => {
                             </span>
 
                             <span className="px-3 py-1 rounded-lg bg-green-900/80 text-green-100 text-sm font-semibold">
-                                {type[detailMovie.type]}
+                                {detailMovie.type}
                             </span>
 
-                            {detailMovie.episode_total > 0 && (
+                            {detailMovie.episodes.length > 0 && (
                                 <span className="px-3 py-1 rounded-lg bg-purple-900/80 text-purple-100 text-sm font-semibold">
-                                    {detailMovie.episode_total} tập
+                                    {detailMovie.episodes.length} tập
                                 </span>
                             )}
                         </div>
 
                         {/* Action buttons */}
                         <div className="action-button">
-                            <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0]?.server_data[0]?.slug}`}>
-                                <button className="bg-light-100 shadow-light-100/50 shadow-2xl">
+                            <Link to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}>
+                                <button className="bg-light-100 shadow-light-100/50 shadow-2xl disabled:opacity-50" disabled={episodes.length === 0}>
                                     <Play className="w-5 h-5 animate-pulse" />Xem ngay
                                 </button>
                             </Link>
@@ -84,11 +78,13 @@ const Header = ({ detailMovie, episodes }) => {
                     </div>
 
                     {/* title in mobile*/}
-                    <div className="block lg:hidden space-y-3 p-1">
-                        <h1 className='text-start'>{detailMovie.name}</h1>
-                        <p className="font-semibold text-white/80">{detailMovie.origin_name}</p>
+                    <div className=" lg:hidden space-y-3 w-full flex flex-col items-center justify-center">
+                        <div className='flex flex-col items-center justify-center'>
+                            <h1 className=''>{detailMovie.name}</h1>
+                            <p className="font-semibold text-white/80">{detailMovie.originName}</p>
+                        </div>
                         <div className="action-button">
-                            <Link to={`/xem-phim/${detailMovie.slug}?ver=0&ep=${episodes[0]?.server_data[0]?.slug}`}>
+                            <Link to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}>
                                 <button className="bg-white/30 rounded-full p-3 backdrop-blur-xs">
                                     <Play className="w-10 h-10 text-white" />
                                 </button>

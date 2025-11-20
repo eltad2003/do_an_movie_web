@@ -42,7 +42,7 @@ const Home = () => {
                     ) : (
                         <ul>
                             {listMovies.map((movie) => (
-                                <MovieCard key={movie._id} movie={movie} />
+                                <MovieCard key={movie.id} movie={movie} />
                             ))}
                         </ul>
                     )}

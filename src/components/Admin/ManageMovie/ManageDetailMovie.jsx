@@ -662,7 +662,7 @@ const ManageDetailMovie = () => {
                         </div>
                     </form>
                 ) : typeHeader === 'episodes' ? (
-                    <MangeEpisodes episodes={movie.episodes} />
+                    <MangeEpisodes episodes={movie.episodes} movieId={id} />
                 ) : (
                     <ManageReview />
                 )}

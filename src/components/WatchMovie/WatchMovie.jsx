@@ -6,15 +6,14 @@ import Loading from '../UI/Loading'
 import Comment from '../DetailMovie/Comment'
 import InfoMovie from './InfoMovie'
 import VideoPlayer from './VideoPlayer'
-import ListEpisode from './ListEpisode'
 import Episodes from '../DetailMovie/Episodes'
+import ListEpisode from './ListEpisode'
 
 
 const WatchMovie = () => {
   const { slug } = useParams()
   const [searchParams] = useSearchParams()
   const epSlug = searchParams.get('ep')
-  const serverVersion = searchParams.get('ver') || 0
   const { detailMovie, episodes, isLoading, errorMessage } = useDetailMovie(slug)
 
   if (isLoading) { return <Loading /> }
@@ -32,15 +31,16 @@ const WatchMovie = () => {
             <h3 className='text-sm md:text-lg font-bold text-white flex-wrap '>Xem phim {detailMovie.name}</h3>
           </header>
 
-          {episodes[serverVersion].server_data.map(ep => ep.slug === epSlug && (
+          {episodes.map(ep => ep.slug === epSlug && (
             <VideoPlayer
               key={ep.id}
-              videoUrl={ep.link_embed}
+              videoUrl={ep.videoUrl}
             />
           ))}
 
           <InfoMovie detailMovie={detailMovie} />
-          <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} />
+          {/* <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} /> */}
+          <ListEpisode episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} />
           <Comment />
 
         </div>

@@ -4,21 +4,16 @@ import { Link } from 'react-router-dom'
 import { chunkArray } from '../../utils/helpers'
 
 const Episodes = ({ episodes, detailMovie: { slug } }) => {
-    const [selectedServer, setSelectedServer] = useState(0)
+
     const [selectedRange, setSelectedRange] = useState(0)
-    const listEpisodes = episodes[selectedServer]?.server_data || [] //contain info episode: name, slug, link_embed
     const MAX_EPISODE_PER_RANGE = 50
 
-    const handleChangeServer = (e) => {
-        setSelectedServer(e.target.value)
-        setSelectedRange(0)
-    }
 
     const handleChangeRange = (e) => {
         setSelectedRange(e.target.value)
     }
 
-    const groupEpisode = chunkArray(listEpisodes, MAX_EPISODE_PER_RANGE);
+    const groupEpisode = chunkArray(episodes, MAX_EPISODE_PER_RANGE);
 
     if (!episodes || episodes.length === 0) {
         return (
@@ -31,41 +26,29 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
     return (
         <section className='section'>
             <h2 >Danh sách tập</h2>
-            <div className="flex flex-wrap gap-2">
-                {/* select server */}
-                <select
-                    className='bg-gray-800 text-light-100 rounded-lg p-2 mb-6'
-                    value={selectedServer}
-                    onChange={handleChangeServer}
-                >
-                    {episodes.map((e, idx) => (
-                        <option key={idx} value={idx}>
-                            {e.server_name}
-                        </option>
-                    ))}
-                </select>
-                {/* select range episode */}
-                {groupEpisode.length > 1 && (
+            {/* range episode */}
+            {groupEpisode.length > 1 && (
+                <div className='mb-4'>
+                    <label htmlFor='episode-range' className='mr-2'>Chọn khoảng tập:</label>
                     <select
-                        className='bg-gray-800 text-light-100 rounded-lg p-2 mb-6'
+                        id='episode-range'
                         value={selectedRange}
                         onChange={handleChangeRange}
+                        className='bg-dark-200 text-white p-2 rounded-lg'
                     >
-                        {groupEpisode.map((_, idx) => (
-                            <option key={idx} value={idx}>
-                                Tập {idx * MAX_EPISODE_PER_RANGE + 1} - {Math.min((idx + 1) * MAX_EPISODE_PER_RANGE, listEpisodes.length)}
-                                {/* Tập {idx * MAX_EPISODE_PER_RANGE + 1} - {((idx + 1) * MAX_EPISODE_PER_RANGE)} */}
+                        {groupEpisode.map((group, index) => (
+                            <option key={index} value={index}>
+                                Tập {index * MAX_EPISODE_PER_RANGE + 1} - {index * MAX_EPISODE_PER_RANGE + group.length}
                             </option>
                         ))}
                     </select>
-                )}
-            </div>
-
+                </div>
+            )}
             {/* list episode */}
             <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3'>
                 {groupEpisode[selectedRange].map((ep, idx) => (
                     <Link
-                        to={`/xem-phim/${slug}?ver=${selectedServer}&ep=${ep.slug}`}
+                        to={`/xem-phim/${slug}?ep=${ep.slug}`}
                         key={idx}
                         className='text-sm px-3 py-2 rounded-lg bg-gray-800 inline-flex cursor-pointer gap-2 items-center justify-center hover:bg-gray-700 transition hover:text-light-100'
                     >

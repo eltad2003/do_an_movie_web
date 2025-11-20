@@ -12,7 +12,8 @@ export const useDetailMovie = (slug) => {
             try {
                 setIsLoading(true)
                 const data = await movieService.getMovieDetail(slug)
-                setDetailMovie(data.movie || [])
+                setDetailMovie(data || {})
+
                 setEpisodes(data.episodes || [])
             } catch (err) {
                 setErrorMessage(err.message)
