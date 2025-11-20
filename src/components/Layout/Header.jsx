@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useNav } from '../../hooks/useNav'
 import DropDown from './DropDown'
-import { LogOut, Menu, Shield, User, UserPen, X } from 'lucide-react'
+import { Clock, LogOut, Menu, Shield, User, UserPen, X } from 'lucide-react'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
 
@@ -89,6 +89,7 @@ const Navbar = () => {
                     {user && user.user.roleName === 'ROLE_ADMIN' && (
                         <Link to="/admin" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Shield />Quản trị</Link>
                     )}
+                    <Link to="/lich-su" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Clock />Lịch sử</Link>
                     <Link onClick={handleLogout} className='inline-flex gap-4 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
                 </div>
             )}

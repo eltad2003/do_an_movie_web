@@ -27,6 +27,7 @@ import ManageActor from './components/Admin/ManageActor'
 import ManageCategory from './components/Admin/ManageCategory'
 import ManageCountry from './components/Admin/ManageCountry'
 import ManageDirector from './components/Admin/ManageDirector'
+import History from './components/Profile/History'
 
 const App = () => {
   return (
@@ -50,9 +51,9 @@ const App = () => {
 
           <Route path="/tim-kiem" element={<SearchResults />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path='/profile' element={<Profile />} />
-          </Route>
+
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/lich-su' element={<History />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>

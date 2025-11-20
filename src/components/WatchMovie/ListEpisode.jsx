@@ -51,7 +51,8 @@ const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
                     <Link
                         to={`/xem-phim/${slug}?ep=${ep.slug}`}
                         key={idx}
-                        className={`text-sm px-3 py-2 rounded-lg ${ep.slug === epSlug ? 'bg-yellow-700' : 'bg-gray-800'} inline-flex cursor-pointer gap-2 items-center justify-center hover:bg-gray-700 transition`}
+                        className={`text-sm px-3 py-2 rounded-lg ${ep.slug === epSlug ? 'bg-yellow-700' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'} inline-flex gap-2 items-center justify-center  transition`}
+                        disabled={ep.slug === epSlug}         
                     >
                         <Play className='w-4 h-4' />
                         {ep.name}
