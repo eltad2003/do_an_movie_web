@@ -2,6 +2,7 @@ import { Edit, Trash2, Upload, X, Plus } from 'lucide-react'
 import React, { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../../context/AuthContext'
+import { generateSlug } from '../../../utils/helpers'
 
 const MangeEpisodes = ({ episodes, movieId }) => {
     const { user } = useContext(AuthContext)
@@ -14,8 +15,6 @@ const MangeEpisodes = ({ episodes, movieId }) => {
     const [episodeData, setEpisodeData] = useState({
         name: '',
         slug: '',
-        episodeNumber: 1,
-        duration: 0,
         videoUrl: '',
         movie: { id: movieId }
     })
@@ -26,8 +25,8 @@ const MangeEpisodes = ({ episodes, movieId }) => {
         const { name, value } = e.target
         setEpisodeData(prev => ({
             ...prev,
-            [name]: name === 'episodeNumber' || name === 'duration' ? parseInt(value) || 0 : value,
-            slug: name === 'name' ? value.toLowerCase().replace(/\s+/g, '-') : prev.slug
+            [name]: value,
+            slug: name === 'name' ? generateSlug(value) : prev.slug
         }))
     }
 
@@ -81,13 +80,10 @@ const MangeEpisodes = ({ episodes, movieId }) => {
 
             setUploadProgress(50)
 
-            const uploadRes = await fetch(
-                `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
-                {
-                    method: 'POST',
-                    body: formData
-                }
-            )
+            const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`, {
+                method: 'POST',
+                body: formData
+            })
 
             if (!uploadRes.ok) {
                 const errorData = await uploadRes.json()
@@ -145,8 +141,6 @@ const MangeEpisodes = ({ episodes, movieId }) => {
             const payload = {
                 name: episodeData.name,
                 slug: episodeData.slug,
-                episodeNumber: episodeData.episodeNumber,
-                duration: episodeData.duration,
                 videoUrl: videoUrl,
                 movie: { id: movieId }
             }
@@ -168,28 +162,14 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                 toast.success(editingEpisode ? 'Cập nhật tập phim thành công!' : 'Thêm tập phim thành công!')
                 resetForm()
 
-                // Reload page sau 1 giây
+                // Reload page sau 0.5 giây
                 setTimeout(() => {
                     window.location.reload()
-                }, 1000)
+                }, 500)
             } else {
                 const error = await res.text()
                 console.error('Error response:', error)
-
-                // Parse error message
-                if (res.status === 400) {
-                    if (error.includes('episodeNumber')) {
-                        toast.error('Số tập này đã tồn tại cho phim này!')
-                    } else if (error.includes('videoUrl')) {
-                        toast.error('Vui lòng cung cấp URL video!')
-                    } else {
-                        toast.error('Dữ liệu không hợp lệ: ' + error)
-                    }
-                } else if (res.status === 401) {
-                    toast.error('Bạn không có quyền thực hiện thao tác này!')
-                } else {
-                    toast.error(error || 'Có lỗi xảy ra!')
-                }
+                toast.error(error || 'Có lỗi xảy ra!')
             }
         } catch (error) {
             console.error('Error:', error)
@@ -204,8 +184,6 @@ const MangeEpisodes = ({ episodes, movieId }) => {
         setEpisodeData({
             name: episode.name,
             slug: episode.slug,
-            episodeNumber: episode.episodeNumber || 1,
-            duration: episode.duration || 0,
             videoUrl: episode.videoUrl,
             movie: { id: movieId }
         })
@@ -247,8 +225,6 @@ const MangeEpisodes = ({ episodes, movieId }) => {
         setEpisodeData({
             name: '',
             slug: '',
-            episodeNumber: 1,
-            duration: 0,
             videoUrl: '',
             movie: { id: movieId }
         })
@@ -273,9 +249,8 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                 <table className='w-full'>
                     <thead className='bg-gray-50 border-b border-gray-200'>
                         <tr>
-                            <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>Số tập</th>
+                            <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>ID</th>
                             <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>Tên tập</th>
-                            <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>Thời lượng</th>
                             <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>Video</th>
                             <th className='px-6 py-3 text-xs text-center font-semibold uppercase'>Thao tác</th>
                         </tr>
@@ -283,9 +258,8 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                     <tbody className="divide-y divide-gray-200">
                         {episodes && episodes.length > 0 ? episodes.map((episode) => (
                             <tr key={episode.id} className='hover:bg-gray-50'>
-                                <td className="px-6 py-4 font-semibold">{episode.episodeNumber || '-'}</td>
-                                <td className="px-6 py-4 font-medium">{episode.name}</td>
-                                <td className="px-6 py-4 text-gray-500">{episode.duration ? `${episode.duration} phút` : '-'}</td>
+                                <td className="px-6 py-4">{episode.id}</td>
+                                <td className="px-6 py-4">{episode.name}</td>
                                 <td className="px-6 py-4">
                                     {episode.videoUrl ? (
                                         <a
@@ -360,41 +334,6 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                     required
                                 />
                             </div>
-
-                            <div className="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label className="block font-semibold text-gray-700 mb-2">
-                                        Số tập *
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name="episodeNumber"
-                                        value={episodeData.episodeNumber}
-                                        onChange={handleInputChange}
-                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        placeholder="VD: 1"
-                                        min="1"
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block font-semibold text-gray-700 mb-2">
-                                        Thời lượng (phút) *
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name="duration"
-                                        value={episodeData.duration}
-                                        onChange={handleInputChange}
-                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        placeholder="VD: 45"
-                                        min="1"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
                             <div className="mb-4">
                                 <label className="block font-semibold text-gray-700 mb-2">
                                     Slug (URL thân thiện)
@@ -421,7 +360,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                             href={episodeData.videoUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-blue-500 hover:underline ml-1"
+                                            className="text-blue-500 font-bold hover:underline ml-1"
                                         >
                                             Xem video
                                         </a>
