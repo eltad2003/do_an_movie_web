@@ -50,7 +50,7 @@ function AdminLayout() {
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 left-0 w-64 bg-gray-900  z-40 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} duration-200`}
+                className={`fixed top-0 left-0 w-64 bg-gray-900 z-40 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} duration-200`}
             >
                 <div className="flex flex-col min-h-dvh">
                     {/* User Profile */}

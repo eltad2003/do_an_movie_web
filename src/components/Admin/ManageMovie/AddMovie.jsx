@@ -188,7 +188,7 @@ const AddMovie = ({ onBack }) => {
             if (res.ok) {
                 toast.success('Thêm phim thành công!')
                 onBack()
-
+                window.location.reload()
             } else {
                 const error = await res.text()
                 toast.error(`Thêm phim thất bại: ${error}`)
