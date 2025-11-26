@@ -37,9 +37,9 @@ const InfoMovie = ({ detailMovie }) => {
                 <div className="grid grid-cols-1 gap-y-3 ">
                     <InfoItem label={type.year} value={detailMovie.year} />
                     <InfoItem label='Thời lượng' value={detailMovie.duration} />
-                    <InfoItem label={type.country} value={detailMovie.countries.map((c) => c.name).join(', ')} />
-                    <InfoItem label={type.actors} value={detailMovie.actors.map((a) => a.name).join(', ')} />
-                    <InfoItem label={type.director} value={detailMovie.directors.map((d) => d.name).join(', ')} />
+                    <InfoItem label={type.country} value={detailMovie.countries.map((c) => c.name).join(', ') || "Đang cập nhật"} />
+                    <InfoItem label={type.actors} value={detailMovie.actors.map((a) => a.name).join(', ') || "Đang cập nhật"} />
+                    <InfoItem label={type.director} value={detailMovie.directors.map((d) => d.name).join(', ') || "Đang cập nhật"} />
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-import { Edit, Trash2, Upload, X, Plus } from 'lucide-react'
+import { Edit, Trash2, Upload, X, Plus, Link as LinkIcon } from 'lucide-react'
 import React, { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../../context/AuthContext'
@@ -11,6 +11,9 @@ const MangeEpisodes = ({ episodes, movieId }) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
     const [uploadProgress, setUploadProgress] = useState(0)
+
+    // State mới: chọn kiểu nhập video
+    const [videoInputType, setVideoInputType] = useState('upload') // 'upload' hoặc 'url'
 
     const [episodeData, setEpisodeData] = useState({
         name: '',
@@ -97,7 +100,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
             setUploadProgress(100)
             setIsUploading(false)
 
-            return uploadResult.secure_url // Return secure video URL
+            return uploadResult.secure_url
 
         } catch (error) {
             console.error('Upload error:', error)
@@ -115,20 +118,38 @@ const MangeEpisodes = ({ episodes, movieId }) => {
         try {
             let videoUrl = episodeData.videoUrl
 
-            // Nếu có file video mới, upload lên Cloudinary trước
-            if (videoFile) {
-                toast.info('Đang upload video lên Cloudinary...')
-                videoUrl = await uploadToCloudinary()
-                if (!videoUrl) {
+            // Kiểm tra theo loại input
+            if (videoInputType === 'upload') {
+                // Upload file
+                if (videoFile) {
+                    toast.info('Đang upload video lên Cloudinary...')
+                    videoUrl = await uploadToCloudinary()
+                    if (!videoUrl) {
+                        setIsSubmitting(false)
+                        return
+                    }
+                    toast.success('Upload video thành công!')
+                } else if (!editingEpisode) {
+                    toast.error('Vui lòng chọn file video!')
                     setIsSubmitting(false)
                     return
                 }
-                toast.success('Upload video thành công!')
-            } else if (!editingEpisode) {
-                // Khi tạo mới bắt buộc phải có video
-                toast.error('Vui lòng chọn file video!')
-                setIsSubmitting(false)
-                return
+            } else {
+                // Nhập URL
+                if (!episodeData.videoUrl || episodeData.videoUrl.trim() === '') {
+                    toast.error('Vui lòng nhập URL video!')
+                    setIsSubmitting(false)
+                    return
+                }
+
+                // Validate URL format (optional)
+                if (!episodeData.videoUrl.startsWith('http')) {
+                    toast.error('URL không hợp lệ! Phải bắt đầu với http:// hoặc https://')
+                    setIsSubmitting(false)
+                    return
+                }
+
+                videoUrl = episodeData.videoUrl
             }
 
             // BƯỚC 3: Tạo/Cập nhật episode với videoUrl
@@ -162,7 +183,6 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                 toast.success(editingEpisode ? 'Cập nhật tập phim thành công!' : 'Thêm tập phim thành công!')
                 resetForm()
 
-                // Reload page sau 0.5 giây
                 setTimeout(() => {
                     window.location.reload()
                 }, 500)
@@ -187,6 +207,14 @@ const MangeEpisodes = ({ episodes, movieId }) => {
             videoUrl: episode.videoUrl,
             movie: { id: movieId }
         })
+
+        // Auto detect video input type
+        if (episode.videoUrl && episode.videoUrl.includes('.m3u8')) {
+            setVideoInputType('url')
+        } else {
+            setVideoInputType('upload')
+        }
+
         setShowModal(true)
     }
 
@@ -230,6 +258,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
         })
         setVideoFile(null)
         setUploadProgress(0)
+        setVideoInputType('upload')
     }
 
     return (
@@ -258,19 +287,26 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                     <tbody className="divide-y divide-gray-200">
                         {episodes && episodes.length > 0 ? episodes.map((episode) => (
                             <tr key={episode.id} className='hover:bg-gray-50'>
-                                <td className="px-6 py-4">{episode.id}</td>
-                                <td className="px-6 py-4">{episode.name}</td>
+                                <td className="px-6 py-4 text-sm">{episode.id}</td>
+                                <td className="px-6 py-4 font-medium">{episode.name}</td>
                                 <td className="px-6 py-4">
                                     {episode.videoUrl ? (
-                                        <a
-                                            href={episode.videoUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className='hover:underline text-blue-500 flex items-center gap-1'
-                                        >
-                                            <Upload size={14} />
-                                            Xem video
-                                        </a>
+                                        <div className="flex flex-col gap-1">
+                                            <a
+                                                href={episode.videoUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className='hover:underline text-blue-500 flex items-center gap-1 text-sm disabled:text-gray-500'
+                                                title={episode.videoUrl}
+                                            
+                                            >
+                                                <Upload size={14} />
+                                                Xem video
+                                            </a>
+                                            <span className="text-xs text-gray-500">
+                                                {episode.videoUrl.includes('.m3u8') ? 'HLS Stream không thể xem' : 'Direct Video'}
+                                            </span>
+                                        </div>
                                     ) : (
                                         <span className="text-gray-400">Chưa có video</span>
                                     )}
@@ -280,12 +316,14 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                         <button
                                             onClick={() => handleEdit(episode)}
                                             className="p-2 rounded-lg cursor-pointer bg-blue-500 text-white hover:bg-blue-600"
+                                            title="Chỉnh sửa"
                                         >
                                             <Edit size={18} />
                                         </button>
                                         <button
                                             onClick={() => handleDelete(episode.id)}
                                             className="p-2 rounded-lg cursor-pointer bg-red-500 text-white hover:bg-red-600"
+                                            title="Xóa"
                                         >
                                             <Trash2 size={18} />
                                         </button>
@@ -294,7 +332,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                             </tr>
                         )) : (
                             <tr>
-                                <td colSpan="5" className="text-center py-8 text-gray-500">
+                                <td colSpan="4" className="text-center py-8 text-gray-500">
                                     Chưa có tập phim nào.
                                 </td>
                             </tr>
@@ -306,7 +344,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
             {/* Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg w-[600px] max-h-[90vh] overflow-y-auto">
+                    <div className="bg-white p-6 rounded-lg w-[650px] max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold text-black">
                                 {editingEpisode ? 'Cập nhật tập phim' : 'Thêm tập phim'}
@@ -334,6 +372,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                     required
                                 />
                             </div>
+
                             <div className="mb-4">
                                 <label className="block font-semibold text-gray-700 mb-2">
                                     Slug (URL thân thiện)
@@ -348,77 +387,157 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                 />
                             </div>
 
+                            {/* Video Input Type Selector */}
                             <div className="mb-4">
                                 <label className="block font-semibold text-gray-700 mb-2">
-                                    Video {!editingEpisode && '*'}
+                                    Chọn cách nhập video *
                                 </label>
-
-                                {editingEpisode && episodeData.videoUrl && (
-                                    <div className="mb-2 p-2 bg-gray-50 rounded text-sm text-gray-600">
-                                        Video hiện tại:
-                                        <a
-                                            href={episodeData.videoUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-500 font-bold hover:underline ml-1"
-                                        >
-                                            Xem video
-                                        </a>
-                                    </div>
-                                )}
-
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                                    <input
-                                        type="file"
-                                        accept="video/*"
-                                        onChange={handleVideoChange}
-                                        className="hidden"
-                                        id="video-upload"
-                                    />
-                                    <label
-                                        htmlFor="video-upload"
-                                        className="cursor-pointer"
-                                    >
-                                        {videoFile ? (
-                                            <div className="text-green-600">
-                                                <Upload size={32} className="mx-auto mb-2" />
-                                                <p className="font-medium">{videoFile.name}</p>
-                                                <p className="text-sm text-gray-500">
-                                                    {(videoFile.size / 1024 / 1024).toFixed(2)} MB
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            <div className="text-gray-500">
-                                                <Upload size={32} className="mx-auto mb-2" />
-                                                <p>Click để chọn video</p>
-                                                <p className="text-sm mt-1">
-                                                    {editingEpisode ? '(Tùy chọn - để trống nếu không đổi)' : '(Bắt buộc)'}
-                                                </p>
-                                                <p className="text-xs mt-1">MP4, AVI, MOV, WebM</p>
-                                            </div>
-                                        )}
+                                <div className="flex gap-4">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="videoInputType"
+                                            value="upload"
+                                            checked={videoInputType === 'upload'}
+                                            onChange={(e) => {
+                                                setVideoInputType(e.target.value)
+                                                setVideoFile(null)
+                                                setEpisodeData(prev => ({ ...prev, videoUrl: '' }))
+                                            }}
+                                            className="w-4 h-4 text-blue-600"
+                                        />
+                                        <Upload size={18} />
+                                        <span>Upload file video</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="videoInputType"
+                                            value="url"
+                                            checked={videoInputType === 'url'}
+                                            onChange={(e) => {
+                                                setVideoInputType(e.target.value)
+                                                setVideoFile(null)
+                                            }}
+                                            className="w-4 h-4 text-blue-600"
+                                        />
+                                        <LinkIcon size={18} />
+                                        <span>Nhập URL (m3u8, mp4)</span>
                                     </label>
                                 </div>
-
-                                {isUploading && (
-                                    <div className="mt-2">
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-blue-500 h-2 rounded-full transition-all"
-                                                style={{ width: `${uploadProgress}%` }}
-                                            />
-                                        </div>
-                                        <p className="text-sm text-gray-600 mt-1 text-center">
-                                            Đang upload lên Cloudinary... {uploadProgress}%
-                                        </p>
-                                    </div>
-                                )}
                             </div>
 
-                            <div className="flex justify-end gap-2">
+                            {/* Hiển thị video hiện tại khi edit */}
+                            {editingEpisode && episodeData.videoUrl && (
+                                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg " >
+                                    <p className="text-sm font-semibold text-gray-700 mb-1">Video hiện tại:</p>
+                                    <a
+                                        href={episodeData.videoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:underline text-sm break-all"
+
+                                    >
+                                        {episodeData.videoUrl}
+                                    </a>
+                                    <p className="text-xs text-gray-500 mt-1" >
+                                        {episodeData.videoUrl.includes('.m3u8') ? '📡 HLS Streaming' : '🎬 Direct Video'}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Upload File Section */}
+                            {videoInputType === 'upload' && (
+                                <div className="mb-4">
+                                    <label className="block font-semibold text-gray-700 mb-2">
+                                        Upload video {!editingEpisode && '*'}
+                                    </label>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                                        <input
+                                            type="file"
+                                            accept="video/*"
+                                            onChange={handleVideoChange}
+                                            className="hidden"
+                                            id="video-upload"
+                                        />
+                                        <label
+                                            htmlFor="video-upload"
+                                            className="cursor-pointer"
+                                        >
+                                            {videoFile ? (
+                                                <div className="text-green-600">
+                                                    <Upload size={40} className="mx-auto mb-2" />
+                                                    <p className="font-medium">{videoFile.name}</p>
+                                                    <p className="text-sm text-gray-500 mt-1">
+                                                        {(videoFile.size / 1024 / 1024).toFixed(2)} MB
+                                                    </p>
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.preventDefault()
+                                                            setVideoFile(null)
+                                                        }}
+                                                        className="mt-2 text-xs text-red-500 hover:underline"
+                                                    >
+                                                        Xóa file
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="text-gray-500">
+                                                    <Upload size={40} className="mx-auto mb-2" />
+                                                    <p className="font-medium">Click để chọn video</p>
+                                                    <p className="text-sm mt-1">
+                                                        {editingEpisode ? '(Tùy chọn - để trống nếu không đổi)' : '(Bắt buộc)'}
+                                                    </p>
+                                                    <p className="text-xs mt-2 text-gray-400">MP4, AVI, MOV, WebM</p>
+                                                </div>
+                                            )}
+                                        </label>
+                                    </div>
+
+                                    {isUploading && (
+                                        <div className="mt-3">
+                                            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div
+                                                    className="bg-blue-500 h-2.5 rounded-full transition-all"
+                                                    style={{ width: `${uploadProgress}%` }}
+                                                />
+                                            </div>
+                                            <p className="text-sm text-gray-600 mt-2 text-center">
+                                                Đang upload lên Cloudinary... {uploadProgress}%
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* URL Input Section */}
+                            {videoInputType === 'url' && (
+                                <div className="mb-4">
+                                    <label className="block font-semibold text-gray-700 mb-2">
+                                        URL Video (m3u8, mp4) *
+                                    </label>
+                                    <input
+                                        type="url"
+                                        name="videoUrl"
+                                        value={episodeData.videoUrl}
+                                        onChange={handleInputChange}
+                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        placeholder="https://example.com/video.m3u8 hoặc https://example.com/video.mp4"
+                                        required={!editingEpisode}
+                                    />
+                                    <div className="mt-2 text-xs text-gray-500 space-y-1">
+                                        <p>✅ Hỗ trợ: HLS (.m3u8), MP4, WebM</p>
+                                        <p>📝 Ví dụ HLS: https://example.com/playlist.m3u8</p>
+                                        <p>📝 Ví dụ MP4: https://example.com/video.mp4</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="flex justify-end gap-2 mt-6">
                                 <button
                                     type="button"
-                                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer bg-gray-100 rounded-lg"
+                                    className="px-5 py-2.5 hover:bg-gray-200 cursor-pointer bg-gray-100 rounded-lg font-medium"
                                     onClick={resetForm}
                                     disabled={isSubmitting || isUploading}
                                 >
@@ -426,7 +545,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="cursor-pointer hover:bg-blue-600 px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="cursor-pointer hover:bg-blue-600 px-5 py-2.5 bg-blue-500 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                                     disabled={isSubmitting || isUploading}
                                 >
                                     {isSubmitting ? 'Đang xử lý...' : isUploading ? 'Đang upload...' : (editingEpisode ? 'Cập nhật' : 'Thêm')}

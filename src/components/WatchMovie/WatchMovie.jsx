@@ -34,7 +34,7 @@ const WatchMovie = () => {
           {episodes.map(ep => ep.slug === epSlug && (
             <VideoPlayer
               key={ep.id}
-              videoUrl={"https://player.phimapi.com/player/?url=https://s6.kkphimplayer6.com/20251111/yIKoixCK/index.m3u8"}
+              videoUrl={ep.videoUrl}
             />
           ))}
 

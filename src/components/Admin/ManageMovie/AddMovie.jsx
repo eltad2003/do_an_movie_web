@@ -188,7 +188,9 @@ const AddMovie = ({ onBack }) => {
             if (res.ok) {
                 toast.success('Thêm phim thành công!')
                 onBack()
-                window.location.reload()
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000)
             } else {
                 const error = await res.text()
                 toast.error(`Thêm phim thất bại: ${error}`)
@@ -347,7 +349,7 @@ const AddMovie = ({ onBack }) => {
                                             value={movieData.slug}
                                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 bg-gray-50"
                                             placeholder="Tự động tạo từ tên phim"
-                                            readOnly
+                                            onChange={handleInputChange}
                                         />
                                     </div>
 
