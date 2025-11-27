@@ -5,10 +5,10 @@ export const movieService = {
   getMovies: () => api.get(`/movies`),
   getMovieDetail: (slug) => api.get(`/movies/${slug}`),
   
-  searchMovies: (query) => api.get(`/v1/api/tim-kiem?keyword=${query}`),
-  getCategories: () => api.get('/the-loai'),
+  searchMovies: (query) => api.get(`/movies/search?keyword=${query}`),
+  getCategories: () => api.get('/categories'),
   moviesByCategory: (slug, page = 1) => api.get(`/v1/api/the-loai/${slug}?page=${page}`),
-  getCountries: () => api.get('/quoc-gia'),
+  getCountries: () => api.get('/countries'),
   moviesByCountry: (slug, page = 1) => api.get(`/v1/api/quoc-gia/${slug}?page=${page}`),
 
   manageCategories: () => api.get('/admin/categories'),

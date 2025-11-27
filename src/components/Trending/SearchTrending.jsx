@@ -43,7 +43,7 @@ const SearchTrending = () => {
                                 </div>
 
                                 <img
-                                    src={formatPosterUrl(movie.poster_url)}
+                                    src={movie.poster_url }
                                     alt="poster"
                                     className="w-auto h-[340px] object-cover rounded-2xl"
 

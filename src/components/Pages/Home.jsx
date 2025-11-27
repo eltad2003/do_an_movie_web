@@ -21,10 +21,10 @@ const Home = () => {
                 {/* section search */}
                 <header className='space-y-9 mb-10'>
 
-                    <h1>Tìm và thưởng thức những bộ phim hay nhất.</h1>
+                    {/* <h1>Tìm và thưởng thức những bộ phim hay nhất.</h1>
                     <p className='text-white/70 text-center mx-auto'>
                         Khám phá hàng ngàn bộ phim chất lượng cao với phụ đề tiếng Việt
-                    </p>
+                    </p> */}
                     <img src="./hero-img.png" alt="banner" />
                     <Search />
                 </header>
@@ -33,7 +33,7 @@ const Home = () => {
                 <SearchTrending />
 
                 {/* section all movie */}
-                <section className='space-y-9'>
+                <section className='space-y-9 mb-10'>
                     <h2 className='text-light-100'>Danh sách phim mới</h2>
                     {isLoading ? (
                         <Skeleton />

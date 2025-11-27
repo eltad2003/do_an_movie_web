@@ -28,7 +28,7 @@ const Header = ({ detailMovie, episodes }) => {
                     {/* movie info */}
                     <div className="space-y-4 hidden lg:block">
                         <div >
-                            <h1 className='text-start'>{detailMovie.name}</h1>
+                            <h1 className='text-start text-5xl'>{detailMovie.name}</h1>
                             <h2 className='font-semibold text-gray-400'>{detailMovie.originName}</h2>
                         </div>
 

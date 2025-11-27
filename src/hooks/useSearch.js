@@ -12,10 +12,10 @@ export const useSearch = (query) => {
             setIsLoading(true)
             try {
                 const data = await movieService.searchMovies(query)
-                setSearchResults(data.data.items || [])
+                setSearchResults(data || [])
 
-                if (query && data.data.items?.length > 0) {
-                    await updateSearchCount(query, data.data.items[0])
+                if (query && data?.length > 0) {
+                    await updateSearchCount(query, data[0])
                 }
             } catch (error) {
                 console.error("Error fetching search results:", error)

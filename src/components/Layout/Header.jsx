@@ -38,12 +38,14 @@ const Navbar = () => {
         setIsOpenSideBar(false)
         setIsOpenProfile(false)
         setOpenDropdown(null)
-    }, [location.pathname])
+        
+        
+     }, [location.pathname])
 
 
 
     return (
-        <nav className='flex justify-between items-center bg-dark-200 sticky top-0 z-50 p-5'>
+        <nav className='flex justify-between items-center bg-dark-200/50 sticky top-0 z-50 p-5'>
             <div className='lg:flex items-center gap-8 hidden '>
                 <a href='/' className='text-white text-2xl font-bold cursor-pointer'>CHILLFLIX</a>
                 <DropDown

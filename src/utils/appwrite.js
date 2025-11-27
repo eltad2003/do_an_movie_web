@@ -1,5 +1,5 @@
 import { Client, ID, Query, TablesDB } from "appwrite";
-import { formatPosterUrl } from "./helpers";
+
 
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -29,10 +29,10 @@ export const updateSearchCount = async (query, movie) => {
             })
         } else {
             await tablesDB.createRow(DATABASE_ID, TABLE_ID, ID.unique(), {
-                movie_id: movie._id,
+                movie_id: movie.id,
                 searchQuery: query,
                 count: 1,
-                poster_url: formatPosterUrl(movie.poster_url)
+                poster_url: movie.posterUrl
             })
             console.log('new search: ', query);
 

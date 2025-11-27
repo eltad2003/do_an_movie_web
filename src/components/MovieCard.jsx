@@ -2,7 +2,7 @@ import { Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 
-const MovieCard = ({ movie: { name, posterUrl, originName, year, slug } }) => {
+const MovieCard = ({ movie: { name, posterUrl, originName, year, slug,rating } }) => {
 
 
     return (
@@ -15,9 +15,9 @@ const MovieCard = ({ movie: { name, posterUrl, originName, year, slug } }) => {
                 <p className='text-white/50 line-clamp-1' title={originName}>{originName}</p>
 
                 <div className="mt-2 flex items-center flex-wrap gap-2 text-white">
-                    <div className="flex items-center gap-1">
-                        <Star className='h-4 w-4 text-yellow-400' />
-                        {/* <p className='font-bold'>{tmdb.vote_average ? tmdb.vote_average.toFixed(1) : 'N/A'}</p> */}
+                    <div className="flex items-center gap-1 ">
+                        <Star className='h-4 w-4 fill-current text-yellow-400' />
+                        <p className='font-bold'>{rating ? rating.toFixed(1) : 'N/A'}</p>
                     </div>
                     <span>•</span>
                     <p className="text-white/50">{year}</p>
