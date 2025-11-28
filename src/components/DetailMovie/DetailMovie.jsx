@@ -17,7 +17,7 @@ const DetailMovie = () => {
             {errorMessage && <p>Error: {errorMessage}</p>}
             {detailMovie && (
                 <div>
-                    <Header detailMovie={detailMovie} episodes={episodes} />
+                    <Header detailMovie={detailMovie} episodes={episodes} movieId={detailMovie.id}/>
                     <div className='wrapper'>
                         <InfoMovie detailMovie={detailMovie} />
                         <Episodes episodes={episodes} detailMovie={detailMovie} />

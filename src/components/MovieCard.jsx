@@ -2,16 +2,16 @@ import { Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 
-const MovieCard = ({ movie: { name, posterUrl, originName, year, slug,rating } }) => {
+const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating } }) => {
 
 
     return (
-        <div className='bg-dark-100 p-5 rounded-2xl hover:shadow-2xl trasition-all duration-300 cursor-pointer'>
+        <div className='bg-dark-100 p-5 rounded-2xl hover:scale-105 transition-all duration-300 cursor-pointer'>
             <Link to={`/phim/${slug}`}>
-                <img src={posterUrl} alt="poster" className='h-auto w-full rounded-lg' loading='lazy' />
+                <img src={posterUrl} alt="poster" className='rounded-lg h-48 sm:h-56 md:h-72 w-full' loading='lazy' />
             </Link>
             <div className='mt-3'>
-                <p className='text-white font-bold line-clamp-1' title={name}>{name}</p>
+                <p className='text-white font-bold' title={name}>{name}</p>
                 <p className='text-white/50 line-clamp-1' title={originName}>{originName}</p>
 
                 <div className="mt-2 flex items-center flex-wrap gap-2 text-white">

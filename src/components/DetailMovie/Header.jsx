@@ -1,8 +1,81 @@
 import { Heart, Play, Star, Tv } from 'lucide-react'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext'
+import { toast } from 'react-toastify'
 
-const Header = ({ detailMovie, episodes }) => {
+const Header = ({ detailMovie, episodes, movieId }) => {
+    const { user } = useContext(AuthContext)
+    const [isFavorite, setIsFavorite] = useState(false)
+
+    const addFavorite = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/api/favorites/${movieId}`, {
+                method: 'POST',
+                headers: {
+                    'authorization': `Bearer ${user.accessToken}`
+                }
+            })
+            if (res.ok) {
+                toast.success('Đã thêm phim vào mục yêu thích!')
+                setIsFavorite(true)
+            } else if (res.status === 400) {
+                toast.error('Phim đã có trong mục yêu thích!')
+            } else if (res.status === 401) {
+                toast.error('Vui lòng đăng nhập để thêm vào mục yêu thích!')
+            }
+            else {
+                toast.error('Thêm phim vào mục yêu thích thất bại!')
+            }
+        } catch (error) {
+            console.error('Error adding favorite:', error)
+            toast.error('Đã có lỗi xảy ra!')
+        }
+    }
+
+    const deleteFavorite = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/api/favorites/${movieId}`, {
+                method: 'DELETE',
+                headers: {
+                    'authorization': `Bearer ${user.accessToken}`
+                }
+            })
+            if (res.ok) {
+                toast.success('Đã xóa phim khỏi mục yêu thích!')
+                setIsFavorite(false)
+            }
+            else {
+                toast.error('Xóa phim khỏi mục yêu thích thất bại!')
+            }
+        } catch (error) {
+            console.error('Error deleting favorite:', error)
+            toast.error('Đã có lỗi xảy ra!')
+        }
+    }
+
+    const checkFavorite = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/api/favorites/check/${movieId}`, {
+                method: 'GET',
+                headers: {
+                    'authorization': `Bearer ${user.accessToken}`
+                }
+            })
+            if (res.ok) {
+                const data = await res.json()
+                setIsFavorite(data.isFavorite)
+            } else {
+                setIsFavorite(false)
+            }
+        } catch (error) {
+            console.error('Error checking favorite:', error)
+            setIsFavorite(false)
+        }
+    }
+    useEffect(() => {
+        checkFavorite()
+    }, [])
 
     return (
         <section
@@ -26,14 +99,14 @@ const Header = ({ detailMovie, episodes }) => {
                     </div>
 
                     {/* movie info */}
-                    <div className="space-y-4 hidden lg:block">
+                    <div className="space-y-4 ">
                         <div >
                             <h1 className='text-start text-5xl'>{detailMovie.name}</h1>
                             <h2 className='font-semibold text-gray-400'>{detailMovie.originName}</h2>
                         </div>
 
                         {/* Rating & Info badges */}
-                        <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex flex-wrap items-center gap-3 ">
                             <span className="px-3 py-1 rounded-lg bg-yellow-900/80 text-yellow-100 inline-flex items-center gap-1 text-sm font-semibold">
                                 <Star className="w-4 h-4 fill-current" />
                                 {detailMovie.rating ? (
@@ -61,16 +134,20 @@ const Header = ({ detailMovie, episodes }) => {
                         {/* Action buttons */}
                         <div className="action-button">
                             <Link to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}>
-                                <button className="bg-light-100 shadow-light-100/50 shadow-2xl disabled:opacity-50" disabled={episodes.length === 0}>
+                                <button className="bg-light-100 shadow-light-100 shadow-2xl disabled:opacity-50" disabled={episodes.length === 0}>
                                     <Play className="w-5 h-5 animate-pulse" />Xem ngay
                                 </button>
                             </Link>
 
-                            <button className=" bg-pink-700 shadow-pink-700/50 shadow-2xl text-white">
-                                <Heart className="w-5 h-5 " />Yêu thích
+                            <button
+                                onClick={() => {
+                                    isFavorite ? deleteFavorite() : addFavorite()
+                                }}
+                                className=" bg-pink-700 shadow-pink-700 shadow-2xl text-white">
+                                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />Yêu thích
                             </button>
                             <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="bg-blue-700 shadow-blue-700/50 shadow-2xl text-white">
+                                <button className="bg-blue-700 shadow-blue-700 shadow-2xl text-white">
                                     <Tv className="w-5 h-5" />Xem chung
                                 </button>
                             </Link>
@@ -78,7 +155,7 @@ const Header = ({ detailMovie, episodes }) => {
                     </div>
 
                     {/* title in mobile*/}
-                    <div className=" lg:hidden space-y-3 w-full flex flex-col items-center justify-center">
+                    {/* <div className=" lg:hidden space-y-3 w-full flex flex-col items-center justify-center">
                         <div className='flex flex-col items-center justify-center'>
                             <h1 className=''>{detailMovie.name}</h1>
                             <p className="font-semibold text-white/80">{detailMovie.originName}</p>
@@ -100,7 +177,7 @@ const Header = ({ detailMovie, episodes }) => {
                                 </button>
                             </Link>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
