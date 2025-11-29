@@ -75,8 +75,9 @@ const Profile = () => {
 
     return (
         <main >
-            <div className="container mx-auto p-5 max-w-3xl">
-                <section className="section">
+            <div className='pattern' />
+            <div className="wrapper max-w-3xl ">
+                <section className="section  mt-10">
                     <div className="flex justify-center items-center mb-6 gap-3">
                         <User />
                         <h2>Thông tin cơ bản</h2>
@@ -162,7 +163,7 @@ const Profile = () => {
 
                                 <button
                                     onClick={() => setIsEditing(true)}
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105"
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg "
                                 >
                                     Chỉnh sửa thông tin
                                 </button>

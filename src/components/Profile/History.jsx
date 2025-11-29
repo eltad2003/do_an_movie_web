@@ -151,16 +151,14 @@ const History = () => {
 
     return (
         <main >
-            <div className='container mx-auto p-5 max-w-6xl'>
-                <div className='bg-dark-100 rounded-lg shadow-lg p-6'>
+            <div className='pattern' />
+            <div className='wrapper '>
+                <div className='bg-dark-100 mt-10 rounded-lg p-5 '>
                     {/* Header */}
                     <div className='mb-5'>
                         <h2 className='text-2xl font-bold text-white flex items-center gap-2'>
                             <Clock size={28} />
                             Lịch sử xem phim
-                            <span className='text-sm font-normal text-gray-400'>
-                                ({watchHistory.length} phim)
-                            </span>
                         </h2>
                     </div>
 
@@ -169,7 +167,7 @@ const History = () => {
                         {watchHistory.map((history) => (
                             <div
                                 key={history.historyId}
-                                className='flex flex-col sm:flex-row gap-4 p-4 bg-dark-200 border border-gray-700 rounded-lg'
+                                className='flex flex-col sm:flex-row gap-4 p-4 bg-dark-100 border border-gray-700 rounded-lg'
                             >
                                 {/* Thumbnail */}
                                 <Link
@@ -189,7 +187,7 @@ const History = () => {
                                 </Link>
 
                                 {/* Info */}
-                                <div className='flex-1 min-w-0'>
+                                <div className='flex-1 min-w-0 '>
                                     <Link
                                         to={`/xem-phim/${history.movie.slug}?ep=${history.episodeSlug}`}
                                         className='text-lg font-semibold text-white hover:text-light-100 transition line-clamp-2'
@@ -203,7 +201,7 @@ const History = () => {
                                     <div className='mt-3 text-sm text-white/50'>
                                         <span className='flex items-center gap-1'>
                                             <Clock size={14} />
-                                            {formatDate(history.watchedAt)} •   {history.episodeName}
+                                            {formatDate(history.watchedAt)} • {history.episodeName}
                                         </span>
                                         <span>
 
@@ -213,17 +211,17 @@ const History = () => {
                                 </div>
 
                                 {/* Actions */}
-                                <div className='flex sm:flex-col gap-2'>
+                                <div className='flex sm:flex-col gap-3'>
                                     <Link
                                         to={`/xem-phim/${history.movie.slug}/${history.episodeSlug}`}
-                                        className='flex-1 sm:flex-none px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center justify-center gap-2 text-sm font-semibold'
+                                        className='btn inline-flex items-center gap-1'
                                     >
                                         <Play size={16} />
                                         Xem tiếp
                                     </Link>
                                     <button
                                         onClick={() => handleDeleteHistory(history.historyId)}
-                                        className='flex-1 sm:flex-none px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition flex items-center justify-center gap-2 text-sm'
+                                        className='flex-1 sm:flex-none px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition flex items-center justify-center gap-1 text-sm'
                                     >
                                         <Trash2 size={16} />
                                         Xóa

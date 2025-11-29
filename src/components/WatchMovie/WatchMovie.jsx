@@ -22,7 +22,7 @@ const WatchMovie = () => {
     <main>
       {errorMessage && <p className="text-red-500 text-center p-5">{errorMessage}</p>}
       {detailMovie && (
-        <div>
+        <div className='wrapper'>
           <header className='flex items-center gap-3 mb-10'>
             <Link to={`/phim/${detailMovie.slug}`}>
               <button className='btn text-sm'><ChevronLeft className='w-4 h-4' /></button>
@@ -37,7 +37,7 @@ const WatchMovie = () => {
             />
           ))}
 
-          <div className='wrapper'>
+          <div>
             <InfoMovie detailMovie={detailMovie} />
             {/* <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} /> */}
             <ListEpisode episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} />

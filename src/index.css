@@ -67,11 +67,11 @@
     }
 
     .section {
-        @apply mb-10 text-white p-3 md:p-5 rounded-lg bg-dark-100
+        @apply mb-10 text-white p-3 md:p-5 rounded-xl bg-dark-100
     }
 
     .overlay-gradient {
-        @apply absolute inset-0 bg-gradient-to-t from-primary via-black/70 to-transparent
+        @apply absolute inset-0 bg-gradient-to-t from-primary via-primary/70 to-transparent
     }
 
     .auth-form {

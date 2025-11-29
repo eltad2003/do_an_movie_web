@@ -85,7 +85,9 @@ const Header = ({ detailMovie, episodes, movieId }) => {
             }}
         >
             {/* overlay gradient */}
-            <div className="overlay-gradient" />
+            <div className='overlay-gradient' /> 
+            <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/0 to-transparent'></div>
+
             {/* Content */}
             <div className="absolute bottom-0 left-0 right-0 p-3 lg:p-10 ">
                 <div className="flex items-end gap-6">
@@ -94,15 +96,16 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         <img
                             src={detailMovie.posterUrl}
                             alt="poster"
-                            className="w-56 h-full rounded-lg object-cover shadow-primary "
+                            className="w-56 h-full rounded-lg object-cover "
                         />
+
                     </div>
 
                     {/* movie info */}
                     <div className="space-y-4 ">
                         <div >
                             <h1 className='text-start text-5xl'>{detailMovie.name}</h1>
-                            <h2 className='font-semibold text-gray-400'>{detailMovie.originName}</h2>
+                            <h2 className='font-semibold text-yellow-400'>{detailMovie.originName}</h2>
                         </div>
 
                         {/* Rating & Info badges */}
@@ -134,7 +137,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         {/* Action buttons */}
                         <div className="action-button">
                             <Link to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}>
-                                <button className="bg-light-100 shadow-light-100 shadow-2xl disabled:opacity-50" disabled={episodes.length === 0}>
+                                <button className="bg-light-100 shadow-2xl disabled:opacity-50" disabled={episodes.length === 0}>
                                     <Play className="w-5 h-5" />Xem ngay
                                 </button>
                             </Link>
@@ -143,11 +146,11 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 onClick={() => {
                                     isFavorite ? deleteFavorite() : addFavorite()
                                 }}
-                                className=" bg-pink-700 shadow-pink-700 shadow-2xl text-white">
+                                className=" bg-pink-700  shadow-2xl text-white">
                                 <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />Yêu thích
                             </button>
                             <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="bg-blue-700 shadow-blue-700 shadow-2xl text-white">
+                                <button className="bg-blue-700  shadow-2xl text-white">
                                     <Tv className="w-5 h-5" />Xem chung
                                 </button>
                             </Link>
@@ -180,6 +183,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                     </div> */}
 
                 </div>
+
             </div>
         </section>
     )

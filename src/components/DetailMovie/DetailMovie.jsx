@@ -14,7 +14,7 @@ const DetailMovie = () => {
     if (isLoading) { return <Loading /> }
     return (
         <main>
-             <div className='pattern' />
+
             {errorMessage && <p>Error: {errorMessage}</p>}
             {detailMovie && (
                 <div>

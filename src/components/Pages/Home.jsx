@@ -7,6 +7,8 @@ import { useState } from 'react'
 import Pagination from '../UI/Pagination'
 import SearchTrending from '../Trending/SearchTrending'
 import Skeleton from '../UI/Skeleton'
+import MovieTrending from '../Trending/MovieTrending'
+import BannerMovieTrending from '../Trending/BannerMovieTrending'
 
 
 
@@ -16,25 +18,23 @@ const Home = () => {
 
     return (
         <main>
-            <div className='pattern' />
-            <div className='wrapper'>
-                {/* section search */}
-                <header className='space-y-9 mb-10'>
+            {/* <div className='pattern' /> */}
 
-                    {/* <h1>Tìm và thưởng thức những bộ phim hay nhất.</h1>
-                    <p className='text-white/70 text-center mx-auto'>
-                        Khám phá hàng ngàn bộ phim chất lượng cao với phụ đề tiếng Việt
-                    </p> */}
-                    <img src="./hero-img.png" alt="banner" />
-                    <Search />
-                </header>
+            <div >
+                <MovieTrending />
 
-                {/*section search trending */}
                 <SearchTrending />
 
+                {/* <BannerMovieTrending /> */}
+
+                <header>
+                    <Search />
+                    <img src="./hero-img.png" alt="banner" />
+                </header>
+
                 {/* section all movie */}
-                <section className='space-y-9 mb-10'>
-                    <h2 className='text-light-100'>Danh sách phim mới</h2>
+                <section className=' mb-10 p-6'>
+                    <h2 >Danh sách phim mới</h2>
                     {isLoading ? (
                         <Skeleton />
                     ) : errorMessage ? (

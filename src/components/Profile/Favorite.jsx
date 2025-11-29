@@ -87,6 +87,7 @@ const Favorite = () => {
 
     return (
         <main>
+            <div className='pattern' />
             <div className='wrapper'>
                 <section className='space-y-9 mb-10'>
                     <h2 className='text-3xl font-bold text-white mb-5'>Yêu thích</h2>
