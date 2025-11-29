@@ -75,18 +75,20 @@ const Header = ({ detailMovie, episodes, movieId }) => {
     }
     useEffect(() => {
         checkFavorite()
-    }, [])
+    }, [movieId, user])
 
     return (
-        <section
-            className={`relative h-[70vh] bg-cover bg-center w-full mb-5 lg:mb-10 `}
+        <div
+            className={`relative h-[80dvh] bg-cover bg-center w-full mb-5 lg:mb-10  `}
             style={{
                 backgroundImage: `url(${detailMovie.thumbUrl})`,
+                objectFit: 'cover',
             }}
         >
-            {/* overlay gradient */}
-            <div className='overlay-gradient' /> 
+            {/* overlay bottom and left */}
+            <div className='overlay-gradient' />
             <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/0 to-transparent'></div>
+            <div className='absolute inset-0 bg-gradient-to-l from-primary via-primary/0 to-transparent'></div>
 
             {/* Content */}
             <div className="absolute bottom-0 left-0 right-0 p-3 lg:p-10 ">
@@ -96,7 +98,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         <img
                             src={detailMovie.posterUrl}
                             alt="poster"
-                            className="w-56 h-full rounded-lg object-cover "
+                            className="w-54 h-full rounded-lg object-cover "
                         />
 
                     </div>
@@ -104,7 +106,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                     {/* movie info */}
                     <div className="space-y-4 ">
                         <div >
-                            <h1 className='text-start text-5xl'>{detailMovie.name}</h1>
+                            <h1 className='text-start'>{detailMovie.name}</h1>
                             <h2 className='font-semibold text-yellow-400'>{detailMovie.originName}</h2>
                         </div>
 
@@ -124,7 +126,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                             </span>
 
                             <span className="px-3 py-1 rounded-lg bg-green-900/80 text-green-100 text-sm font-semibold">
-                                {detailMovie.type}
+                                {detailMovie.type === 'single' ? 'Phim lẻ' : 'Phim bộ'}
                             </span>
 
                             {detailMovie.episodes.length > 0 && (
@@ -137,8 +139,8 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         {/* Action buttons */}
                         <div className="action-button">
                             <Link to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}>
-                                <button className="bg-light-100 shadow-2xl disabled:opacity-50" disabled={episodes.length === 0}>
-                                    <Play className="w-5 h-5" />Xem ngay
+                                <button className="bg-red-700 text-white  disabled:opacity-50" disabled={episodes.length === 0}>
+                                    <Play className="w-5 h-5 fill-white" />Xem ngay
                                 </button>
                             </Link>
 
@@ -146,11 +148,11 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 onClick={() => {
                                     isFavorite ? deleteFavorite() : addFavorite()
                                 }}
-                                className=" bg-pink-700  shadow-2xl text-white">
+                                className=" bg-pink-700   text-white">
                                 <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />Yêu thích
                             </button>
                             <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="bg-blue-700  shadow-2xl text-white">
+                                <button className="bg-blue-700   text-white">
                                     <Tv className="w-5 h-5" />Xem chung
                                 </button>
                             </Link>
@@ -185,7 +187,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                 </div>
 
             </div>
-        </section>
+        </div>
     )
 }
 

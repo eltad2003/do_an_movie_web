@@ -2,27 +2,41 @@ import { Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 
-const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating } }) => {
+const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating, duration } }) => {
 
 
     return (
-        <div className='bg-dark-100 p-5 rounded-2xl hover:scale-102 transition-all duration-300 cursor-pointer group'>
-            <Link to={`/phim/${slug}`}>
-                <img src={posterUrl} alt="poster" className='rounded-lg h-auto w-full lg:h-94' loading='lazy' />
+        <div className='relative rounded-xl bg-dark-100 group transition-all duration-300 cursor-pointer group'>
+            <Link to={`/phim/${slug}`} className=' aspect-[2/3] block overflow-hidden '>
+                <img
+                    src={posterUrl} alt="poster"
+                    className='h-full w-full object-cover group-hover:scale-110 transition-transform duration-500'
+                    loading='lazy'
+                />
+
+                {year && (
+                    <div className='absolute top-2 right-2 bg-black/80 text-white text-xs font-semibold px-2 py-1 rounded'>
+                        {year}
+                    </div>
+                )}
             </Link>
-            <div className='mt-3'>
+            <div className='p-4'>
                 <div>
-                    <p className='text-white font-bold line-clamp-1 group-hover:underline' title={name}>{name}</p>
-                    <p className='text-white/50 line-clamp-1' title={originName}>{originName}</p>
+                    <Link to={`/phim/${slug}`}>
+                        <h3 className='text-white font-bold line-clamp-1 group-hover:text-purple-400 transition-colors' title={name}>
+                            {name}
+                        </h3>
+                    </Link>
+                    <p className='text-gray-400 text-sm line-clamp-1' title={originName}>{originName}</p>
                 </div>
 
-                <div className="mt-2 flex items-center flex-wrap gap-2 text-white">
-                    <div className="flex items-center gap-1 "> 
+                <div className="flex items-center justify-between pt-2 mt-2 ">
+                    <div className="flex items-center gap-1 ">
                         <Star className='h-4 w-4 fill-current text-yellow-400' />
-                        <p className='font-bold'>{rating ? rating.toFixed(1) : 'N/A'}</p>
+                        <p className='text-white font-semibold text-sm'>{rating ? rating.toFixed(1) : 'N/A'}</p>
                     </div>
-                    <span>•</span>
-                    <p className="text-white/50">{year}</p>
+
+                    <p className="text-white/50">{duration}</p>
                 </div>
             </div>
         </div>

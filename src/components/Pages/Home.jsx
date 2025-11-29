@@ -8,7 +8,7 @@ import Pagination from '../UI/Pagination'
 import SearchTrending from '../Trending/SearchTrending'
 import Skeleton from '../UI/Skeleton'
 import MovieTrending from '../Trending/MovieTrending'
-import BannerMovieTrending from '../Trending/BannerMovieTrending'
+
 
 
 
@@ -22,18 +22,14 @@ const Home = () => {
 
             <div >
                 <MovieTrending />
-
                 <SearchTrending />
-
-                {/* <BannerMovieTrending /> */}
-
-                <header>
+                <header className='mb-10'>
                     <Search />
-                    <img src="./hero-img.png" alt="banner" />
+                    {/* <img src="./hero-img.png" alt="banner" /> */}
                 </header>
 
-                {/* section all movie */}
-                <section className=' mb-10 p-6'>
+                {/* all movie */}
+                <section className='mb-10 p-6'>
                     <h2 >Danh sách phim mới</h2>
                     {isLoading ? (
                         <Skeleton />
