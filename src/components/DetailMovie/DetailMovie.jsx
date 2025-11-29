@@ -14,6 +14,7 @@ const DetailMovie = () => {
     if (isLoading) { return <Loading /> }
     return (
         <main>
+             <div className='pattern' />
             {errorMessage && <p>Error: {errorMessage}</p>}
             {detailMovie && (
                 <div>
@@ -21,7 +22,7 @@ const DetailMovie = () => {
                     <div className='wrapper'>
                         <InfoMovie detailMovie={detailMovie} />
                         <Episodes episodes={episodes} detailMovie={detailMovie} />
-                        <Comment />
+                        <Comment movieId={detailMovie.id}/>
                     </div>
                 </div>
             )}

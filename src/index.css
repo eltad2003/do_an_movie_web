@@ -25,7 +25,6 @@
         font-family: "Roboto", sans-serif;
         font-optical-sizing: auto;
         background: #050015;
-
     }
 
     h1 {
@@ -68,7 +67,7 @@
     }
 
     .section {
-        @apply mb-10 text-white p-3 md:p-5 rounded-lg bg-dark-200/80
+        @apply mb-10 text-white p-3 md:p-5 rounded-lg bg-dark-100
     }
 
     .overlay-gradient {

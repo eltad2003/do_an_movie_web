@@ -37,3 +37,27 @@ export const generateSlug = (name) => {
         .replace(/-+/g, '-')
         .trim('-')
 }
+
+
+export const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60))
+
+    if (diffInHours < 1) {
+        const diffInMinutes = Math.floor((now - date) / (1000 * 60))
+        return diffInMinutes === 0 ? 'Vừa xong' : `${diffInMinutes} phút trước`
+    } else if (diffInHours < 24) {
+        return `${diffInHours} giờ trước`
+    } else if (diffInHours < 48) {
+        return 'Hôm qua'
+    } else {
+        return date.toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        })
+    }
+}

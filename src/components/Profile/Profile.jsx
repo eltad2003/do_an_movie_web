@@ -173,7 +173,7 @@ const Profile = () => {
 
                 {/* change password*/}
                 <ChangePassword token={user.accessToken} />
-              
+
             </div>
         </main>
     )

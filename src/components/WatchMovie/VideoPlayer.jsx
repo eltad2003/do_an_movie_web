@@ -302,7 +302,7 @@ export default function VideoPlayerCustom({ videoUrl }) {
     return (
         <div
             ref={containerRef}
-            className="group relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow- mb-20"
+            className="group relative w-full aspect-video bg-black overflow-hidden mb-20"
         >
             {/* Video Element */}
             <video

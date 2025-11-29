@@ -135,7 +135,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         <div className="action-button">
                             <Link to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}>
                                 <button className="bg-light-100 shadow-light-100 shadow-2xl disabled:opacity-50" disabled={episodes.length === 0}>
-                                    <Play className="w-5 h-5 animate-pulse" />Xem ngay
+                                    <Play className="w-5 h-5" />Xem ngay
                                 </button>
                             </Link>
 

@@ -4,7 +4,8 @@ export const movieService = {
   // getMovies: (page = 1) => api.get(`/danh-sach/phim-moi-cap-nhat?page=${page}`),
   getMovies: () => api.get(`/movies`),
   getMovieDetail: (slug) => api.get(`/movies/${slug}`),
-  
+  getComments: (movieId) => api.get(`/public/comments/movie/${movieId}`),
+
   searchMovies: (query) => api.get(`/movies/search?keyword=${query}`),
   getCategories: () => api.get('/categories'),
   moviesByCategory: (slug, page = 1) => api.get(`/v1/api/the-loai/${slug}?page=${page}`),
