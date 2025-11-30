@@ -1,5 +1,5 @@
 import { Play } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { chunkArray } from '../../utils/helpers'
 
@@ -7,13 +7,14 @@ const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
 
     const [selectedRange, setSelectedRange] = useState(0)
     const MAX_EPISODE_PER_RANGE = 50
-
+    const groupEpisode = chunkArray(episodes, MAX_EPISODE_PER_RANGE);
 
     const handleChangeRange = (e) => {
         setSelectedRange(e.target.value)
     }
-
-    const groupEpisode = chunkArray(episodes, MAX_EPISODE_PER_RANGE);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [epSlug]);
 
     if (!episodes || episodes.length === 0) {
         return (
@@ -23,6 +24,7 @@ const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
             </div>
         )
     }
+
     return (
         <div className='mb-10 bg-dark-100 text-white p-5 rounded-lg'>
             <h3 className='text-xl font-bold mb-3'>Danh sách tập</h3>
@@ -52,7 +54,7 @@ const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
                         to={`/xem-phim/${slug}?ep=${ep.slug}`}
                         key={idx}
                         className={`text-sm px-3 py-2 rounded-lg ${ep.slug === epSlug ? 'bg-yellow-700' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'} inline-flex gap-2 items-center justify-center  transition`}
-                        disabled={ep.slug === epSlug}         
+                        disabled={ep.slug === epSlug}
                     >
                         <Play className='w-4 h-4' />
                         {ep.name}

@@ -1,12 +1,14 @@
-import { Heart, Play, Star, Tv } from 'lucide-react'
+import { Heart, Play, Star, Tv, X } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
+import Modal from 'react-modal'
 
 const Header = ({ detailMovie, episodes, movieId }) => {
     const { user } = useContext(AuthContext)
     const [isFavorite, setIsFavorite] = useState(false)
+    const [modalIsOpen, setIsOpen] = useState(false);
 
     const addFavorite = async () => {
         try {
@@ -73,6 +75,9 @@ const Header = ({ detailMovie, episodes, movieId }) => {
             setIsFavorite(false)
         }
     }
+
+
+
     useEffect(() => {
         checkFavorite()
     }, [movieId, user])
@@ -88,19 +93,28 @@ const Header = ({ detailMovie, episodes, movieId }) => {
             {/* overlay bottom and left */}
             <div className='overlay-gradient' />
             <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/0 to-transparent'></div>
-            <div className='absolute inset-0 bg-gradient-to-l from-primary via-primary/0 to-transparent'></div>
+            {/* <div className='absolute inset-0 bg-gradient-to-l from-primary via-primary/0 to-transparent'></div> */}
+
+
 
             {/* Content */}
             <div className="absolute bottom-0 left-0 right-0 p-3 lg:p-10 ">
                 <div className="flex items-end gap-6">
                     {/* poster */}
-                    <div className="flex-shrink-0 hidden lg:block">
+                    <div className="relative flex-shrink-0 hidden lg:block">
                         <img
                             src={detailMovie.posterUrl}
                             alt="poster"
                             className="w-54 h-full rounded-lg object-cover "
                         />
-
+                        {/* play trailer */}
+                        <div className='absolute z-50 inset-0 flex items-center justify-center group' title='Xem trailer'>
+                            <button
+                                onClick={() => setIsOpen(true)}
+                                className=' rounded-full bg-white/30  text-white backdrop-blur-sm p-5 opacity-0 group-hover:opacity-100 transition duration-300 cursor-pointer'>
+                                <Play size={40} />
+                            </button>
+                        </div>
                     </div>
 
                     {/* movie info */}
@@ -156,6 +170,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                     <Tv className="w-5 h-5" />Xem chung
                                 </button>
                             </Link>
+
                         </div>
                     </div>
 
@@ -187,6 +202,47 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                 </div>
 
             </div>
+
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setIsOpen(false)}
+                style={{
+                    overlay: {
+                        position: "fixed",
+                        zIndex: 9999,
+                        backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    },
+                    content: {
+                        top: "50%",
+                        left: "50%",
+                        right: "auto",
+                        bottom: "auto",
+                        marginRight: "-50%",
+                        transform: "translate(-50%, -50%)",
+                        maxWidth: "800px",
+                        width: "90%",
+
+
+                    },
+                }}
+                contentLabel="Example Modal"
+            >
+                {detailMovie.trailerUrl && (
+                    <div className='w-full aspect-video relative'>
+                        <iframe
+                            src={detailMovie.trailerUrl.replace('watch?v=', 'embed/')}
+                            className='w-full h-full rounded-lg'
+                            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                            allowFullScreen
+                            title="Movie Trailer"
+                        />
+
+                        <button onClick={() => setIsOpen(false)}><X /></button>
+
+                    </div>
+                )}
+            </Modal>
         </div>
     )
 }

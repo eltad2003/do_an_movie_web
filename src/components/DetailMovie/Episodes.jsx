@@ -10,7 +10,7 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
 
 
     const handleChangeRange = (e) => {
-        setSelectedRange(e.target.value)
+        setSelectedRange(Number(e.target.value))
     }
 
     const groupEpisode = chunkArray(episodes, MAX_EPISODE_PER_RANGE);

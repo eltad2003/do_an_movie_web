@@ -40,7 +40,7 @@ const MovieTrending = () => {
                             className='w-full h-full md:h-auto object-cover transition-transform duration-500 group-hover:scale-110'
                         />
                         {/* overlay left and bottom */}
-                        <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/90 md:via-primary/0 to-transparent' />
+                        <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/80 md:via-primary/0 to-transparent' />
                         <div className='absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary to-transparent' />
                     </div>
 

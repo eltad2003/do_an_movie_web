@@ -38,9 +38,9 @@ const Navbar = () => {
         setIsOpenSideBar(false)
         setIsOpenProfile(false)
         setOpenDropdown(null)
-        
-        
-     }, [location.pathname])
+
+
+    }, [location.pathname])
 
 
 
@@ -55,8 +55,8 @@ const Navbar = () => {
                     isDropdownOpen={openDropdown === 'category'}
                     onToggle={() => handleDropdownToggle('category')}
                 />
-                <Type to="/phim-bo" label="Phim bộ" />
-                <Type to="/phim-le" label="Phim lẻ" />
+                {/* <Type to="/phim-bo" label="Phim bộ" />
+                <Type to="/phim-le" label="Phim lẻ" /> */}
                 <DropDown
                     text='Quốc gia'
                     slug='quoc-gia'
