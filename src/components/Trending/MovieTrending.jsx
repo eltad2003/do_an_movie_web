@@ -7,7 +7,7 @@ import { Play, Info, Star, Clock, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom';
 const MovieTrending = () => {
     const { listMovies } = useMovies()
-    const trendingMovies = listMovies.sort((a, b) => b.views - a.views).slice(0, 5)
+    const trendingMovies = listMovies.sort((a, b) => b.views - a.views).slice(0, 3)
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
@@ -48,7 +48,7 @@ const MovieTrending = () => {
                     <div className='absolute bottom-0 left-0  flex items-center'>
                         <div className='container mx-auto px-5'>
                             <div className='max-w-2xl space-y-2 md:space-y-6'>
-                                <h1 className='text-start text-base md:text-5xl'>
+                                <h1 className='text-start text-base  md:text-3xl lg:text-5xl'>
                                     {detailMovie.name}
                                 </h1>
                                 <p className='text-sm md:text-xl text-yellow-400'>

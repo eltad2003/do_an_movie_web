@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
 import Modal from 'react-modal'
+import { useSaveHistory } from '../../hooks/useHistory'
 
 const Header = ({ detailMovie, episodes, movieId }) => {
     const { user } = useContext(AuthContext)
     const [isFavorite, setIsFavorite] = useState(false)
     const [modalIsOpen, setIsOpen] = useState(false);
+    const { saveHistory } = useSaveHistory()
 
     const addFavorite = async () => {
         try {
@@ -152,7 +154,10 @@ const Header = ({ detailMovie, episodes, movieId }) => {
 
                         {/* Action buttons */}
                         <div className="action-button">
-                            <Link to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}>
+                            <Link
+                                to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}
+                                onClick={() => user && saveHistory(episodes[0]?.id)}
+                            >
                                 <button className="bg-red-700 text-white  disabled:opacity-50" disabled={episodes.length === 0}>
                                     <Play className="w-5 h-5 fill-white" />Xem ngay
                                 </button>

@@ -1,79 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Clock, Play, Trash2, Film } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
 import Loading from '../UI/Loading'
+import { useHistory } from '../../hooks/useHistory'
+import { formatDate } from '../../utils/helpers'
 
 const History = () => {
     const { user } = useContext(AuthContext)
-    const [watchHistory, setWatchHistory] = useState([])
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        fetchWatchHistory()
-    }, [])
-
-    const fetchWatchHistory = async () => {
-        try {
-
-            const res = await fetch(`${import.meta.env.VITE_BE}/api/history/me`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${user.accessToken}`
-                }
-            })
-
-            if (res.ok) {
-                const historyData = await res.json()
-                if (!historyData || historyData.length === 0) {
-                    setWatchHistory([])
-                    setLoading(false)
-                    return
-                }
-
-                // lưu history với thông tin chi tiết của movie và slug tập
-                const detailedHistory = await Promise.all(
-                    historyData.map(async (record) => {
-                        try {
-                            const movieRes = await fetch(`${import.meta.env.VITE_BE}/movies/id/${record.episode.movieId}`)
-                            if (movieRes.ok) {
-                                const movie = await movieRes.json()
-                                return {
-                                    historyId: record.id,
-                                    episodeSlug: record.episode.slug,
-                                    episodeName: record.episode.name,
-                                    watchedAt: record.watchedAt,
-                                    movie
-                                }
-                            }
-                            return null
-                        } catch (error) {
-                            console.error(`Error fetching episode ${record.episode.id}:`, error)
-                            return null
-                        }
-                    })
-                )
-
-                // Lọc bỏ null và sắp xếp theo thời gian xem gần nhất
-                const filteredHistory = detailedHistory
-                    .filter(item => item !== null)
-                    .sort((a, b) => new Date(b.watchedAt) - new Date(a.watchedAt))
-
-                setWatchHistory(filteredHistory)
-                console.log('History data:', filteredHistory)
-            } else {
-                const errorText = await res.text()
-                console.error('Error response:', errorText)
-                toast.error('Không thể tải lịch sử xem phim')
-            }
-        } catch (error) {
-            console.error('Error fetching watch history:', error)
-            toast.error('Không thể tải lịch sử xem phim')
-        } finally {
-            setLoading(false)
-        }
-    }
+    const { watchHistory, setWatchHistory, loading } = useHistory()
 
     const handleDeleteHistory = async (historyId) => {
         if (!window.confirm('Bạn có chắc muốn xóa lịch sử này?')) return
@@ -100,28 +36,7 @@ const History = () => {
         }
     }
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString)
-        const now = new Date()
-        const diffInHours = Math.floor((now - date) / (1000 * 60 * 60))
 
-        if (diffInHours < 1) {
-            const diffInMinutes = Math.floor((now - date) / (1000 * 60))
-            return diffInMinutes === 0 ? 'Vừa xong' : `${diffInMinutes} phút trước`
-        } else if (diffInHours < 24) {
-            return `${diffInHours} giờ trước`
-        } else if (diffInHours < 48) {
-            return 'Hôm qua'
-        } else {
-            return date.toLocaleDateString('vi-VN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            })
-        }
-    }
 
     if (loading) {
         return <Loading />
@@ -213,7 +128,7 @@ const History = () => {
                                 {/* Actions */}
                                 <div className='flex sm:flex-col gap-3'>
                                     <Link
-                                        to={`/xem-phim/${history.movie.slug}/${history.episodeSlug}`}
+                                        to={`/xem-phim/${history.movie.slug}?ep=${history.episodeSlug}`}
                                         className='btn inline-flex items-center gap-1'
                                     >
                                         <Play size={16} />

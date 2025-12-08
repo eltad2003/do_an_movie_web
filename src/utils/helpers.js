@@ -6,13 +6,6 @@ export const formatDuration = (minutes) => {
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`
 }
 
-// export const formatPosterUrl = (url) => {
-//     if (!url) return '/images/placeholder-movie.jpg'
-
-//     if (url.startsWith('https://phimimg.com/')) return url
-
-//     return `https://phimimg.com${url.startsWith('/') ? url : `/${url}`}`
-// }
 
 export const chunkArray = (arr, size) => {
     const result = [];
