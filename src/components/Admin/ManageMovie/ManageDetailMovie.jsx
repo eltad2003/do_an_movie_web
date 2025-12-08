@@ -664,7 +664,7 @@ const ManageDetailMovie = () => {
                 ) : typeHeader === 'episodes' ? (
                     <MangeEpisodes episodes={movie.episodes} movieId={id} />
                 ) : (
-                    <ManageReview />
+                    <ManageReview movieId={id} />
                 )}
 
             </div>
