@@ -129,7 +129,7 @@ const Dashboard = () => {
     const COLORS = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#ef4444']
 
     const StatCard = ({ icon: Icon, title, value, change, color, bgColor }) => (
-        <div className={`${bgColor} rounded-xl p-3`}>
+        <div className={`${bgColor} rounded-xl p-3 border border-gray-300 shadow-lg`}>
             <div className='flex items-center justify-between mb-4'>
                 <div className={`p-3 ${color} rounded-lg`}>
                     <Icon className='w-6 h-6 text-white' />
@@ -144,7 +144,6 @@ const Dashboard = () => {
                     </span>
                 )}
             </div>
-
         </div>
     )
 
@@ -155,7 +154,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100'>
+        <div className='min-h-dvh'>
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-5">
                 <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
@@ -170,7 +169,7 @@ const Dashboard = () => {
                         value={stats.totalMovies}
                         change={12}
                         color="bg-purple-600"
-                        bgColor="bg-white"
+                        bgColor="bg-purple-50"
                     />
                     <StatCard
                         icon={Users}
@@ -178,7 +177,7 @@ const Dashboard = () => {
                         value={stats.totalUsers}
                         change={8}
                         color="bg-blue-600"
-                        bgColor="bg-white"
+                        bgColor="bg-blue-50"
                     />
                     <StatCard
                         icon={Eye}
@@ -186,35 +185,35 @@ const Dashboard = () => {
                         value={stats.totalViews}
                         change={23}
                         color="bg-pink-600"
-                        bgColor="bg-white"
+                        bgColor="bg-pink-50"
                     />
                     <StatCard
                         icon={TrendingUp}
                         title="Phim mới tháng này"
                         value={stats.newMoviesThisMonth}
                         color="bg-green-600"
-                        bgColor="bg-white"
+                        bgColor="bg-green-50"
                     />
                     <StatCard
                         icon={Calendar}
                         title="Tổng số tập"
                         value={stats.totalEpisodes}
                         color="bg-orange-600"
-                        bgColor="bg-white"
+                        bgColor="bg-orange-50"
                     />
                     <StatCard
                         icon={MessageSquare}
                         title="Tổng bình luận"
                         value={stats.totalReviews}
                         color="bg-red-600"
-                        bgColor="bg-white"
+                        bgColor="bg-red-50"
                     />
                 </div>
 
                 {/* Charts Row */}
                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8'>
                     {/* Views Chart */}
-                    <div className='bg-white rounded-xl shadow-lg p-6'>
+                    <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
                             <Activity className='w-5 h-5 text-purple-600' />
                             Lượt xem 7 ngày qua
@@ -238,7 +237,7 @@ const Dashboard = () => {
                     </div>
 
                     {/* Category Distribution */}
-                    <div className='bg-white rounded-xl shadow-lg p-6'>
+                    <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
                             <Award className='w-5 h-5 text-pink-600' />
                             Phân bố thể loại
@@ -268,7 +267,7 @@ const Dashboard = () => {
                 {/* Top Movies & Recent Activities */}
                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8'>
                     {/* Top 5 Movies */}
-                    <div className='bg-white rounded-xl shadow-lg p-6'>
+                    <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
                             <Star className='w-5 h-5 text-yellow-600' />
                             Top 5 phim xem nhiều
@@ -300,14 +299,14 @@ const Dashboard = () => {
                     </div>
 
                     {/* Recent Movies */}
-                    <div className='bg-white rounded-xl shadow-lg p-6'>
+                    <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
                             <Clock className='w-5 h-5 text-blue-600' />
                             Phim mới thêm
                         </h2>
                         <div className='space-y-3'>
                             {recentMovies.map(movie => (
-                                <div key={movie.id} className='flex items-center gap-3 p-3 hover:bg-gray-200 rounded-lg transition-colors'>
+                                <div key={movie.id} className='flex items-center gap-3 p-3 hover:bg-gray-200  rounded-lg transition-colors'>
                                     <img
                                         src={movie.posterUrl}
                                         alt={movie.name}

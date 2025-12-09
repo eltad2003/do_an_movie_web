@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react'
+import { Heart, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 
@@ -6,11 +6,11 @@ const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating, d
 
 
     return (
-        <div className='relative rounded-xl bg-dark-100 group transition-all duration-300 cursor-pointer group'>
-            <Link to={`/phim/${slug}`} className=' aspect-[2/3] block overflow-hidden '>
+        <div className='relative rounded-xl bg-dark-200 group transition-all duration-300 cursor-pointer group'>
+            <Link to={`/phim/${slug}`} className='aspect-[2/3] block overflow-hidden '>
                 <img
                     src={posterUrl} alt="poster"
-                    className='h-full w-full object-cover group-hover:scale-110 transition-transform duration-500'
+                    className='h-full w-full object-cover group-hover:scale-110 transition-transform duration-300'
                     loading='lazy'
                 />
 
@@ -30,13 +30,17 @@ const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating, d
                     <p className='text-gray-400 text-sm line-clamp-1' title={originName}>{originName}</p>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 mt-2 ">
+                <div className="flex items-center justify-between gap-3 mt-3">
                     <div className="flex items-center gap-1 ">
                         <Star className='h-4 w-4 fill-current text-yellow-400' />
                         <p className='text-white font-semibold text-sm'>{rating ? rating.toFixed(1) : 'N/A'}</p>
                     </div>
 
-                    <p className="text-white/50">{duration}</p>
+                    <p className="text-white/50 line-clamp-1">{duration}</p>
+                    {/* yêu thích */}
+                    <button className='text-white'>
+                        <Heart />
+                    </button>
                 </div>
             </div>
         </div>

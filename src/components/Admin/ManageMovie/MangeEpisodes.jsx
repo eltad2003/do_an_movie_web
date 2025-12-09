@@ -274,9 +274,9 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                 Thêm tập phim
             </button>
 
-            <div className='overflow-auto rounded-lg shadow-sm border border-gray-200'>
+            <div className='overflow-auto rounded-lg shadow-sm border border-gray-400'>
                 <table className='w-full'>
-                    <thead className='bg-gray-50 border-b border-gray-200'>
+                    <thead className='bg-gray-50 border-b border-gray-400'>
                         <tr>
                             <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>ID</th>
                             <th className='px-6 py-3 text-xs text-left font-semibold uppercase'>Tên tập</th>
@@ -284,8 +284,8 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                             <th className='px-6 py-3 text-xs text-center font-semibold uppercase'>Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
-                        {episodes && episodes.length > 0 ? episodes.map((episode) => (
+                    <tbody className="divide-y divide-gray-300">
+                        {episodes && episodes.length > 0 ? episodes.sort((a, b) => a.name.localeCompare(b.name)).map((episode) => (
                             <tr key={episode.id} className='hover:bg-gray-50'>
                                 <td className="px-6 py-4 text-sm">{episode.id}</td>
                                 <td className="px-6 py-4 font-medium">{episode.name}</td>
@@ -298,7 +298,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                                 rel="noopener noreferrer"
                                                 className='hover:underline text-blue-500 flex items-center gap-1 text-sm disabled:text-gray-500'
                                                 title={episode.videoUrl}
-                                            
+
                                             >
                                                 <Upload size={14} />
                                                 Xem video
@@ -368,7 +368,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                     value={episodeData.name}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    placeholder="VD: Tập 1 - Khởi đầu"
+                                    placeholder="VD: Tập 01, Full,..."
                                     required
                                 />
                             </div>

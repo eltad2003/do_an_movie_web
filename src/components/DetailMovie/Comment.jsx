@@ -81,7 +81,7 @@ const Comment = ({ movieId }) => {
                 {comments.length > 0 ? comments.map((comment) => (
                     <div key={comment.id} className='border-b border-gray-700 pb-3 mb-6'>
                         <div className='flex items-center mb-2'>
-                            <div className='w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold mr-4'>
+                            <div className='w-10 h-10 rounded-full bg-gradient flex items-center justify-center text-primary font-bold mr-4'>
                                 {comment.user.username ? comment.user.username.charAt(0).toUpperCase() : 'U'}
                             </div>
                             <div>

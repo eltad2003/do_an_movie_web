@@ -29,26 +29,26 @@ const MovieTrending = () => {
     }
 
     return (
-        <Carousel responsive={responsive} transitionDuration={500} >
+        <Carousel responsive={responsive}  >
             {trendingMovies.map((detailMovie) => (
-                <div className='relative w-full h-[80dvh] mb-15 overflow-hidden group' key={detailMovie.id}>
+                <div className='relative w-full h-[80dvh] mb-20 overflow-hidden group' key={detailMovie.id}>
 
-                    <div className='absolute inset-0'>
+                    <div className='absolute inset-0 aspect-auto'>
                         <img
                             src={detailMovie.thumbUrl}
                             alt={detailMovie.name}
-                            className='w-full h-full md:h-auto object-cover transition-transform duration-500 group-hover:scale-110'
+                            className='w-full h-full  object-cover transition-transform duration-500 group-hover:scale-110'
                         />
                         {/* overlay left and bottom */}
-                        <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/80 md:via-primary/0 to-transparent' />
+                        <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/80 md:via-primary/50 lg:via-primary/0 to-transparent' />
                         <div className='absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary to-transparent' />
                     </div>
 
                     {/* Content */}
-                    <div className='absolute bottom-0 left-0  flex items-center'>
+                    <div className='absolute bottom-0 md:bottom-10 left-0 flex items-center md:ml-3'>
                         <div className='container mx-auto px-5'>
                             <div className='max-w-2xl space-y-2 md:space-y-6'>
-                                <h1 className='text-start text-base  md:text-3xl lg:text-5xl'>
+                                <h1 className='text-start md:text-3xl lg:text-4xl'>
                                     {detailMovie.name}
                                 </h1>
                                 <p className='text-sm md:text-xl text-yellow-400'>
@@ -92,17 +92,17 @@ const MovieTrending = () => {
                                 />
 
                                 {/* Action Buttons */}
-                                <div className='flex flex-wrap gap-4 pt-4'>
+                                <div className='flex flex-wrap gap-3 mt-3'>
                                     <Link
                                         to={`/xem-phim/${detailMovie.slug}?ep=${detailMovie.episodes[0]?.slug}`}
-                                        className='group/btn flex items-center gap-2 px-8 py-3.5 bg-red-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105'
+                                        className='group/btn flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105'
                                     >
                                         <Play size={20} className='fill-white ' />
                                         Xem ngay
                                     </Link>
                                     <Link
                                         to={`/phim/${detailMovie.slug}`}
-                                        className='flex items-center gap-2 px-8 py-3.5 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold rounded-lg border-2 border-white/30 transition-all duration-300 hover:scale-105'
+                                        className='flex items-center gap-2 px-4 py-3 bg-white/10 backdrop-blur-sm hover:text-purple-400 text-white font-semibold rounded-lg border-2 border-white/30 transition-colors'
                                     >
                                         <Info size={20} />
                                         Chi tiết

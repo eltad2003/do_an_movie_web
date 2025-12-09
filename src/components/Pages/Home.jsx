@@ -22,12 +22,8 @@ const Home = () => {
 
             <div >
                 <MovieTrending />
+                <Search />
                 <SearchTrending />
-                <header className='mb-10'>
-                    <Search />
-                    {/* <img src="./hero-img.png" alt="banner" /> */}
-                </header>
-
                 {/* all movie */}
                 <section className='mb-10 p-6'>
                     <h2 >Danh sách phim mới</h2>

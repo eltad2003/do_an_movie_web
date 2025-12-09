@@ -67,6 +67,17 @@ const Navbar = () => {
 
                 <Type to="/xem-chung" label="Xem chung" />
             </div>
+            {isOpenProfile && (
+                <div className='absolute top-full right-0 m-1 w-48 bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
+                    <Link to="/ho-so" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><UserPen />Hồ sơ</Link>
+                    {user && user.user.roleName === 'ROLE_ADMIN' && (
+                        <Link to="/admin" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Shield />Quản trị</Link>
+                    )}
+                    <Link to="/lich-su" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Clock />Lịch sử</Link>
+                    <Link to="/yeu-thich" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Heart />Yêu thích</Link>
+                    <Link onClick={handleLogout} className='inline-flex gap-4 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
+                </div>
+            )}
 
             {/* mobile */}
             <div className='lg:hidden relative flex items-center gap-4'>
@@ -85,20 +96,9 @@ const Navbar = () => {
                     <button className='btn'>Đăng nhập</button>
                 </Link>
             )}
-            {isOpenProfile && (
-                <div className='absolute top-full right-0 m-1 w-48 bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
-                    <Link to="/ho-so" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><UserPen />Hồ sơ</Link>
-                    {user && user.user.roleName === 'ROLE_ADMIN' && (
-                        <Link to="/admin" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Shield />Quản trị</Link>
-                    )}
-                    <Link to="/lich-su" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Clock />Lịch sử</Link>
-                    <Link to="/yeu-thich" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Heart />Yêu thích</Link>
-                    <Link onClick={handleLogout} className='inline-flex gap-4 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
-                </div>
-            )}
 
             {isOpenSideBar && (
-                <div className='absolute top-full left-0 right-0 w-full bg-dark-200 rounded-b-lg p-3 flex flex-col gap-8 lg:hidden z-50'>
+                <div className='absolute top-full left-0 right-0 w-full bg-dark-100 rounded-b-lg p-3 flex flex-col gap-8 lg:hidden z-50'>
                     <DropDown
                         text='Quốc gia'
                         slug='quoc-gia'
@@ -113,9 +113,6 @@ const Navbar = () => {
                         isDropdownOpen={openDropdown === 'category'}
                         onToggle={() => handleDropdownToggle('category')}
                     />
-                    <Type to="/phim-bo" label="Phim bộ" />
-                    <Type to="/phim-le" label="Phim lẻ" />
-
                     <Type to="/xem-chung" label="Xem chung" />
                 </div>
             )}

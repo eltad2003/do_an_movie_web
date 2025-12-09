@@ -18,7 +18,7 @@ const SearchTrending = () => {
             console.log(error)
         }
     }
-    
+
     useEffect(() => {
         fetchTrendingSearch()
     }, [])
@@ -26,27 +26,26 @@ const SearchTrending = () => {
     if (!listMovies.length) return null
 
     return (
-        <section className='mb-10 p-6'>
-            <h2 className=' text-white inline-flex items-center gap-2 '>
-        
+        <section className='mb-10 '>
+            <h2 className=' text-white inline-flex items-center gap-2 px-6'>
                 Tìm kiếm thịnh hành
             </h2>
 
-            <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={3000} transitionDuration={500} >
+            <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={2000}  >
                 {listMovies.map((movie) => (
                     <div key={movie.$id}>
                         <Link to={`/tim-kiem?q=${movie.searchQuery}`}>
-                            <div className="relative flex items-center justify-center overflow-hidden transition-all hover:scale-105 duration-300 group">
+                            <div className="relative flex items-center justify-center overflow-hidden group">
                                 <div className="absolute bottom-0 left-2 z-10">
                                     <p className="fancy-text">{listMovies.indexOf(movie) + 1}</p>
                                 </div>
-
-                                <img
-                                    src={movie.poster_url}
-                                    alt="poster"
-                                    className="w-auto h-auto object-cover rounded-lg"
-
-                                />
+                                <div className='aspect-[2/3] overflow-hidden'>
+                                    <img
+                                        src={movie.poster_url}
+                                        alt="poster"
+                                        className='h-full w-full object-cover transition-all hover:scale-110 duration-300'
+                                    />
+                                </div>
                                 {/* Hover overlay */}
                                 <div
                                     title={movie.searchQuery}

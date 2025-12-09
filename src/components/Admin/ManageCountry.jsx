@@ -77,9 +77,9 @@ const ManageCountry = () => {
                 >
                     Thêm quốc gia
                 </button>
-                <div className='overflow-auto rounded-lg shadow-sm border border-gray-200'>
+                <div className='overflow-auto rounded-lg shadow-sm border border-gray-400'>
                     <table className='w-full'>
-                        <thead className='bg-gray-50 border-b border-gray-200'>
+                        <thead className='bg-gray-50 border-b border-gray-400'>
                             <tr>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>STT</th>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>Tên Quốc Gia</th>
@@ -87,7 +87,7 @@ const ManageCountry = () => {
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-center'>Thao Tác</th>
                             </tr>
                         </thead>
-                        <tbody className='divide-y divide-gray-200'>
+                        <tbody className='divide-y divide-gray-300'>
                             {countries.length > 0 ? countries.map((country, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{country.id}</td>

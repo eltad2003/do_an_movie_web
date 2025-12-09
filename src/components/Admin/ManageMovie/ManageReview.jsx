@@ -1,6 +1,5 @@
 import { Star, StarIcon, Trash2 } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../../context/AuthContext'
 
@@ -24,7 +23,7 @@ const ManageReview = ({ movieId }) => {
     }
 
     const handleDeleteComment = async (reviewId) => {
-        // DELETE :admin/comments/:id
+        // DELETE: admin/comments/:id
         if (window.confirm('Bạn có chắc chắn muốn xóa đánh giá của người dùng này không?')) {
             try {
                 const res = await fetch(`${import.meta.env.VITE_BE}/admin/comments/${reviewId}`, {
@@ -52,9 +51,9 @@ const ManageReview = ({ movieId }) => {
 
     return (
         <div>
-            <div className='overflow-auto rounded-lg shadow-sm border border-gray-200'>
+            <div className='overflow-auto rounded-lg shadow-sm border border-gray-400'>
                 <table className='w-full'>
-                    <thead className='bg-gray-50 border-b border-gray-200'>
+                    <thead className='bg-gray-50 border-b border-gray-400'>
                         <tr>
                             <th className='px-6 py-4 text-left text-xs font-semibold uppercase'>Người dùng</th>
                             <th className='px-6 py-4 text-left text-xs font-semibold uppercase'>Bình luận</th>
@@ -62,8 +61,8 @@ const ManageReview = ({ movieId }) => {
                             <th className='p-4 text-left text-xs font-semibold uppercase'>Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
-                        {reviews.map((review, index) => (
+                    <tbody className="divide-y divide-gray-300">
+                        {reviews.length > 0 ? reviews.map((review, index) => (
                             <tr key={index} className='hover:bg-gray-50'>
                                 <td className="px-6 py-4">
                                     <div className='flex flex-col'>
@@ -91,7 +90,11 @@ const ManageReview = ({ movieId }) => {
                                     </button>
                                 </td>
                             </tr>
-                        ))}
+                        )) : (
+                            <tr>
+                                <td colSpan="4" className="px-6 py-4 text-center text-gray-500">Chưa có đánh giá nào.</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

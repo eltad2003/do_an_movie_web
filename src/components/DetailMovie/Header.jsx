@@ -101,33 +101,25 @@ const Header = ({ detailMovie, episodes, movieId }) => {
 
             {/* Content */}
             <div className="absolute bottom-0 left-0 right-0 p-3 lg:p-10 ">
-                <div className="flex items-end gap-6">
+                <div className="flex flex-col items-center md:flex-row md:items-end gap-6">
                     {/* poster */}
-                    <div className="relative flex-shrink-0 hidden lg:block">
+                    <div className="relative">
                         <img
                             src={detailMovie.posterUrl}
                             alt="poster"
                             className="w-54 h-full rounded-lg object-cover "
                         />
-                        {/* play trailer */}
-                        <div className='absolute z-50 inset-0 flex items-center justify-center group' title='Xem trailer'>
-                            <button
-                                onClick={() => setIsOpen(true)}
-                                className=' rounded-full bg-white/30  text-white backdrop-blur-sm p-5 opacity-0 group-hover:opacity-100 transition duration-300 cursor-pointer'>
-                                <Play size={40} />
-                            </button>
-                        </div>
                     </div>
 
                     {/* movie info */}
-                    <div className="space-y-4 ">
-                        <div >
-                            <h1 className='text-start'>{detailMovie.name}</h1>
-                            <h2 className='font-semibold text-yellow-400'>{detailMovie.originName}</h2>
+                    <div className="space-y-5">
+                        <div className=''>
+                            <h1 className=' md:text-start'>{detailMovie.name}</h1>
+                            <h2 className='font-semibold text-yellow-400 hidden md:block'>{detailMovie.originName}</h2>
                         </div>
 
                         {/* Rating & Info badges */}
-                        <div className="flex flex-wrap items-center gap-3 ">
+                        <div className="hidden md:flex flex-wrap items-center gap-3">
                             <span className="px-3 py-1 rounded-lg bg-yellow-900/80 text-yellow-100 inline-flex items-center gap-1 text-sm font-semibold">
                                 <Star className="w-4 h-4 fill-current" />
                                 {detailMovie.rating ? (
@@ -158,21 +150,26 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}
                                 onClick={() => user && saveHistory(episodes[0]?.id)}
                             >
-                                <button className="bg-red-700 text-white  disabled:opacity-50" disabled={episodes.length === 0}>
-                                    <Play className="w-5 h-5 fill-white" />Xem ngay
+                                <button className="bg-red-700 text-white font-bold disabled:opacity-50" disabled={episodes.length === 0}>
+                                    <Play className="w-5 h-5 fill-current" />Xem ngay
                                 </button>
                             </Link>
+
+                            <button onClick={() => setIsOpen(true)} className='bg-yellow-700 text-white'>
+                                <Play className="w-5 h-5" /> Xem Trailer
+                            </button>
 
                             <button
                                 onClick={() => {
                                     isFavorite ? deleteFavorite() : addFavorite()
                                 }}
-                                className=" bg-pink-700   text-white">
+                                className=" bg-pink-700 text-white">
                                 <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />Yêu thích
                             </button>
+
                             <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="bg-blue-700   text-white">
-                                    <Tv className="w-5 h-5" />Xem chung
+                                <button className="bg-blue-700 text-white">
+                                    <Tv className="w-5 h-5 fill-blue-700" />Xem chung
                                 </button>
                             </Link>
 
@@ -216,7 +213,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                     overlay: {
                         position: "fixed",
                         zIndex: 9999,
-                        backgroundColor: "rgba(0, 0, 0, 0.6)",
+                        backgroundColor: "rgba(0, 0, 0, 0.7)",
                     },
                     content: {
                         top: "50%",
@@ -227,14 +224,12 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         transform: "translate(-50%, -50%)",
                         maxWidth: "800px",
                         width: "90%",
-
-
                     },
                 }}
                 contentLabel="Example Modal"
             >
                 {detailMovie.trailerUrl && (
-                    <div className='w-full aspect-video relative'>
+                    <div className='w-full aspect-video '>
                         <iframe
                             src={detailMovie.trailerUrl.replace('watch?v=', 'embed/')}
                             className='w-full h-full rounded-lg'
@@ -242,9 +237,6 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                             allowFullScreen
                             title="Movie Trailer"
                         />
-
-                        <button onClick={() => setIsOpen(false)}><X /></button>
-
                     </div>
                 )}
             </Modal>

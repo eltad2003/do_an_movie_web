@@ -159,7 +159,7 @@ const ManageMovie = () => {
 
         const config = statusConfig[status] || statusConfig['UPDATING']
         return (
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
+            <span className={`inline-block  px-2 py-1 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
                 {config.label}
             </span>
         )
@@ -251,7 +251,7 @@ const ManageMovie = () => {
                                 placeholder="Tìm kiếm theo tên phim..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
                             />
                         </div>
 
@@ -260,7 +260,7 @@ const ManageMovie = () => {
                             <select
                                 value={filterStatus}
                                 onChange={(e) => setFilterStatus(e.target.value)}
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                                className="px-6 py-2 border border-gray-300 rounded-lg "
                             >
                                 <option value="ALL">Tất cả trạng thái</option>
                                 <option value="RELEASED">Đã phát hành</option>
@@ -271,22 +271,18 @@ const ManageMovie = () => {
                             <select
                                 value={filterYear}
                                 onChange={(e) => setFilterYear(e.target.value)}
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                                className="px-6 py-2 border border-gray-300 rounded-lg "
                             >
                                 <option value="ALL">Tất cả năm</option>
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                                <option value="2022">2022</option>
-                                <option value="2021">2021</option>
-                                <option value="2020">2020</option>
-                                <option value="2019">2019</option>
+                                {Array.from({ length: 16 }, (_, i) => {
+                                    const year = new Date().getFullYear() - i
+                                    return <option key={year} value={year} >{year}</option>
+                                })}
+
                             </select>
-
-
-
                             <button
                                 onClick={() => setShowAddMovie(true)}
-                                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+                                className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
                                 <Plus size={18} />
                                 Thêm phim
                             </button>
@@ -297,10 +293,10 @@ const ManageMovie = () => {
                 {/* Content */}
 
 
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-400 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
+                            <thead className="bg-gray-50 border-b border-gray-400">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Phim</th>
                                     <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Năm phát hành</th>
@@ -311,7 +307,7 @@ const ManageMovie = () => {
                                     <th className="px-6 py-3 text-center text-xs font-semibold uppercase">Thao tác</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200">
+                            <tbody className="divide-y divide-gray-300">
                                 {filteredMovies.map((movie) => (
                                     <tr key={movie.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-3">
@@ -350,7 +346,7 @@ const ManageMovie = () => {
                                             )}
                                         </td>
                                         <td className="px-6 py-3 text-gray-900">{formatViews(movie.views || 0)}</td>
-                                        <td className="px-6 py-3">{getStatusBadge(movie.status)}</td>
+                                        <td>{getStatusBadge(movie.status)}</td>
                                         <td className="px-6 py-3 text-center">
                                             <div className="flex items-center justify-center gap-2">
                                                 <Link
