@@ -37,10 +37,8 @@ export default function VideoPlayerCustom({ videoUrl }) {
     // HLS specific state
     const [levels, setLevels] = useState([]);
     const [selectedQuality, setSelectedQuality] = useState("auto");
-
-    // =========================================================
     // 1. INITIALIZE VIDEO (HLS or MP4)
-    // =========================================================
+  
     useEffect(() => {
         const video = videoRef.current;
         if (!video || !videoUrl) return;
@@ -79,7 +77,7 @@ export default function VideoPlayerCustom({ videoUrl }) {
                 hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
                     console.log(`Manifest loaded, found ${data.levels.length} quality levels`);
                     setLevels(hls.levels); // Lưu danh sách độ phân giải
-                    video.play().catch(() => {/* Autoplay block is fine */ });
+                    // video.play().catch(() => {/* Autoplay block is fine */ });
                 });
 
                 hls.on(Hls.Events.ERROR, (event, data) => {
@@ -302,7 +300,7 @@ export default function VideoPlayerCustom({ videoUrl }) {
     return (
         <div
             ref={containerRef}
-            className="group relative w-full aspect-video bg-black overflow-hidden mb-20"
+            className="group relative w-full aspect-video bg-black overflow-hidden mb-10"
         >
             {/* Video Element */}
             <video

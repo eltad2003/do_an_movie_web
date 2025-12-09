@@ -1,9 +1,10 @@
 import { Heart, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useFavorite } from '../hooks/useFavorite'
 
 
-const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating, duration } }) => {
-
+const MovieCard = ({ movie: { id, name, posterUrl, originName, year, slug, rating, duration } }) => {
+    const { isFavorite, addFavorite, deleteFavorite } = useFavorite(id)
 
     return (
         <div className='relative rounded-xl bg-dark-200 group transition-all duration-300 cursor-pointer group'>
@@ -15,8 +16,13 @@ const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating, d
                 />
 
                 {year && (
-                    <div className='absolute top-2 right-2 bg-black/80 text-white text-xs font-semibold px-2 py-1 rounded'>
+                    <div className='absolute top-2 right-2 bg-black/80 text-white text-xs font-semibold px-1.5 py-1 rounded'>
                         {year}
+                    </div>
+                )}
+                {duration && (
+                    <div className='absolute top-2 left-2 bg-black/80 text-white text-xs font-semibold px-1.5 py-1 rounded'>
+                        {duration}
                     </div>
                 )}
             </Link>
@@ -34,12 +40,16 @@ const MovieCard = ({ movie: { name, posterUrl, originName, year, slug, rating, d
                     <div className="flex items-center gap-1 ">
                         <Star className='h-4 w-4 fill-current text-yellow-400' />
                         <p className='text-white font-semibold text-sm'>{rating ? rating.toFixed(1) : 'N/A'}</p>
+
                     </div>
 
-                    <p className="text-white/50 line-clamp-1">{duration}</p>
-                    {/* yêu thích */}
-                    <button className='text-white'>
-                        <Heart />
+                    <button
+                        className='text-white cursor-pointer hover:text-pink-500'
+                        onClick={() => {
+                            isFavorite ? deleteFavorite() : addFavorite()
+                        }}
+                    >
+                        <Heart className={`${isFavorite ? 'fill-current' : 'fill-none'}`} />
                     </button>
                 </div>
             </div>

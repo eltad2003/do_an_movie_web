@@ -133,7 +133,7 @@ const AuthProvider = ({ children }) => {
                 clearTimeout(refreshTokenTimeoutRef.current)
             }
         }
-    }, [user?.accessToken]) 
+    }, [user?.accessToken])
 
     const login = async (username, password) => {
         try {
@@ -230,7 +230,7 @@ const AuthProvider = ({ children }) => {
             login,
             logout,
             loginGoogle,
-            refreshAccessToken 
+            refreshAccessToken
         }}>
             {children}
         </AuthContext.Provider>

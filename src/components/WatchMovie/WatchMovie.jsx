@@ -22,8 +22,8 @@ const WatchMovie = () => {
     <main>
       {errorMessage && <p className="text-red-500 text-center p-5">{errorMessage}</p>}
       {detailMovie && (
-        <div className='wrapper'>
-          <header className='flex items-center gap-3 mb-10'>
+        <div className='wrapper mb-30'>
+          <header className='flex items-center gap-3 mb-5'>
             <Link to={`/phim/${detailMovie.slug}`}>
               <button className='btn text-sm'><ChevronLeft className='w-4 h-4' /></button>
             </Link>
@@ -41,7 +41,7 @@ const WatchMovie = () => {
             <InfoMovie detailMovie={detailMovie} />
             {/* <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} /> */}
             <ListEpisode episodes={episodes.sort((a, b) => a.name.localeCompare(b.name))} detailMovie={detailMovie} epSlug={epSlug} />
-            <Comment />
+            <Comment movieId={detailMovie.id}/>
           </div>
 
         </div>

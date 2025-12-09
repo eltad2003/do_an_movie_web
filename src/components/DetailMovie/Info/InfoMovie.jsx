@@ -26,14 +26,14 @@ const InfoMovie = ({ detailMovie }) => {
                 <InfoGenres detailMovie={detailMovie} />
 
                 {/* Current episode */}
-                <div className='bg-green-900 inline-block px-3 py-1 rounded-lg text-sm font-semibold text-green-800 mb-4' title='tập phim'>
+                <div className='bg-green-900 inline-block px-3 py-1 rounded-lg text-sm font-semibold text-green-800 my-4' title='tập phim'>
                     {detailMovie.episodes.length > 0
                         ? <span className='text-green-100'>{detailMovie.episodes.length} tập</span>
                         : <span className='text-green-50'>Đang cập nhật</span>}
                 </div>
 
                 {/* content */}
-                <p className="text-gray-300 mb-8" dangerouslySetInnerHTML={{ __html: detailMovie.description }} />
+                <p className="text-gray-300 mb-10" dangerouslySetInnerHTML={{ __html: detailMovie.description }} />
                 <div className="grid grid-cols-1 gap-y-3 ">
                     <InfoItem label={type.year} value={detailMovie.year} />
                     <InfoItem label='Thời lượng' value={detailMovie.duration} />

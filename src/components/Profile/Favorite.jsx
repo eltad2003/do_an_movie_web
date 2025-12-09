@@ -86,15 +86,15 @@ const Favorite = () => {
     }
 
     return (
-        <main>
+        <main className='min-h-screen'>
             <div className='pattern' />
             <div className='wrapper'>
-                <section className='space-y-9 mb-10'>
+                <section className='space-y-9 mb-30'>
                     <h2 className='text-3xl font-bold text-white mb-5'>Yêu thích</h2>
                     <ul>
                         {favorites.map((favorite) => (
-                            <div className='relative'>
-                                <MovieCard key={favorite.id} movie={favorite.movie} />
+                            <div className='relative' key={favorite.id}>
+                                <MovieCard movie={favorite.movie} />
                                 <button
                                     onClick={() => deleteFavorite(favorite.movie.id)}
                                     className='text-white absolute top-1 right-1 hover:bg-gray-500 bg-gray-700 rounded cursor-pointer'>

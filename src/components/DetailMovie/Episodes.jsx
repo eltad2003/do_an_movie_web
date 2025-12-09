@@ -18,7 +18,7 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
 
     if (!episodes || episodes.length === 0) {
         return (
-            <div className='mb-10 bg-dark-100 text-white p-5 rounded-lg'>
+            <div className='mb-20 bg-dark-100 text-white p-5 rounded-lg'>
                 <h3 className='text-xl font-bold mb-3'>Danh sách tập</h3>
                 <p className='text-gray-400'>Không có tập phim nào</p>
             </div>
@@ -29,7 +29,7 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
             <h2 >Danh sách tập</h2>
             {/* range episode */}
             {groupEpisode.length > 1 && (
-                <div className='mb-4'>
+                <div className='mb-5'>
                     <label htmlFor='episode-range' className='mr-2'>Chọn khoảng tập:</label>
                     <select
                         id='episode-range'

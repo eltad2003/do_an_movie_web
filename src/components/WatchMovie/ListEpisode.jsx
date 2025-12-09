@@ -1,13 +1,16 @@
 import { Play } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { chunkArray } from '../../utils/helpers'
+import { useSaveHistory } from '../../hooks/useHistory'
+import { AuthContext } from '../../context/AuthContext'
 
 const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
-
+    const { user } = useContext(AuthContext)
     const [selectedRange, setSelectedRange] = useState(0)
     const MAX_EPISODE_PER_RANGE = 50
     const groupEpisode = chunkArray(episodes, MAX_EPISODE_PER_RANGE);
+    const { saveHistory } = useSaveHistory()
 
     const handleChangeRange = (e) => {
         setSelectedRange(e.target.value)
@@ -55,6 +58,7 @@ const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
                         key={idx}
                         className={`text-sm px-3 py-2 rounded-lg ${ep.slug === epSlug ? 'bg-yellow-700' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'} inline-flex gap-2 items-center justify-center  transition`}
                         disabled={ep.slug === epSlug}
+                        onClick={() => user && saveHistory(ep.id)}
                     >
                         <Play className='w-4 h-4' />
                         {ep.name}

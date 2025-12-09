@@ -76,7 +76,7 @@ const Profile = () => {
     return (
         <main >
             <div className='pattern' />
-            <div className="wrapper max-w-3xl ">
+            <div className="wrapper max-w-3xl">
                 <section className="section  mt-10">
                     <div className="flex justify-center items-center mb-6 gap-3">
                         <User />

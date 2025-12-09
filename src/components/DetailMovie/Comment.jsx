@@ -60,7 +60,7 @@ const Comment = ({ movieId }) => {
             <h2 >Bình luận</h2>
 
             {/* comment form */}
-            <div className='mb-10 space-y-4'>
+            <div className='mb-20 space-y-4'>
                 <textarea
                     placeholder='Viết bình luận của bạn...'
                     className='w-full p-4 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-light-100/30 resize-none'
@@ -79,7 +79,7 @@ const Comment = ({ movieId }) => {
             <div className='space-y-6'>
                 {/* Sample Comment */}
                 {comments.length > 0 ? comments.map((comment) => (
-                    <div key={comment.id} className='border-b border-gray-700 pb-3 mb-6'>
+                    <div key={comment.id} className='border-b border-gray-700 pb-3 mb-10'>
                         <div className='flex items-center mb-2'>
                             <div className='w-10 h-10 rounded-full bg-gradient flex items-center justify-center text-primary font-bold mr-4'>
                                 {comment.user.username ? comment.user.username.charAt(0).toUpperCase() : 'U'}
@@ -92,7 +92,7 @@ const Comment = ({ movieId }) => {
                         <p className='text-gray-300'>{comment.content}</p>
                     </div>
                 )) : (
-                    <div className='flex items-center flex-col gap-3 text-white/50 mb-6'>
+                    <div className='flex items-center flex-col gap-3 text-white/50 mb-10'>
                         <MessageSquareOff  size={50}/>
                         <p>Chưa có bình luận nào</p>
                     </div>

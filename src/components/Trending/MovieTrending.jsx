@@ -5,6 +5,7 @@ import Carousel from 'react-multi-carousel'
 import "react-multi-carousel/lib/styles.css";
 import { Play, Info, Star, Clock, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom';
+import InfoGenres from '../DetailMovie/Info/InfoGenres';
 const MovieTrending = () => {
     const { listMovies } = useMovies()
     const trendingMovies = listMovies.sort((a, b) => b.views - a.views).slice(0, 3)
@@ -31,7 +32,7 @@ const MovieTrending = () => {
     return (
         <Carousel responsive={responsive}  >
             {trendingMovies.map((detailMovie) => (
-                <div className='relative w-full h-[80dvh] mb-20 overflow-hidden group' key={detailMovie.id}>
+                <div className='relative w-full h-[90dvh] mb-20 overflow-hidden group' key={detailMovie.id}>
 
                     <div className='absolute inset-0 aspect-auto'>
                         <img
@@ -68,13 +69,7 @@ const MovieTrending = () => {
                                         </div>
                                     )}
                                     {detailMovie.categories && detailMovie.categories.length > 0 && (
-                                        <div className='flex items-center gap-2'>
-                                            {detailMovie.categories.slice(0, 3).map((cat, idx) => (
-                                                <span key={idx} className='px-3 py-1 bg-purple-600/30 backdrop-blur-sm rounded-full text-sm text-light-100'>
-                                                    {cat.name}
-                                                </span>
-                                            ))}
-                                        </div>
+                                        <InfoGenres detailMovie={detailMovie} />
                                     )}
                                     {detailMovie.year && (
                                         <span className='px-3 py-1 bg-white/10 backdrop-blur-sm text-white text-sm rounded-full flex items-center gap-1'>

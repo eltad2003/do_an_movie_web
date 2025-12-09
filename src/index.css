@@ -32,7 +32,7 @@
     }
 
     h2 {
-        @apply text-2xl font-bold text-white sm:text-3xl leading-[62px];
+        @apply text-xl font-bold text-white lg:text-3xl leading-[62px];
     }
 
 
@@ -63,15 +63,15 @@
     }
 
     .wrapper {
-        @apply container p-3 md:p-0 mx-auto flex flex-col z-10 relative
+        @apply container p-3 mx-auto flex flex-col z-10 relative
     }
 
     .section {
-        @apply mb-5 text-white p-3 md:p-5 rounded-lg bg-dark-100
+        @apply mb-10 text-white p-3 md:p-6 rounded-lg bg-dark-100
     }
 
     .overlay-gradient {
-        @apply absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent
+        @apply absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent
     }
 
     .auth-form {

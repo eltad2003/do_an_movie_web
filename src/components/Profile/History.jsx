@@ -68,7 +68,7 @@ const History = () => {
         <main >
             <div className='pattern' />
             <div className='wrapper '>
-                <div className='bg-dark-100 mt-10 rounded-lg p-5 '>
+                <div className=' mt-5 rounded-lg p-5 mb-20'>
                     {/* Header */}
                     <div className='mb-5'>
                         <h2 className='text-2xl font-bold text-white flex items-center gap-2'>
@@ -82,7 +82,7 @@ const History = () => {
                         {watchHistory.map((history) => (
                             <div
                                 key={history.historyId}
-                                className='flex flex-col sm:flex-row gap-4 p-4 bg-dark-100 border border-gray-700 rounded-lg'
+                                className='flex flex-col sm:flex-row gap-4 p-4 bg-dark-100/90 backdrop-blur-lg rounded-lg'
                             >
                                 {/* Thumbnail */}
                                 <Link
@@ -95,8 +95,8 @@ const History = () => {
                                         className='w-full sm:w-52 h-32 object-cover rounded-lg hover:opacity-80 transition-opacity'
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 ">
-                                        <div className="bg-white/50 rounded-full p-3 backdrop-blur-sm">
-                                            <Play className="w-8 h-8 cursor-pointer text-gray-500" />
+                                        <div className="bg-white/10 rounded-full p-3 backdrop-blur-lg">
+                                            <Play className="w-8 h-8 cursor-pointer text-white" />
                                         </div>
                                     </div>
                                 </Link>

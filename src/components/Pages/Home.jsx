@@ -25,7 +25,7 @@ const Home = () => {
                 <Search />
                 <SearchTrending />
                 {/* all movie */}
-                <section className='mb-10 p-6'>
+                <section className='mb-30 p-6'>
                     <h2 >Danh sách phim mới</h2>
                     {isLoading ? (
                         <Skeleton />
