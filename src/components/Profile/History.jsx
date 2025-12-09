@@ -42,36 +42,16 @@ const History = () => {
         return <Loading />
     }
 
-    if (watchHistory.length === 0) {
-        return (
-            <main >
-                <div className='container mx-auto p-5 max-w-3xl text-center py-20'>
-                    <Film size={64} className='mx-auto text-gray-500 mb-4' />
-                    <h3 className='text-2xl text-white font-semibold mb-2'>
-                        Chưa có lịch sử xem phim
-                    </h3>
-                    <p className='text-gray-400 mb-6'>
-                        Bắt đầu xem phim để lưu lại lịch sử của bạn
-                    </p>
-                    <Link
-                        to='/'
-                        className='btn font-bold'
-                    >
-                        Khám phá phim
-                    </Link>
-                </div>
-            </main>
-        )
-    }
+
 
     return (
         <main >
             <div className='pattern' />
             <div className='wrapper '>
-                <div className=' mt-5 rounded-lg p-5 mb-20'>
+                <div className=' mt-5 rounded-lg mb-20'>
                     {/* Header */}
                     <div className='mb-5'>
-                        <h2 className='text-2xl font-bold text-white flex items-center gap-2'>
+                        <h2 className={`text-2xl font-bold text-white flex items-center gap-2 ${watchHistory.length === 0 && "hidden"}`}>
                             <Clock size={28} />
                             Lịch sử xem phim
                         </h2>
@@ -79,10 +59,10 @@ const History = () => {
 
                     {/* History List */}
                     <div className='space-y-4'>
-                        {watchHistory.map((history) => (
+                        {watchHistory.length > 0 ? watchHistory.map((history) => (
                             <div
                                 key={history.historyId}
-                                className='flex flex-col sm:flex-row gap-4 p-4 bg-dark-100/90 backdrop-blur-lg rounded-lg'
+                                className='flex flex-col sm:flex-row gap-4 p-5 bg-dark-100 rounded-lg '
                             >
                                 {/* Thumbnail */}
                                 <Link
@@ -102,18 +82,18 @@ const History = () => {
                                 </Link>
 
                                 {/* Info */}
-                                <div className='flex-1 min-w-0 '>
+                                <div className='flex-1 min-w-0'>
                                     <Link
                                         to={`/xem-phim/${history.movie.slug}?ep=${history.episodeSlug}`}
                                         className='text-lg font-semibold text-white hover:text-light-100 transition line-clamp-2'
                                     >
                                         {history.movie.name}
                                     </Link>
-                                    <p className=' text-light-100 mt-1 flex items-center gap-2'>
+                                    <p className=' text-yellow-400 mt-1 flex items-center gap-2'>
                                         {history.movie.originName}
                                     </p>
 
-                                    <div className='mt-3 text-sm text-white/50'>
+                                    <div className='mt-2 text-sm text-white/50'>
                                         <span className='flex items-center gap-1'>
                                             <Clock size={14} />
                                             {formatDate(history.watchedAt)} • {history.episodeName}
@@ -136,7 +116,7 @@ const History = () => {
                                     </Link>
                                     <button
                                         onClick={() => handleDeleteHistory(history.historyId)}
-                                        className='flex-1 sm:flex-none px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition flex items-center justify-center gap-1 text-sm'
+                                        className='flex-1 sm:flex-none px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-1 text-sm'
                                     >
                                         <Trash2 size={16} />
                                         Xóa
@@ -144,7 +124,23 @@ const History = () => {
                                 </div>
 
                             </div>
-                        ))}
+                        )) : (
+                            <div className='flex flex-col items-center justify-center min-h-[50vh] text-center'>
+                                <Film size={64} className='mx-auto text-gray-500 mb-4' />
+                                <h3 className='text-2xl text-white font-semibold mb-2'>
+                                    Chưa có lịch sử xem phim
+                                </h3>
+                                <p className='text-gray-400 mb-6'>
+                                    Bắt đầu xem phim để lưu lại lịch sử của bạn
+                                </p>
+                                <Link
+                                    to='/'
+                                    className='btn font-bold'
+                                >
+                                    Khám phá phim
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

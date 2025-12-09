@@ -38,8 +38,6 @@ const App = () => {
         <Route path="/" element={<Main />}>
           <Route index element={<Home />} />
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
 
           <Route path="/phim/:slug" element={<DetailMovie />} />
           <Route path="/xem-phim/:slug" element={< WatchMovie />} />
@@ -59,6 +57,8 @@ const App = () => {
 
           <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
@@ -75,10 +75,10 @@ const App = () => {
         </Route>
 
       </Routes>
-      
+
       <ToastContainer
         position="top-right"
-        autoClose={2000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

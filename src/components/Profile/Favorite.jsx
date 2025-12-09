@@ -21,6 +21,7 @@ const Favorite = () => {
             if (res.ok) {
                 const data = await res.json()
                 setFavorites(data || [])
+                console.log(data);
 
             } else {
                 const errorText = await res.text()
@@ -66,7 +67,8 @@ const Favorite = () => {
     if (favorites.length === 0) {
         return (
             <main >
-                <div className='container mx-auto p-5 max-w-3xl text-center py-20'>
+                <div className='pattern' />
+                <div className='wrapper container flex flex-col items-center justify-center min-h-[50vh] text-center'>
                     <Film size={64} className='mx-auto text-gray-500 mb-4' />
                     <h3 className='text-2xl text-white font-semibold mb-2'>
                         Chưa có phim yêu thích
@@ -97,8 +99,8 @@ const Favorite = () => {
                                 <MovieCard movie={favorite.movie} />
                                 <button
                                     onClick={() => deleteFavorite(favorite.movie.id)}
-                                    className='text-white absolute top-1 right-1 hover:bg-gray-500 bg-gray-700 rounded cursor-pointer'>
-                                    <X size={20} />
+                                    className='text-white absolute top-1 right-1 hover:bg-red-600 bg-black/80 rounded cursor-pointer'>
+                                    <X size={25} />
                                 </button>
                             </div>
                         ))}

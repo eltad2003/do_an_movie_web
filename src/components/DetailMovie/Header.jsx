@@ -1,8 +1,8 @@
 import { Heart, Play, Star, Tv, X } from 'lucide-react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
-import { toast } from 'react-toastify'
+
 import Modal from 'react-modal'
 import { useSaveHistory } from '../../hooks/useHistory'
 import { useFavorite } from '../../hooks/useFavorite'
@@ -16,7 +16,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
 
     return (
         <div
-            className={`relative h-[100dvh] sm:h-[80dvh] lg:h-[50dvh] xl:h-[85dvh] bg-cover bg-center w-full mb-10 xl:mb-20`}
+            className={`relative h-[100dvh] sm:h-[80dvh] lg:h-[50dvh] xl:h-[90dvh] bg-cover bg-center w-full mb-5 xl:mb-20`}
             style={{
                 backgroundImage: `url(${detailMovie.thumbUrl})`,
                 objectFit: 'cover',
@@ -31,7 +31,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
 
 
             {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-6">
+            <div className="absolute bottom-5 left-0 right-0 p-6">
                 <div className="flex flex-col items-center md:flex-row md:items-end gap-6">
                     {/* poster */}
                     <div className="relative">

@@ -10,7 +10,7 @@ const InfoMovie = ({ detailMovie: { id, name, slug, originName, description, pos
         <div className='section'>
             <div className='flex gap-6 flex-col'>
                 {/* Action buttons */}
-                <div className="action-button mt-5">
+                <div className="action-button my-6 md:my-2">
                     <button
                         onClick={() => {
                             isFavorite ? deleteFavorite() : addFavorite()
@@ -26,8 +26,8 @@ const InfoMovie = ({ detailMovie: { id, name, slug, originName, description, pos
                     </Link>
 
                 </div>
-                <div className='flex md:flex-row flex-col gap-6' >
-                    <div className='flex items-end gap-3 flex-1'>
+                <div className='flex lg:flex-row flex-col gap-6 items-start' >
+                    <div className='flex items-end gap-4'>
                         <div className='aspect-3/4'>
                             <img
                                 src={posterUrl}
@@ -36,15 +36,15 @@ const InfoMovie = ({ detailMovie: { id, name, slug, originName, description, pos
                             />
                         </div>
                         <div className='space-y-3'>
-                            <div>
-                                <h2>{name}</h2>
-                                <p className='text-yellow-400 font-bold '>{originName}</p>
+                            <div className='max-w-sm'>
+                                <p className='text-white font-bold text-xl'>{name}</p>
+                                <p className='text-yellow-400 font-semibold '>{originName}</p>
                             </div>
                             <InfoGenres detailMovie={{ categories }} />
 
                         </div>
                     </div>
-                    <div className='flex-1'>
+                    <div className='flex-1 min-w-0'>
                         <p className='text-gray-300 mb-3 text-sm md:text-base' dangerouslySetInnerHTML={{ __html: description }} />
                         <Link
                             to={`/phim/${slug}`}

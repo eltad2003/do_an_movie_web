@@ -56,14 +56,14 @@ const Comment = ({ movieId }) => {
     }, [movieId])
 
     return (
-        <section className='section'>
+        <section className='section mb-40'>
             <h2 >Bình luận</h2>
 
             {/* comment form */}
             <div className='mb-20 space-y-4'>
                 <textarea
                     placeholder='Viết bình luận của bạn...'
-                    className='w-full p-4 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-light-100/30 resize-none'
+                    className='w-full p-4 rounded-lg bg-gray-800 border border-gray-500 text-white placeholder-white focus:outline-none  resize-none'
                     rows={4}
                     value={addComment.content}
                     onChange={handleInputChange}
@@ -93,7 +93,7 @@ const Comment = ({ movieId }) => {
                     </div>
                 )) : (
                     <div className='flex items-center flex-col gap-3 text-white/50 mb-10'>
-                        <MessageSquareOff  size={50}/>
+                        <MessageSquareOff size={50} />
                         <p>Chưa có bình luận nào</p>
                     </div>
                 )}

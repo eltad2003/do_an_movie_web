@@ -3,6 +3,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import logoGoogle from '/google-color.svg'
+
 const Login = () => {
     const { login, loginGoogle } = useContext(AuthContext)
     const [creds, setCreds] = useState({
@@ -50,33 +51,36 @@ const Login = () => {
     }
 
     return (
-        <div className='auth-form'>
-            <form onSubmit={handleLogin}>
-                <h2 >Đăng nhập</h2>
-                <div>
-                    <label htmlFor="username">Tên đăng nhập</label>
-                    <input type="text" name="username" required={true} onChange={handleChange} />
-                </div>
-                <div>
-                    <label htmlFor="password">Mật khẩu</label>
-                    <input type="password" name="password" required onChange={handleChange} />
-                </div>
-                <div>
-                    <a href="/forgot-password" className='text-light-100 hover:underline'>Quên mật khẩu?</a>
-                </div>
+        <main>
+            <div className='pattern' />
+            <div className='auth-form wrapper'>
+                <form onSubmit={handleLogin}>
+                    <h2 >Đăng nhập</h2>
+                    <div>
+                        <label htmlFor="username">Tên đăng nhập</label>
+                        <input type="text" name="username" required={true} onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Mật khẩu</label>
+                        <input type="password" name="password" required onChange={handleChange} />
+                    </div>
+                    <div>
+                        <a href="/forgot-password" className='text-light-100 hover:underline'>Quên mật khẩu?</a>
+                    </div>
 
-                <button type="submit" className='btn w-full'>Đăng nhập</button>
-                <p className='text-center text-light-100/50'>Hoặc</p>
-                <button type="button" className='btn w-full inline-flex items-center justify-center' onClick={handleLoginGoogle}>
-                    <img src={logoGoogle} alt="Google" className='w-5 h-5' />  Đăng nhập bằng Google
-                </button>
-                <div className='flex items-center justify-center gap-1'>
-                    <p className='text-white/50'>Bạn mới sử dụng ChillFilx?</p>
-                    <a href="/register" className='text-light-100 font-bold'>Đăng ký ngay.</a>
-                </div>
-            </form>
+                    <button type="submit" className='btn w-full'>Đăng nhập</button>
+                    <p className='text-center text-white/50 divide-x divide-amber-500'>Hoặc</p>
+                    <button type="button" className='btn w-full inline-flex items-center justify-center' onClick={handleLoginGoogle}>
+                        <img src={logoGoogle} alt="Google" className='w-5 h-5' />  Đăng nhập bằng Google
+                    </button>
+                    <div className='flex items-center justify-center gap-1'>
+                        <p className='text-white/50'>Bạn mới sử dụng ChillFilx?</p>
+                        <a href="/register" className='text-light-100 font-bold hover:underline'>Đăng ký ngay.</a>
+                    </div>
+                </form>
 
-        </div>
+            </div>
+        </main>
     )
 }
 

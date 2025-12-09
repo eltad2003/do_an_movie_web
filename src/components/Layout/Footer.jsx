@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <footer className="bg-dark-100 text-white py-6">
             <div className="container mx-auto px-4 ">
-                <div className="flex flex-col items-start gap-5 lg:flex-row lg:justify-between lg:items-center">
+                <div className="flex flex-col items-start gap-8 lg:flex-row lg:justify-between lg:items-center">
 
                     <div className="flex flex-col gap-4 max-w-md ">
                         <a href="/" className="text-2xl md:text-4xl text-gradient font-bold">

@@ -67,7 +67,7 @@
     }
 
     .section {
-        @apply mb-10 text-white p-3 md:p-6 rounded-lg bg-dark-100
+        @apply mb-10 text-white p-4 md:p-6 rounded-lg bg-dark-100/90 backdrop-blur-lg
     }
 
     .overlay-gradient {
@@ -75,7 +75,7 @@
     }
 
     .auth-form {
-        @apply flex items-center justify-center min-h-[80dvh];
+        @apply flex items-center justify-center min-h-dvh;
 
         & input {
             @apply w-full mb-3 px-4 py-2 rounded bg-light-100/10 border border-light-100/20 text-light-100 placeholder-light-100/50 focus:outline-none focus:ring-2 focus:ring-light-100/30;
@@ -86,7 +86,7 @@
         }
 
         & form {
-            @apply p-5 mt-5 space-y-5 bg-dark-100 rounded-xl md:w-100 max-w-md;
+            @apply p-5 mt-5 space-y-5 bg-dark-100 rounded-xl  container max-w-md mx-auto;
         }
     }
 
@@ -106,7 +106,7 @@
         @apply flex flex-wrap gap-3 items-center justify-center md:justify-normal w-full;
 
         & button {
-            @apply transform hover:scale-105 duration-300 inline-flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg 
+            @apply transform hover:scale-105 duration-300 inline-flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg
         }
     }
 }

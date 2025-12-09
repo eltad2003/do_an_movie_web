@@ -238,9 +238,9 @@ const ManageUser = () => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center text-gray-900">
+                                            <div className={`flex items-center  ${user.email ? 'text-gray-900' : 'italic text-gray-400'}`} title='Email'>
                                                 <Mail size={16} className="mr-2 text-gray-400 font-bold" />
-                                                {user.email}
+                                                {user.email || 'Chưa cập nhật'}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import InfoGenres from '../DetailMovie/Info/InfoGenres';
 const MovieTrending = () => {
     const { listMovies } = useMovies()
-    const trendingMovies = listMovies.sort((a, b) => b.views - a.views).slice(0, 3)
+    const trendingMovies = listMovies.sort((a, b) => b.views - a.views).slice(0, 2)
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
@@ -32,7 +32,7 @@ const MovieTrending = () => {
     return (
         <Carousel responsive={responsive}  >
             {trendingMovies.map((detailMovie) => (
-                <div className='relative w-full h-[90dvh] mb-20 overflow-hidden group' key={detailMovie.id}>
+                <div className='relative w-full h-[80dvh] xl:h-[90dvh] mb-20 overflow-hidden group' key={detailMovie.id}>
 
                     <div className='absolute inset-0 aspect-auto'>
                         <img
@@ -41,12 +41,12 @@ const MovieTrending = () => {
                             className='w-full h-full  object-cover transition-transform duration-500 group-hover:scale-110'
                         />
                         {/* overlay left and bottom */}
-                        <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/80 md:via-primary/50 lg:via-primary/0 to-transparent' />
-                        <div className='absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary to-transparent' />
+                        <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/80 md:via-primary/50 lg:via-primary/30 xl:via-primary/0 to-transparent' />
+                        <div className='absolute bottom-0 left-0 right-0 h-34 bg-gradient-to-t from-primary to-transparent' />
                     </div>
 
                     {/* Content */}
-                    <div className='absolute bottom-0 md:bottom-10 left-0 flex items-center md:ml-3'>
+                    <div className='absolute bottom-2 xl:bottom-15 left-0 flex items-center md:ml-3'>
                         <div className='container mx-auto px-5'>
                             <div className='max-w-2xl space-y-2 md:space-y-6'>
                                 <h1 className='text-start md:text-3xl lg:text-4xl'>

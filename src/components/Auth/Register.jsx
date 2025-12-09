@@ -1,7 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { AuthContext } from '../../context/AuthContext'
+import logoGoogle from '/google-color.svg'
+
 
 const Register = () => {
+    const { loginGoogle } = useContext(AuthContext)
+
     const [creds, setCreds] = useState({
         username: '',
         name: '',
@@ -11,6 +17,7 @@ const Register = () => {
     })
     const [error, setError] = useState(null)
     const navigate = useNavigate()
+
     const handleRegister = async (e) => {
         e.preventDefault()
         if (creds.password !== creds.confirmPassword) {
@@ -26,13 +33,13 @@ const Register = () => {
                 body: JSON.stringify(creds)
             })
             if (res.ok) {
-                alert('Đăng ký thành công. Vui lòng đăng nhập.')
+                toast.success('Đăng ký thành công. Vui lòng đăng nhập.')
                 navigate('/login')
             }
             else {
                 const errorData = await res.text()
                 setError(errorData)
-                alert('Đăng ký không thành công. Vui lòng thử lại.')
+                toast.error('Đăng ký không thành công. Vui lòng thử lại.')
             }
         } catch (error) {
             console.log(error)
@@ -41,47 +48,62 @@ const Register = () => {
     const handleChange = (e) => {
         setCreds({ ...creds, [e.target.name]: e.target.value })
     }
+    const handleLoginGoogle = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await loginGoogle()
+            if (!res.success) {
+                toast.error(res.message)
+            }
+            else {
+                navigate('/')
+                toast.success(res.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error('Đã có lỗi xảy ra. Vui lòng thử lại.')
+        }
+
+    }
+
     return (
-        <div className='auth-form'>
-            <form onSubmit={handleRegister}>
-                <h2>Đăng ký</h2>
-                <div>
-                    <label htmlFor="fullname">Tên đăng nhập</label>
-                    <input type="text" name="username" placeholder="Username...." required onChange={handleChange} />
-                </div>
-                <div>
-                    <label htmlFor="fullname">Tên đầy đủ</label>
-                    <input type="text" name="name" placeholder="Nhập họ và tên" onChange={handleChange} />
-                </div>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" name="email" placeholder="Nhập email" required onChange={handleChange} />
-                </div>
+        <main>
+            <div className='pattern' />
+            <div className='auth-form wrapper'>
+                <form onSubmit={handleRegister}>
+                    <h2>Đăng ký</h2>
+                    <div>
+                        <label htmlFor="fullname">Tên đăng nhập</label>
+                        <input type="text" name="username" placeholder="Username...." required onChange={handleChange} />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Mật khẩu</label>
+                        <input type="password" name="password" placeholder="Nhập mật khẩu" required onChange={handleChange} />
+                    </div>
 
-                <div>
-                    <label htmlFor="password">Mật khẩu</label>
-                    <input type="password" name="password" placeholder="Nhập mật khẩu" required onChange={handleChange} />
-                </div>
+                    <div>
+                        <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+                        <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required onChange={handleChange} />
+                    </div>
+                    <div>
+                        {error && <p className='text-red-500 text-sm'>{error}</p>}
+                    </div>
 
-                <div>
-                    <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
-                    <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required onChange={handleChange} />
-                </div>
-                <div>
-                    {error && <p className='text-red-500 text-sm'>{error}</p>}
-                </div>
+                    <button type="submit" className='btn w-full' >Đăng ký</button>
+                    <p className='text-center text-light-100'>Hoặc</p>
+                    <button type="button" className='btn w-full inline-flex items-center justify-center' onClick={handleLoginGoogle}>
+                        <img src={logoGoogle} alt="Google" className='w-5 h-5' />  Đăng nhập bằng Google
+                    </button>
+                    <div className='flex items-center justify-center gap-1'>
+                        <p className='text-white/50'>Bạn đã có tài khoản?</p>
+                        <Link to="/login" className='text-light-100 font-bold hover:underline'>
+                            Đăng nhập ngay
+                        </Link>
+                    </div>
+                </form>
+            </div>
+        </main>
 
-                <button type="submit" className='btn w-full' >Đăng ký</button>
-                <p className='text-center text-light-100'>Hoặc</p>
-                <button type="button" className='btn w-full'>Đăng nhập bằng Google</button>
-                <div className='flex items-center justify-center gap-1'>
-                    <p className='text-white/50'>Đã có tài khoản?</p>
-                    <Link to="/login" className='text-light-100 font-bold hover:underline'>
-                        Đăng nhập ngay
-                    </Link>
-                </div>
-            </form>
-        </div>
     )
 }
 

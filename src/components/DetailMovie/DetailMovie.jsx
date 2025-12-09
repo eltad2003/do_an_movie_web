@@ -14,12 +14,12 @@ const DetailMovie = () => {
     if (isLoading) { return <Loading /> }
     return (
         <main>
-
+            {/* <div className='pattern'></div> */}
             {errorMessage && <p>Error: {errorMessage}</p>}
             {detailMovie && (
                 <div>
                     <Header detailMovie={detailMovie} episodes={episodes} movieId={detailMovie.id} />
-                    <div className='wrapper mb-30'>
+                    <div className='wrapper'>
                         <InfoMovie detailMovie={detailMovie} />
                         <Episodes episodes={episodes.sort((a, b) => a.name.localeCompare(b.name))} detailMovie={detailMovie} />
                         <Comment movieId={detailMovie.id} />

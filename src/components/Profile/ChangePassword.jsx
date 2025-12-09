@@ -71,7 +71,7 @@ const ChangePassword = ({ token }) => {
                             name="currentPassword"
                             value={passwordData.currentPassword}
                             onChange={handlePasswordChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 "
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg "
                             placeholder="Nhập mật khẩu hiện tại"
                         />
                     </div>
@@ -85,7 +85,7 @@ const ChangePassword = ({ token }) => {
                             name="newPassword"
                             value={passwordData.newPassword}
                             onChange={handlePasswordChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 "
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg "
                             placeholder="Nhập mật khẩu mới"
                         />
                     </div>
@@ -99,7 +99,7 @@ const ChangePassword = ({ token }) => {
                             name="confirmPassword"
                             value={passwordData.confirmPassword}
                             onChange={handlePasswordChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 "
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg "
                             placeholder="Nhập lại mật khẩu mới"
                         />
                     </div>

@@ -38,7 +38,7 @@ export default function VideoPlayerCustom({ videoUrl }) {
     const [levels, setLevels] = useState([]);
     const [selectedQuality, setSelectedQuality] = useState("auto");
     // 1. INITIALIZE VIDEO (HLS or MP4)
-  
+
     useEffect(() => {
         const video = videoRef.current;
         if (!video || !videoUrl) return;

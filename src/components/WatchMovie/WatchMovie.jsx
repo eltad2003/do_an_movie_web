@@ -20,9 +20,11 @@ const WatchMovie = () => {
 
   return (
     <main>
+      {/* <div className='pattern'></div> */}
       {errorMessage && <p className="text-red-500 text-center p-5">{errorMessage}</p>}
       {detailMovie && (
-        <div className='wrapper mb-30'>
+        
+        <div className='wrapper'>
           <header className='flex items-center gap-3 mb-5'>
             <Link to={`/phim/${detailMovie.slug}`}>
               <button className='btn text-sm'><ChevronLeft className='w-4 h-4' /></button>

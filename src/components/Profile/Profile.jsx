@@ -85,6 +85,14 @@ const Profile = () => {
                     <div className="space-y-6">
                         <div>
                             <label className="block text-sm font-semibold text-light-100 mb-2">
+                                Tên đăng nhập
+                            </label>
+                            <div className='inline-flex gap-3 items-center'>
+                                {userInfo.username}
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-light-100 mb-2">
                                 Tên đầy đủ
                             </label>
                             {isEditing ? (
@@ -93,36 +101,17 @@ const Profile = () => {
                                     name="name"
                                     value={userInfo.name}
                                     onChange={handleInfoChange}
-                                    className="w-full px-4 py-3 text-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                                    className="w-full px-4 py-3 text-white border border-gray-300 rounded-lg  focus:outline-none"
                                     placeholder="Nhập tên đầy đủ"
                                 />
                             ) : (
                                 <div className='inline-flex gap-3 items-center'>
-                                    {userInfo.name}
+                                    <p className={`${!userInfo.name && 'text-white/50 italic'}`}>{userInfo.name || 'Chưa cập nhật'}</p>
                                     <span className='text-sm font-medium px-2.5 py-0.5 bg-green-500 rounded-full'>{userInfo.roleName}</span>
                                 </div>
                             )}
                         </div>
-                        {/* <div>
-                            <label className="block text-sm font-semibold text-light-100 mb-2">
-                                Tên đăng nhập
-                            </label>
-                            {isEditing ? (
-                                <input
-                                    type="text"
-                                    name="username"
-                                    value={userInfo.username}
-                                    onChange={handleInfoChange}
-                                    className="w-full px-4 py-3 text-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                    placeholder="Nhập tên đầy đủ"
-                                />
-                            ) : (
-                                <div className='inline-flex gap-3 items-center'>
-                                    {userInfo.username}
 
-                                </div>
-                            )}
-                        </div> */}
                         <div>
                             <label className="block text-sm font-semibold text-light-100 mb-2">
                                 Email
@@ -133,12 +122,12 @@ const Profile = () => {
                                     name="email"
                                     value={userInfo.email}
                                     onChange={handleInfoChange}
-                                    className="w-full px-4 py-3 border border-gray-300 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                                    className="w-full px-4 py-3 border border-gray-300 text-white rounded-lg  focus:outline-none"
                                     placeholder="Nhập email"
                                 />
                             ) : (
-                                <div>
-                                    {userInfo.email}
+                                <div className={`${!userInfo.email && 'text-white/50 italic'}`}>
+                                    {userInfo.email || 'Chưa cập nhật'}
                                 </div>
                             )}
                         </div>

@@ -17,7 +17,7 @@ const Home = () => {
     const { listMovies, totalPages, isLoading, errorMessage } = useMovies(currentPage)
 
     return (
-        <main>
+        <main >
             {/* <div className='pattern' /> */}
 
             <div >
@@ -25,14 +25,14 @@ const Home = () => {
                 <Search />
                 <SearchTrending />
                 {/* all movie */}
-                <section className='mb-30 p-6'>
+                <section className='p-6'>
                     <h2 >Danh sách phim mới</h2>
                     {isLoading ? (
                         <Skeleton />
                     ) : errorMessage ? (
                         <p className="text-red-500">{errorMessage}</p>
                     ) : (
-                        <ul>
+                        <ul className='mb-20'>
                             {listMovies.map((movie) => (
                                 <MovieCard key={movie.id} movie={movie} />
                             ))}
