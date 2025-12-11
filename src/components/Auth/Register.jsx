@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../context/AuthContext'
 import logoGoogle from '/google-color.svg'
+import { ROUTES } from '../../utils/constants'
 
 
 const Register = () => {
@@ -96,7 +97,7 @@ const Register = () => {
                     </button>
                     <div className='flex items-center justify-center gap-1'>
                         <p className='text-white/50'>Bạn đã có tài khoản?</p>
-                        <Link to="/login" className='text-light-100 font-bold hover:underline'>
+                        <Link to={ROUTES.LOGIN} className='text-light-100 font-bold hover:underline'>
                             Đăng nhập ngay
                         </Link>
                     </div>

@@ -1,30 +1,38 @@
 export const ROUTES = {
-  HOME: '/',
-  LOGIN: '/login',
-  REGISTER: '/register',
-  MOVIE_DETAIL: '/phim/:slug',
-  WATCH_MOVIE: '/xem-phim/:slug',
-  SEARCH: '/tim-kiem',
-  CATEGORY: '/the-loai/:slug',
-  COUNTRY: '/quoc-gia/:slug',
-  NOT_FOUND: '/404',
-  PROFILE: '/profile',
-  ADMIN: '/admin',
-  DASHBOARD: '/admin/dashboard',
-  MANAGE_MOVIES: '/admin/quan-ly-phim',
-  MANAGE_USERS: '/admin/quan-ly-nguoi-dung',
-  MANAGE_CATEGORIES: '/admin/quan-ly-the-loai',
-  MANAGE_COUNTRIES: '/admin/quan-ly-quoc-gia',
-  MANAGE_ACTORS: '/admin/quan-ly-dien-vien'
+    HOME: '/',
+    LOGIN: '/dang-nhap',
+    REGISTER: '/dang-ky',
+
+    MOVIE_DETAIL: '/phim/:slug',
+    WATCH_MOVIE: '/xem-phim/:slug',
+    BY_CATEGORY: '/the-loai/:slugCat',
+    BY_COUNTRY: '/quoc-gia/:slugCountry',
+
+    SEARCH: '/tim-kiem',
+    NOT_FOUND: '/404',
+
+    PROFILE: '/ho-so',
+    HISTORY: '/lich-su',
+    FAVORITE: '/yeu-thich',
+
+    ROOM: '/xem-chung',
+
+    ADMIN: '/admin',
+    MANAGE_MOVIES: 'quan-ly-phim',
+    MANAGE_DETAIL_MOVIE: 'quan-ly-phim/:id',
+    MANAGE_USERS: 'quan-ly-nguoi-dung',
+    MANAGE_CATEGORIES: 'quan-ly-the-loai',
+    MANAGE_COUNTRIES: 'quan-ly-quoc-gia',
+    MANAGE_ACTORS: 'quan-ly-dien-vien',
+    MANAGE_DIRECTORS: 'quan-ly-dao-dien'
 }
 
 export const API_ENDPOINTS = {
-  MOVIES: '/danh-sach/phim-moi-cap-nhat',
-  MOVIE_DETAIL: '/phim',
-  SEARCH: '/tim-kiem',
-  CATEGORIES: '/the-loai',
-  COUNTRIES: '/quoc-gia'
+    MOVIES: '/danh-sach/phim-moi-cap-nhat',
+    MOVIE_DETAIL: '/phim',
+    SEARCH: '/tim-kiem',
+    CATEGORIES: '/the-loai',
+    COUNTRIES: '/quoc-gia'
 }
 
 
-export const MOVIE_TYPES = ['Phim lẻ', 'Phim bộ', 'Hoạt hình', 'TV Show']

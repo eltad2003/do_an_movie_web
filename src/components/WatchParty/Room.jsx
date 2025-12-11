@@ -2,111 +2,120 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Users, Play, Crown, Lock, Globe, Clock, Search, Plus, Filter } from 'lucide-react'
 import RoomCard from './RoomCard'
+import { useWatchRoom } from '../../hooks/useWatchRoom'
 
 const Room = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [filterType, setFilterType] = useState('all') // all, public, private
-    const [rooms] = useState([
-        {
-            id: 1,
-            name: 'Spider-Man: No Way Home - Thảo luận',
-            movie: {
-                title: 'Spider-Man: No Way Home',
-                poster: 'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg',
-                year: 2021
-            },
-            host: 'Minh Anh',
-            participants: 12,
-            maxParticipants: 20,
-            isPrivate: false,
-            status: 'watching', // waiting, watching, paused
-            currentTime: '45:23',
-            roomCode: 'WP123456',
-            createdAt: '2 phút trước'
-        },
-        {
-            id: 2,
-            name: 'Phòng xem phim kinh dị 😱',
-            movie: {
-                title: 'The Conjuring 3',
-                poster: 'https://image.tmdb.org/t/p/w500/xbEhcK7NjJvK4C5eFO6u1WTe7wA.jpg',
-                year: 2021
-            },
-            host: 'Horror Fan',
-            participants: 8,
-            maxParticipants: 15,
-            isPrivate: true,
-            status: 'waiting',
-            currentTime: '00:00',
-            roomCode: 'WP789012',
-            createdAt: '5 phút trước'
-        },
-        {
-            id: 3,
-            name: 'Anime chill với friends',
-            movie: {
-                title: 'Your Name',
-                poster: 'https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg',
-                year: 2016
-            },
-            host: 'Otaku_kun',
-            participants: 25,
-            maxParticipants: 30,
-            isPrivate: false,
-            status: 'watching',
-            currentTime: '78:45',
-            roomCode: 'WP345678',
-            createdAt: '15 phút trước'
-        },
-        {
-            id: 4,
-            name: 'Marvel Marathon 🦸‍♂️',
-            movie: {
-                title: 'Avengers: Endgame',
-                poster: 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
-                year: 2019
-            },
-            host: 'MCU_Lover',
-            participants: 45,
-            maxParticipants: 50,
-            isPrivate: false,
-            status: 'watching',
-            currentTime: '120:30',
-            roomCode: 'WP901234',
-            createdAt: '30 phút trước'
-        }
-    ])
+    // const [rooms] = useState([
+    //     {
+    //         id: 1,
+    //         name: 'Spider-Man: No Way Home - Thảo luận',
+    //         movie: {
+    //             title: 'Spider-Man: No Way Home',
+    //             poster: 'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg',
+    //             year: 2021
+    //         },
+    //         host: 'Minh Anh',
+    //         participants: 12,
+    //         maxParticipants: 20,
+    //         isPrivate: false,
+    //         status: 'watching', // waiting, watching, paused
+    //         currentTime: '45:23',
+    //         roomCode: 'WP123456',
+    //         createdAt: '2 phút trước'
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Phòng xem phim kinh dị 😱',
+    //         movie: {
+    //             title: 'The Conjuring 3',
+    //             poster: 'https://image.tmdb.org/t/p/w500/xbEhcK7NjJvK4C5eFO6u1WTe7wA.jpg',
+    //             year: 2021
+    //         },
+    //         host: 'Horror Fan',
+    //         participants: 8,
+    //         maxParticipants: 15,
+    //         isPrivate: true,
+    //         status: 'waiting',
+    //         currentTime: '00:00',
+    //         roomCode: 'WP789012',
+    //         createdAt: '5 phút trước'
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Anime chill với friends',
+    //         movie: {
+    //             title: 'Your Name',
+    //             poster: 'https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg',
+    //             year: 2016
+    //         },
+    //         host: 'Otaku_kun',
+    //         participants: 25,
+    //         maxParticipants: 30,
+    //         isPrivate: false,
+    //         status: 'watching',
+    //         currentTime: '78:45',
+    //         roomCode: 'WP345678',
+    //         createdAt: '15 phút trước'
+    //     },
+    //     {
+    //         id: 4,
+    //         name: 'Marvel Marathon 🦸‍♂️',
+    //         movie: {
+    //             title: 'Avengers: Endgame',
+    //             poster: 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
+    //             year: 2019
+    //         },
+    //         host: 'MCU_Lover',
+    //         participants: 45,
+    //         maxParticipants: 50,
+    //         isPrivate: false,
+    //         status: 'watching',
+    //         currentTime: '120:30',
+    //         roomCode: 'WP901234',
+    //         createdAt: '30 phút trước'
+    //     }
+    // ])
+
+    const { rooms } = useWatchRoom()
 
     const filteredRooms = rooms.filter(room => {
-        const matchesSearch = room.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            room.movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+        const matchesSearch = room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            room.movieName.toLowerCase().includes(searchQuery.toLowerCase())
 
         const matchesFilter = filterType === 'all' ||
-            (filterType === 'public' && !room.isPrivate) ||
-            (filterType === 'private' && room.isPrivate)
+            (filterType === 'public' && !room.hasPassword) ||
+            (filterType === 'private' && room.hasPassword)
 
         return matchesSearch && matchesFilter
     })
 
     return (
         <main >
-            <div className='relative h-[50vh] md:h-[75vh] '>
-                <img src="./watch-party.webp" alt="banner" className='w-full h-full bg-center bg-contain' />
+            <div className='relative h-[40dvh] xl:h-[80dvh] bg-cover bg-center w-full'
+                style={{
+                    backgroundImage: "url(./watch-party.webp)",
+                    objectFit: 'cover',
+                    backgroundPosition: 'center center',
+                }}
+            >
                 <div className="overlay-gradient" />
 
-                <div className='absolute inset-0 mt-3 p-3 '>
+
+                <div className='absolute inset-0 mt-5'>
                     <h1 >
                         Phòng xem chung
                     </h1>
-                    <p className="text-white/70 text-center mx-auto">
+                    <p className="text-white/50 text-center mx-auto text-sm md:text-base max-w-md mt-2">
                         Tham gia hoặc tạo phòng để xem phim cùng bạn bè. Chia sẻ cảm xúc và thảo luận
                     </p>
                 </div>
             </div>
             <div className="wrapper">
                 {/* Controls */}
-                <section className="mb-8">
-                    <div className="flex gap-3 items-center justify-between">
+                <section className="my-8">
+                    <div className="flex gap-3 items-center ">
 
                         {/* Search & Filter */}
 
@@ -135,23 +144,18 @@ const Room = () => {
                             </select>
                         </div>
 
-                        {/* Create Room Button */}
-                        <Link to="/xem-chung/tao-phong">
-                            <button className="btn">
-                                <Plus className="w-5 h-5" />
-                            </button>
-                        </Link>
+
                     </div>
                 </section>
 
                 {/* Rooms Grid */}
-                <section>
+                <section className='mb-30'>
                     {filteredRooms.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
                             {filteredRooms.map((room) => (
                                 <RoomCard key={room.id} room={room} />
                             ))}
-                        </div>
+                        </ul>
                     ) : (
                         <div className="text-center py-20">
                             <div className="text-6xl mb-4">🎬</div>

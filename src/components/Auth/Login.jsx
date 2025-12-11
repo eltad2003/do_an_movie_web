@@ -3,6 +3,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import logoGoogle from '/google-color.svg'
+import { ROUTES } from '../../utils/constants'
 
 const Login = () => {
     const { login, loginGoogle } = useContext(AuthContext)
@@ -75,7 +76,7 @@ const Login = () => {
                     </button>
                     <div className='flex items-center justify-center gap-1'>
                         <p className='text-white/50'>Bạn mới sử dụng ChillFilx?</p>
-                        <a href="/register" className='text-light-100 font-bold hover:underline'>Đăng ký ngay.</a>
+                        <a href={ROUTES.REGISTER} className='text-light-100 font-bold hover:underline'>Đăng ký ngay.</a>
                     </div>
                 </form>
 

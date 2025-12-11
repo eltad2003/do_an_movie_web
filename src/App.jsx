@@ -29,47 +29,47 @@ import ManageCountry from './components/Admin/ManageCountry'
 import ManageDirector from './components/Admin/ManageDirector'
 import History from './components/Profile/History'
 import Favorite from './components/Profile/Favorite'
+import { ROUTES } from './utils/constants'
 
 const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Main />}>
+        <Route path={ROUTES.HOME} element={<Main />}>
           <Route index element={<Home />} />
 
+          <Route path={ROUTES.MOVIE_DETAIL} element={<DetailMovie />} />
+          <Route path={ROUTES.WATCH_MOVIE} element={< WatchMovie />} />
+          <Route path={ROUTES.BY_CATEGORY} element={< ByCategory />} />
+          <Route path={ROUTES.BY_COUNTRY} element={< ByCountry />} />
 
-          <Route path="/phim/:slug" element={<DetailMovie />} />
-          <Route path="/xem-phim/:slug" element={< WatchMovie />} />
-          <Route path="/the-loai/:slugCat" element={< ByCategory />} />
-          <Route path="/quoc-gia/:slugCountry" element={< ByCountry />} />
-
-          <Route path="/xem-chung" element={<Room />} />
+          <Route path={ROUTES.ROOM} element={<Room />} />
           <Route path="/xem-chung/:id" element={<WatchParty />} />
           <Route path="/xem-chung/tao-phong" element={<CreateRoom />} />
 
-          <Route path="/tim-kiem" element={<SearchResults />} />
+          <Route path={ROUTES.SEARCH} element={<SearchResults />} />
 
 
-          <Route path='/ho-so' element={<Profile />} />
-          <Route path='/lich-su' element={<History />} />
-          <Route path='/yeu-thich' element={<Favorite />} />
+          <Route path={ROUTES.PROFILE} element={<Profile />} />
+          <Route path={ROUTES.HISTORY} element={<History />} />
+          <Route path={ROUTES.FAVORITE} element={<Favorite />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route path={ROUTES.REGISTER} element={<Register />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path={ROUTES.ADMIN} element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="quan-ly-phim" element={<ManageMovie />} />
-            <Route path="quan-ly-phim/:id" element={<ManageDetailMovie />} />
-            <Route path="quan-ly-nguoi-dung" element={<ManageUser />} />
-            <Route path="quan-ly-the-loai" element={<ManageCategory />} />
-            <Route path='quan-ly-quoc-gia' element={<ManageCountry />} />
-            <Route path="quan-ly-dien-vien" element={<ManageActor />} />
-            <Route path="quan-ly-dao-dien" element={<ManageDirector />} />
+            <Route path={ROUTES.MANAGE_MOVIES} element={<ManageMovie />} />
+            <Route path={ROUTES.MANAGE_DETAILMOVIE} element={<ManageDetailMovie />} />
+            <Route path={ROUTES.MANAGE_USERS} element={<ManageUser />} />
+            <Route path={ROUTES.MANAGE_CATEGORIES} element={<ManageCategory />} />
+            <Route path={ROUTES.MANAGE_COUNTRIES} element={<ManageCountry />} />
+            <Route path={ROUTES.MANAGE_ACTORS} element={<ManageActor />} />
+            <Route path={ROUTES.MANAGE_DIRECTORS} element={<ManageDirector />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

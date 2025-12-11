@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Play, Users, MessageCircle, Settings, Share2, Crown, Volume2, VolumeX, Maximize, Copy, Check } from 'lucide-react'
 import VideoPlayer from '../WatchMovie/VideoPlayer'
+import { useWatchRoomById } from '../../hooks/useWatchRoom'
+import { useParams } from 'react-router-dom'
 
 const WatchParty = () => {
+    const { id } = useParams()
     const [isHost, setIsHost] = useState(false)
-    const [roomCode, setRoomCode] = useState('WP123456')
+    const [roomCode, setRoomCode] = useState(id)
     const [participants, setParticipants] = useState([
         { id: 1, name: 'Bạn', avatar: '👤', isHost: true },
         { id: 2, name: 'Minh', avatar: '😊', isHost: false },
@@ -26,6 +29,8 @@ const WatchParty = () => {
         isPlaying: true
     })
 
+    const { room } = useWatchRoomById(id)
+
     const sendMessage = () => {
         if (newMessage.trim()) {
             const message = {
@@ -44,22 +49,21 @@ const WatchParty = () => {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
+    if (!room) return null
 
     return (
-        <main className="min-h-screen bg-primary">
-            <div className="container mx-auto p-4">
+        <main>
+            <div className="container mx-auto p-4 mb-30">
                 {/* Header */}
-                <header className="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 className="">Xem chung</h2>
-                        <p className="text-gray-400">Thưởng thức phim cùng bạn bè</p>
-                    </div>
+                <header className="flex justify-between items-center mb-5">
+
+                    <h2>{room.title}</h2>
 
                     <div className="flex items-center gap-4">
                         {/* Room Code */}
-                        <div className="bg-dark-100 px-4 py-2 rounded-lg flex items-center gap-2">
+                        {/* <div className="bg-dark-100 px-4 py-2 rounded-lg flex items-center gap-2">
                             <span className="text-white font-medium">Mã phòng:</span>
-                            <code className="text-light-100 font-mono bg-dark-200 px-2 py-1 rounded">
+                            <code className="text-light-100 font-mono bg-dark-200 px-2 py-1">
                                 {roomCode}
                             </code>
                             <button
@@ -68,7 +72,7 @@ const WatchParty = () => {
                             >
                                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                             </button>
-                        </div>
+                        </div> */}
 
                         {/* Settings */}
                         <button
@@ -106,7 +110,9 @@ const WatchParty = () => {
                             <div className="p-4 bg-dark-200">
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <h3 className="text-white font-bold text-lg">{movieInfo.title}</h3>
+                                        <h3 className="text-white font-bold text-lg">
+                                            <span>{room.movieName} {room.episodeName}</span>
+                                        </h3>
                                         <p className="text-gray-400">
                                             {movieInfo.currentTime} / {movieInfo.duration}
                                         </p>

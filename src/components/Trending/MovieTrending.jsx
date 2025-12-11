@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import InfoGenres from '../DetailMovie/Info/InfoGenres';
 const MovieTrending = () => {
     const { listMovies } = useMovies()
-    const trendingMovies = listMovies.sort((a, b) => b.views - a.views).slice(0, 2)
+    const trendingMovies = listMovies.sort((a, b) => b.views - a.views).slice(0, 5)
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
@@ -32,13 +32,13 @@ const MovieTrending = () => {
     return (
         <Carousel responsive={responsive}  >
             {trendingMovies.map((detailMovie) => (
-                <div className='relative w-full h-[80dvh] xl:h-[90dvh] mb-20 overflow-hidden group' key={detailMovie.id}>
+                <div className='relative w-full h-[80dvh] xl:h-[90dvh] mb-20 overflow-hidden group cursor-grab' key={detailMovie.id}>
 
                     <div className='absolute inset-0 aspect-auto'>
                         <img
                             src={detailMovie.thumbUrl}
                             alt={detailMovie.name}
-                            className='w-full h-full  object-cover transition-transform duration-500 group-hover:scale-110'
+                            className='w-full h-full  object-cover transition-transform duration-500 '
                         />
                         {/* overlay left and bottom */}
                         <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/80 md:via-primary/50 lg:via-primary/30 xl:via-primary/0 to-transparent' />
