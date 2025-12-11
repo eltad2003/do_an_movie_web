@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import InfoGenres from '../DetailMovie/Info/InfoGenres'
 import { useFavorite } from '../../hooks/useFavorite'
 
-const InfoMovie = ({ detailMovie: { id, name, slug, originName, description, posterUrl, categories } }) => {
+const InfoMovie = ({ episodes, epSlug, detailMovie: { id, name, slug, originName, description, posterUrl, categories } }) => {
     const { isFavorite, addFavorite, deleteFavorite } = useFavorite(id)
     return (
         <div className='section'>
@@ -19,7 +19,7 @@ const InfoMovie = ({ detailMovie: { id, name, slug, originName, description, pos
                         <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : 'fill-none'}`} />Yêu thích
                     </button>
 
-                    <Link to={`/xem-chung/tao-phong/${slug}`}>
+                    <Link to={`/xem-chung/tao-phong/${episodes.find(ep => ep.slug === epSlug)?.id}`}>
                         <button className="bg-blue-700 text-white">
                             <Tv className="w-5 h-5 fill-blue-700" />Xem chung
                         </button>

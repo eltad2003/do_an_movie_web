@@ -46,7 +46,7 @@ const App = () => {
 
           <Route path={ROUTES.ROOM} element={<Room />} />
           <Route path="/xem-chung/:id" element={<WatchParty />} />
-          <Route path="/xem-chung/tao-phong" element={<CreateRoom />} />
+          <Route path="/xem-chung/tao-phong/:episodeId" element={<CreateRoom />} />
 
           <Route path={ROUTES.SEARCH} element={<SearchResults />} />
 

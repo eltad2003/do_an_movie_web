@@ -8,11 +8,7 @@ const WatchParty = () => {
     const { id } = useParams()
     const [isHost, setIsHost] = useState(false)
     const [roomCode, setRoomCode] = useState(id)
-    const [participants, setParticipants] = useState([
-        { id: 1, name: 'Bạn', avatar: '👤', isHost: true },
-        { id: 2, name: 'Minh', avatar: '😊', isHost: false },
-        { id: 3, name: 'Lan', avatar: '🙂', isHost: false }
-    ])
+
     const [messages, setMessages] = useState([
         { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
         { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
@@ -22,6 +18,7 @@ const WatchParty = () => {
     const [isChatOpen, setIsChatOpen] = useState(true)
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
     const [copied, setCopied] = useState(false)
+
     const [movieInfo] = useState({
         title: 'Spider-Man: No Way Home',
         currentTime: '45:23',
@@ -44,54 +41,39 @@ const WatchParty = () => {
         }
     }
 
-    const copyRoomCode = () => {
-        navigator.clipboard.writeText(roomCode)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-    }
     if (!room) return null
 
     return (
         <main>
-            <div className="container mx-auto p-4 mb-30">
+            <div className="wrapper">
                 {/* Header */}
                 <header className="flex justify-between items-center mb-5">
-
                     <h2>{room.title}</h2>
-
-                    <div className="flex items-center gap-4">
-                        {/* Room Code */}
-                        {/* <div className="bg-dark-100 px-4 py-2 rounded-lg flex items-center gap-2">
-                            <span className="text-white font-medium">Mã phòng:</span>
-                            <code className="text-light-100 font-mono bg-dark-200 px-2 py-1">
-                                {roomCode}
-                            </code>
-                            <button
-                                onClick={copyRoomCode}
-                                className="text-light-100 hover:text-white transition-colors"
-                            >
-                                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                            </button>
-                        </div> */}
-
-                        {/* Settings */}
-                        <button
-                            onClick={() => setIsSettingsOpen(true)}
-                            className="p-2 bg-dark-100 text-white rounded-lg hover:bg-dark-200 transition-colors"
-                        >
-                            <Settings className="w-5 h-5" />
-                        </button>
-                    </div>
+                    {/* Settings */}
+                    <button
+                        onClick={() => setIsSettingsOpen(true)}
+                        className="p-2 bg-dark-100 text-white rounded-lg hover:bg-dark-200 transition-colors"
+                    >
+                        <Settings className="w-5 h-5" />
+                    </button>
                 </header>
 
                 {/* Main Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div className="flex flex-col lg:flex-row gap-6">
                     {/* Video Player Area */}
                     <div className="lg:col-span-3">
                         <div className="bg-dark-100 rounded-lg overflow-hidden">
                             {/* Video Player */}
                             <div className="relative aspect-video">
-                                <VideoPlayer videoUrl="https://player.phimapi.com/player/?url=https://s6.kkphimplayer6.com/20250828/c0xkSuds/index.m3u8" />
+                                {/* <iframe
+                                    src={room.videoUrl}
+                                    className='w-full h-full'
+                                    allowFullScreen
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture "
+                                    title="Video Player"
+                                /> */}
+                                <VideoPlayer videoUrl={room.videoUrl} />
+                                {/* <video className="w-full h-full object-cover" src={room.videoUrl} controls /> */}
 
                                 {/* Sync Status */}
                                 <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
@@ -102,7 +84,7 @@ const WatchParty = () => {
                                 {/* Participants Count */}
                                 <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
                                     <Users className="w-4 h-4" />
-                                    {participants.length}
+                                    {room.currentViewers}
                                 </div>
                             </div>
 
@@ -138,23 +120,24 @@ const WatchParty = () => {
                         <div className="bg-dark-100 rounded-lg p-4">
                             <h3 className="text-white font-bold mb-4 flex items-center gap-2">
                                 <Users className="w-5 h-5" />
-                                Thành viên ({participants.length})
+                                Thành viên
                             </h3>
 
                             <div className="space-y-3">
-                                {participants.map((participant) => (
-                                    <div key={participant.id} className="flex items-center gap-3">
-                                        <div className="w-8 h-8 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] rounded-full flex items-center justify-center text-dark-100 font-bold">
-                                            {participant.avatar}
-                                        </div>
-                                        <div className="flex-1">
-                                            <p className="text-white font-medium">{participant.name}</p>
-                                        </div>
-                                        {participant.isHost && (
-                                            <Crown className="w-4 h-4 text-yellow-400" />
-                                        )}
+
+                                {/* {[Array(_, length: 3)].map((participant) => (
+                                <div key={participant.id} className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] rounded-full flex items-center justify-center text-dark-100 font-bold">
+                                        {participant.avatar}
                                     </div>
-                                ))}
+                                    <div className="flex-1">
+                                        <p className="text-white font-medium">{participant.name}</p>
+                                    </div>
+                                    {participant.isHost && (
+                                        <Crown className="w-4  h-4 text-yellow-400" />
+                                    )}
+                                </div>
+                                ))} */}
                             </div>
 
                             {/* Invite Button */}

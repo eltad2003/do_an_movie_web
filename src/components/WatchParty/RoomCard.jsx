@@ -1,9 +1,16 @@
-import { Clock, Crown, Globe, Lock, Play, Users } from 'lucide-react'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { Clock, Crown, Globe, Lock, LockIcon, Play, Users, X } from 'lucide-react'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { formatDate } from '../../utils/helpers'
+import ReactModal from 'react-modal'
+import { toast } from 'react-toastify'
 
 const RoomCard = ({ room }) => {
+    const [password, setPassword] = useState('')
+
+    const [typePassword, setTypePassword] = useState(false);
+    const navigate = useNavigate()
+
     const getStatusColor = (status) => {
         switch (status) {
             case 'watching': return 'bg-green-900 text-green-100'
@@ -20,6 +27,21 @@ const RoomCard = ({ room }) => {
             case 'paused': return 'Tạm dừng'
             default: return 'Không xác định'
         }
+    }
+
+    const handleJoinRoom = (e) => {
+        e.preventDefault();
+        if (password.trim() === '') return;
+        if (password === room.password) {
+            navigate(`/xem-chung/${room.id}`);
+            toast.success('Tham gia phòng thành công!')
+        } else {
+            toast.error('Mật khẩu không đúng. Vui lòng thử lại.');
+            setPassword('')
+            setTypePassword(false)
+        }
+
+
     }
 
     return (
@@ -56,13 +78,6 @@ const RoomCard = ({ room }) => {
                     )}
                 </div>
 
-                {/* Play Button Overlay */}
-                {/* <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100  ">
-                    <div className="bg-white/20 rounded-full p-3 backdrop-blur-sm">
-                        <Play className="w-8 h-8 cursor-pointer text-white" />
-                    </div>
-                </div> */}
-
                 {/* Movie Info at Bottom */}
                 <div className="absolute bottom-3 left-3 right-3">
                     <h4 className="text-white/90 font-bold line-clamp-1">
@@ -81,12 +96,12 @@ const RoomCard = ({ room }) => {
                         {room.title}
                     </h3>
 
-                    <div className="flex items-center gap-4 ">
+                    <div className="flex items-center gap-3">
                         <div className=" text-sm flex items-center gap-1 text-light-100 font-semibold">
                             <Crown className="w-4 h-4" />
-                            <span>{room.hostName.split(' ')[0]}</span>
+                            <span>{room.hostName}</span>
                         </div>
-                        <div className="text-xs flex items-center gap-1 text-gray-400 ">
+                        <div className="text-xs flex items-center  gap-1 text-gray-400 ">
                             <Clock className="w-3 h-3" />
                             <span>{formatDate(room.createdAt)}</span>
                         </div>
@@ -94,37 +109,67 @@ const RoomCard = ({ room }) => {
                 </div>
 
                 {/* Participants & Join */}
-                <div className="flex items-center justify-between ">
-                    <div className="flex items-center gap-2 flex-1">
-                        <Users className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-400 text-sm">
-                            {room.currentViewers} đang xem
-                        </span>
-                        {/* <div className="flex -space-x-2">
-                            {[...Array(Math.min(3, 10))].map((_, i) => (
-                                <div key={i} className="w-6 h-6 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] rounded-full border-2 border-dark-100 flex items-center justify-center text-xs font-bold text-dark-100">
-                                    {String.fromCharCode(65 + i)}
-                                </div>
-                            ))}
-                            {room.participants > 3 && (
-                                <div className="w-6 h-6 bg-gray-600 rounded-full border-2 border-dark-100 flex items-center justify-center text-xs font-bold text-white">
-                                    +{room.currentViewers - 3}
-                                </div>
-                            )}
-                        </div> */}
-                    </div>
 
-                    <Link to={`/xem-chung/${room.id}`}>
-                        <button
-                            className="btn disabled:cursor-not-allowed"
-                        // disabled={room.currentViewers >= room.currentViewers}
-                        >
-                            Tham gia
-                        </button>
-                    </Link>
+                <div className="flex items-center justify-between gap-3">
+
+                    {typePassword ? (
+                        <form className='flex-1 flex gap-1' onSubmit={handleJoinRoom}>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="flex-1 bg-white/5 border border-light-100/20 text-white rounded-lg px-4 py-2 focus:outline-none"
+                                placeholder="Nhập mật khẩu"
+                                autoFocus
+                                required
+                            />
+                            <button
+                                type='submit'
+                                className='btn'
+                            >
+                                OK
+                            </button>
+                            <button
+                                type='button'
+                                onClick={() => {
+                                    setTypePassword(false)
+                                    setPassword('')
+                                }}
+                                className='px-3 py-2 text-white cursor-pointer bg-red-800 hover:bg-red-900 rounded-lg'
+                            >
+                                <X className='w-4 h-4' />
+                            </button>
+                        </form>
+                    ) : (
+                        <>
+                            {/* Show participants when NOT typing password */}
+                            <div className="flex items-center gap-2 flex-1">
+                                <Users className="w-4 h-4 text-gray-400" />
+                                <span className="text-gray-400 text-sm">
+                                    {room.currentViewers} đang xem
+                                </span>
+                            </div>
+
+                            {/* Join button */}
+                            {room.hasPassword ? (
+                                <button
+                                    className="btn inline-flex items-center gap-1"
+                                    onClick={() => setTypePassword(true)}
+                                >
+                                    <Lock className='w-4 h-4' />
+                                    Tham gia
+                                </button>
+                            ) : (
+                                <Link to={`/xem-chung/${room.id}`}>
+                                    <button className="btn">Tham gia</button>
+                                </Link>
+                            )}
+                        </>
+                    )}
                 </div>
+
             </div>
-        </div>
+        </div >
     )
 }
 

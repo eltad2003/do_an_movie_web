@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useNav } from '../../hooks/useNav'
 import DropDown from './DropDown'
 import { Clock, Heart, LogOut, Menu, Shield, User, UserPen, X } from 'lucide-react'
@@ -15,6 +15,7 @@ const Navbar = () => {
     const [isOpenSideBar, setIsOpenSideBar] = useState(false)
     const [isOpenProfile, setIsOpenProfile] = useState(false)
     const location = useLocation()
+
 
     const handleDropdownToggle = (name) => {
         setOpenDropdown(openDropdown === name ? null : name)
@@ -56,7 +57,7 @@ const Navbar = () => {
                     isDropdownOpen={openDropdown === 'category'}
                     onToggle={() => handleDropdownToggle('category')}
                 />
-         
+
                 <DropDown
                     text='Quốc gia'
                     slug='quoc-gia'

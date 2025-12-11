@@ -86,7 +86,7 @@
         }
 
         & form {
-            @apply p-5 mt-5 space-y-5 bg-dark-100 rounded-xl  container max-w-md mx-auto;
+            @apply p-5 mt-5 space-y-5 bg-dark-100 rounded-xl container max-w-md mx-auto;
         }
     }
 

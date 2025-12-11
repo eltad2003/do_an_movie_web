@@ -54,3 +54,7 @@ export const formatDate = (dateString) => {
         })
     }
 }
+
+export const back = () => {
+    window.history.back()
+}
