@@ -60,9 +60,9 @@ const RoomCard = ({ room }) => {
                 <div className="absolute top-3 left-3 flex gap-2">
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(room.active)} inline-flex items-center gap-2`}>
                         {room.active ? (
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                         ) : (
-                            <div className="w-2 h-2 bg-red-500 rounded-full" />
+                            <div className="w-3 h-3 bg-red-500 rounded-full" />
                         )}
                         {getStatusText(room.active)}
                     </span>
@@ -97,12 +97,12 @@ const RoomCard = ({ room }) => {
                         {room.title}
                     </h3>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                         <div className=" text-sm flex items-center gap-1 text-light-100 font-semibold">
                             <Crown className="w-4 h-4" />
                             <span>{room.hostName}</span>
                         </div>
-                        <div className="text-xs flex items-center  gap-1 text-gray-400 ">
+                        <div className="text-xs flex items-center cursor-default gap-1 text-gray-400 " title={room.createdAt}>
                             <Clock className="w-3 h-3" />
                             <span>{formatDate(room.createdAt)}</span>
                         </div>
@@ -119,14 +119,14 @@ const RoomCard = ({ room }) => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="flex-1 bg-white/5 border border-light-100/20 text-white rounded-lg px-4 py-2 focus:outline-none"
+                                className="flex-1 bg-white/5 border border-light-100/20 text-white rounded-lg px-2 py-1 focus:outline-none"
                                 placeholder="Nhập mật khẩu"
                                 autoFocus
                                 required
                             />
                             <button
                                 type='submit'
-                                className='btn'
+                                className='px-2 py-1 bg-light-100 hover:bg-light-100/70 font-bold rounded-lg cursor-pointer'
                             >
                                 OK
                             </button>
@@ -136,7 +136,7 @@ const RoomCard = ({ room }) => {
                                     setTypePassword(false)
                                     setPassword('')
                                 }}
-                                className='px-3 py-2 text-white cursor-pointer bg-red-800 hover:bg-red-900 rounded-lg'
+                                className='px-2 py-1 text-white cursor-pointer bg-red-800 hover:bg-red-900 rounded-lg'
                             >
                                 <X className='w-4 h-4' />
                             </button>

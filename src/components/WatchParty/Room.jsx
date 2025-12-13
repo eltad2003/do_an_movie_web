@@ -7,76 +7,7 @@ import { useWatchRoom } from '../../hooks/useWatchRoom'
 const Room = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [filterType, setFilterType] = useState('all') // all, public, private
-    // const [rooms] = useState([
-    //     {
-    //         id: 1,
-    //         name: 'Spider-Man: No Way Home - Thảo luận',
-    //         movie: {
-    //             title: 'Spider-Man: No Way Home',
-    //             poster: 'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg',
-    //             year: 2021
-    //         },
-    //         host: 'Minh Anh',
-    //         participants: 12,
-    //         maxParticipants: 20,
-    //         isPrivate: false,
-    //         status: 'watching', // waiting, watching, paused
-    //         currentTime: '45:23',
-    //         roomCode: 'WP123456',
-    //         createdAt: '2 phút trước'
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Phòng xem phim kinh dị 😱',
-    //         movie: {
-    //             title: 'The Conjuring 3',
-    //             poster: 'https://image.tmdb.org/t/p/w500/xbEhcK7NjJvK4C5eFO6u1WTe7wA.jpg',
-    //             year: 2021
-    //         },
-    //         host: 'Horror Fan',
-    //         participants: 8,
-    //         maxParticipants: 15,
-    //         isPrivate: true,
-    //         status: 'waiting',
-    //         currentTime: '00:00',
-    //         roomCode: 'WP789012',
-    //         createdAt: '5 phút trước'
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Anime chill với friends',
-    //         movie: {
-    //             title: 'Your Name',
-    //             poster: 'https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg',
-    //             year: 2016
-    //         },
-    //         host: 'Otaku_kun',
-    //         participants: 25,
-    //         maxParticipants: 30,
-    //         isPrivate: false,
-    //         status: 'watching',
-    //         currentTime: '78:45',
-    //         roomCode: 'WP345678',
-    //         createdAt: '15 phút trước'
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'Marvel Marathon 🦸‍♂️',
-    //         movie: {
-    //             title: 'Avengers: Endgame',
-    //             poster: 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
-    //             year: 2019
-    //         },
-    //         host: 'MCU_Lover',
-    //         participants: 45,
-    //         maxParticipants: 50,
-    //         isPrivate: false,
-    //         status: 'watching',
-    //         currentTime: '120:30',
-    //         roomCode: 'WP901234',
-    //         createdAt: '30 phút trước'
-    //     }
-    // ])
+
 
     const { rooms } = useWatchRoom()
 
@@ -86,14 +17,16 @@ const Room = () => {
 
         const matchesFilter = filterType === 'all' ||
             (filterType === 'public' && !room.hasPassword) ||
-            (filterType === 'private' && room.hasPassword)
+            (filterType === 'private' && room.hasPassword) ||
+            (filterType === 'actived' && room.active === true) ||
+            (filterType === 'ended' && !room.active)
 
         return matchesSearch && matchesFilter
     })
 
     return (
         <main >
-            <div className='relative h-[40dvh] xl:h-[80dvh] bg-cover bg-center w-full'
+            <div className='relative h-[40dvh] xl:h-[60dvh] bg-cover bg-center w-full'
                 style={{
                     backgroundImage: "url(./watch-party.webp)",
                     objectFit: 'cover',
@@ -141,6 +74,8 @@ const Room = () => {
                                 <option value="all">Tất cả phòng</option>
                                 <option value="public">Phòng công khai</option>
                                 <option value="private">Phòng riêng tư</option>
+                                <option value="actived">Đang chiếu</option>
+                                <option value="ended">Đã kết thúc</option>
                             </select>
                         </div>
 
@@ -151,7 +86,7 @@ const Room = () => {
                 {/* Rooms Grid */}
                 <section className='mb-30'>
                     {filteredRooms.length > 0 ? (
-                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4  gap-5">
                             {filteredRooms.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((room) => (
                                 <RoomCard key={room.id} room={room} />
                             ))}
@@ -165,34 +100,10 @@ const Room = () => {
                             <p className="text-gray-400 mb-6">
                                 Hãy thử thay đổi từ khóa tìm kiếm hoặc tạo phòng mới
                             </p>
-                           
+
                         </div>
                     )}
                 </section>
-
-                {/* Quick Stats */}
-                {/* <section className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-dark-100 p-6 rounded-lg text-center">
-                        <div className="text-3xl font-bold text-light-100 mb-2">
-                            {rooms.length}
-                        </div>
-                        <p className="text-gray-400">Phòng đang hoạt động</p>
-                    </div>
-
-                    <div className="bg-dark-100 p-6 rounded-lg text-center">
-                        <div className="text-3xl font-bold text-light-100 mb-2">
-                            {rooms.reduce((total, room) => total + room.participants, 0)}
-                        </div>
-                        <p className="text-gray-400">Người đang xem</p>
-                    </div>
-
-                    <div className="bg-dark-100 p-6 rounded-lg text-center">
-                        <div className="text-3xl font-bold text-light-100 mb-2">
-                            {rooms.filter(room => room.status === 'watching').length}
-                        </div>
-                        <p className="text-gray-400">Phòng đang phát</p>
-                    </div>
-                </section> */}
             </div>
         </main>
     )

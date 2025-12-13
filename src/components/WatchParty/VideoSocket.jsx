@@ -1,8 +1,8 @@
 import { Client } from '@stomp/stompjs';
-import { Crown, RefreshCcw, Users, WifiSync } from 'lucide-react';
+import { Crown, RefreshCcw, Share2, Users, WifiSync } from 'lucide-react';
 import React, { useRef, useEffect, useState } from 'react';
 import SockJS from "sockjs-client/dist/sockjs";
-
+import Hls from 'hls.js';
 
 const VideoSocket = ({ room, user, videoUrl }) => {
     const videoRef = useRef(null);
@@ -15,7 +15,7 @@ const VideoSocket = ({ room, user, videoUrl }) => {
         // Cấu hình Client
         const stompClient = new Client({
             // Lưu ý: webSocketFactory nên trả về một instance mới
-            webSocketFactory: () => new SockJS('http://localhost:8080/ws-watch-party'),
+            webSocketFactory: () => new SockJS(`${import.meta.env.VITE_BE}/ws-watch-party`),
             onConnect: () => {
                 console.log('Connected to WebSocket');
                 setIsConnected(true); // Đánh dấu là đã kết nối
@@ -46,6 +46,22 @@ const VideoSocket = ({ room, user, videoUrl }) => {
             }
         };
     }, [room.id]);
+
+    // Thiết lập HLS nếu cần
+    useEffect(() => {
+        const video = videoRef.current;
+        if (Hls.isSupported() && videoUrl.endsWith('.m3u8')) {
+            const hls = new Hls();
+            hls.loadSource(videoUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                videoRef.current.play();
+            });
+            return () => {
+                if (hls) hls.destroy();
+            };
+        }
+    }, [videoUrl]);
 
     // Hàm gửi tín hiệu JOIN
     const sendJoinSignal = (client) => {
@@ -158,7 +174,7 @@ const VideoSocket = ({ room, user, videoUrl }) => {
     };
 
     return (
-        <div className='w-full aspect-video'>
+        <div className='w-full aspect-video relative'>
             {/* Hiển thị trạng thái kết nối để debug */}
             {isConnected ? (
                 <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
@@ -189,14 +205,22 @@ const VideoSocket = ({ room, user, videoUrl }) => {
                 <div className="flex justify-between items-start">
                     <div className='flex flex-col gap-3'>
                         <h3 className="text-white font-bold text-lg">
-                            <span>{room.movieName} {room.episodeName}</span>
+                            <span>{room.movieName} - {room.episodeName}</span>
                         </h3>
-                        <div>
-
+                        <div className='flex items-center gap-2'>
                             <button
                                 onClick={() => handleUserAction('SYNC')}
                                 className='inline-flex items-center gap-2 text-sm px-1.5 py-0.5 cursor-pointer text-light-100 rounded-lg border-1 border-white'>
                                 <RefreshCcw className='w-5 h-5' /> Đồng bộ
+                            </button>
+                            <button
+                                onClick={() => {
+                                    alert('Đã sao chép mã phòng!')
+                                    navigator.clipboard.writeText(room.id)
+                                }}
+                                className="px-1.5 py-0.5 inline-flex items-center gap-2 text-sm cursor-pointer text-light-100 rounded-lg border-1 border-white" >
+                                <Share2 className="w-5 h-5" />
+                                Mời bạn bè
                             </button>
                         </div>
                     </div>
@@ -210,6 +234,7 @@ const VideoSocket = ({ room, user, videoUrl }) => {
                             </span>
                         </div>
                     )}
+
                 </div>
             </div>
         </div>

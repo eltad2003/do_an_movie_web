@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Play, Users, MessageCircle, Settings, Share2, Crown, Volume2, VolumeX, Maximize, Copy, Check, LogOut, ChevronLeft } from 'lucide-react'
+import { Play, Users, MessageCircle, Settings, Share2, Crown, Volume2, VolumeX, Maximize, Copy, Check, LogOut, ChevronLeft, Minus, Plus } from 'lucide-react'
 import VideoPlayer from '../WatchMovie/VideoPlayer'
 import { useWatchRoomById } from '../../hooks/useWatchRoom'
 import { Link, useParams } from 'react-router-dom'
@@ -10,23 +10,32 @@ import { toast } from 'react-toastify'
 const WatchParty = () => {
     const { user } = useContext(AuthContext)
     const { id } = useParams()
-    const [copied, setCopied] = useState(false)
+
 
     const [messages, setMessages] = useState([
         { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
         { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
+        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
+        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
+        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
+        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
+        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
+        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
+        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
+        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
+        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
+        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
+        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
+        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
+
         { id: 3, user: 'Bạn', message: 'Cảnh này kinh quá 😱', time: '20:17' }
     ])
     const [newMessage, setNewMessage] = useState('')
-    const [isChatOpen, setIsChatOpen] = useState(true)
+    const [isChatOpen, setIsChatOpen] = useState(false)
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-
-
     const { room } = useWatchRoomById(id)
-
-    const isUserHost = () => {
-        return room.hostId === user.user.id || room.hostName === user.user.name
-    }
+    if (!room) return null
+    const isHost = room.hostId === user.user.id || room.hostName === user.user.name
 
     const sendMessage = () => {
         if (newMessage.trim()) {
@@ -63,18 +72,11 @@ const WatchParty = () => {
         }
     }
 
-    const handleCopyRoomCode = () => {
-        alert('Đã sao chép mã phòng!')
-        navigator.clipboard.writeText(room.id)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-    }
 
-    if (!room) return null
 
     return (
         <main>
-            <div className="wrapper">
+            <div className="wrapper mb-10">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-5">
                     <Link to="/xem-chung" className='flex items-center gap-2'>
@@ -82,137 +84,102 @@ const WatchParty = () => {
                         <h2>{room.title}</h2>
                     </Link>
                     <div className="flex items-center gap-4">
-                        {isUserHost() &&
+                        {isHost &&
                             <button
-                                className='font-semibold inline-flex items-center gap-2 text-red-400 p-2 bg-dark-100 hover:text-red-700 transition-colors cursor-pointer rounded-lg'
+                                className='font-semibold inline-flex items-center gap-2 text-red-600 p-2 bg-dark-200 cursor-pointer rounded-lg border border-red-600'
                                 onClick={handleCloseRoom}
                             >
                                 <LogOut className='w-6 h-6' /> Kết thúc
-                            </button>}
-                        {/* Settings */}
-                        <button
+                            </button>
+                        }
+                        <div className="p-2 gap-2 flex justify-between items-center bg-dark-100 text-white rounded-lg border border-gray-700">
+                            <h3 className="text-white font-bold flex items-center gap-2">
+                                <MessageCircle className="w-5 h-5" />
+                                Chat
+                            </h3>
+                            <button
+                                onClick={() => setIsChatOpen(!isChatOpen)}
+                                className="text-gray-400 hover:text-white transition-colors"
+                            >
+                                {isChatOpen ? <Minus /> : <Plus />}
+                            </button>
+                        </div>
+                        {/* <button
                             onClick={() => setIsSettingsOpen(true)}
                             className="p-2 bg-dark-100 text-white rounded-lg hover:bg-dark-200 transition-colors"
                         >
                             <Settings className="w-5 h-5" />
-                        </button>
+                        </button> */}
                     </div>
 
                 </div>
 
                 {/* Main Content */}
-                <div className="flex flex-col lg:flex-row gap-6">
+                <div className="flex flex-col lg:flex-row gap-5">
                     {/* Video Player Area */}
-                    <div className="lg:col-span-3">
-                        <div className="bg-dark-100 rounded-lg overflow-hidden">
-                            {/* Video Player */}
-                            <div className="relative aspect-video">
+                    <div className='w-full'>
 
-                                <VideoSocket videoUrl={room.videoUrl} room={room} user={user.user} />
-
-
-                            </div>
-
-                            {/* Movie Info */}
-
-                        </div>
+                        <VideoSocket videoUrl={room.videoUrl} room={room} user={user.user} />
                     </div>
 
-                    {/* Sidebar */}
-                    <div className="space-y-6">
-                        {/* Participants */}
-                        <div className="bg-dark-100 rounded-lg p-4">
-                            <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-                                <Users className="w-5 h-5" />
-                                Thành viên
-                            </h3>
-
-                            <div className="space-y-3">
-
-                                {/* {[Array(_, length: 3)].map((participant) => (
-                                <div key={participant.id} className="flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] rounded-full flex items-center justify-center text-dark-100 font-bold">
-                                        {participant.avatar}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-white font-medium">{participant.name}</p>
-                                    </div>
-                                    {participant.isHost && (
-                                        <Crown className="w-4  h-4 text-yellow-400" />
-                                    )}
+                    <>
+                        {isChatOpen && (
+                            <div className=" bg-dark-100 rounded-lg overflow-hidden flex flex-col h-[500px] lg:h-[97%] lg:fixed top-0 right-0 m-3 lg:w-1/4">
+                                <div className="p-2 gap-2 flex justify-between items-center bg-dark-100 text-white border-b border-gray-700">
+                                    <h3 className="text-white font-bold flex items-center gap-2">
+                                        <MessageCircle className="w-5 h-5" />
+                                        Chat
+                                    </h3>
+                                    <button
+                                        onClick={() => setIsChatOpen(!isChatOpen)}
+                                        className="text-gray-400 hover:text-white transition-colors"
+                                    >
+                                        {isChatOpen ? <Minus /> : <Plus />}
+                                    </button>
                                 </div>
-                                ))} */}
-                            </div>
-
-                            {/* Invite Button */}
-                            <button
-                                className="btn w-full inline-flex items-center justify-center"
-                                onClick={handleCopyRoomCode}
-                            >
-                                <Share2 className="w-4 h-4" />
-                                Mời bạn bè
-                            </button>
-                        </div>
-
-                        {/* Chat */}
-                        <div className="bg-dark-100 rounded-lg overflow-hidden">
-                            <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                                <h3 className="text-white font-bold flex items-center gap-2">
-                                    <MessageCircle className="w-5 h-5" />
-                                    Chat
-                                </h3>
-                                <button
-                                    onClick={() => setIsChatOpen(!isChatOpen)}
-                                    className="text-gray-400 hover:text-white transition-colors"
-                                >
-                                    {isChatOpen ? '−' : '+'}
-                                </button>
-                            </div>
-
-                            {isChatOpen && (
-                                <>
-                                    {/* Messages */}
-                                    <div className="h-64 overflow-y-auto p-4 space-y-3">
-                                        {messages.map((msg) => (
-                                            <div key={msg.id} className="flex flex-col">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-light-100 font-medium text-sm">
-                                                        {msg.user}
-                                                    </span>
-                                                    <span className="text-gray-500 text-xs">
-                                                        {msg.time}
-                                                    </span>
-                                                </div>
-                                                <p className="text-gray-300 text-sm bg-dark-200 px-3 py-2 rounded-lg">
-                                                    {msg.message}
-                                                </p>
+                                {/* Messages */}
+                                <div className=" overflow-y-auto px-6 py-3 space-y-3 flex-1 h-[100px]">
+                                    {messages.length > 0 ? messages.map((msg) => (
+                                        <div key={msg.id} className="flex flex-col">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <span className="text-light-100 font-bold ">
+                                                    {msg.user}
+                                                </span>
+                                                <span className="text-gray-500 text-xs">
+                                                    {msg.time}
+                                                </span>
                                             </div>
-                                        ))}
-                                    </div>
-
-                                    {/* Message Input */}
-                                    <div className="p-4 border-t border-gray-700">
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="text"
-                                                value={newMessage}
-                                                onChange={(e) => setNewMessage(e.target.value)}
-                                                onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                                                placeholder="Nhập tin nhắn..."
-                                                className="flex-1 bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-light-100/30"
-                                            />
-                                            <button
-                                                onClick={sendMessage}
-                                                className="bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
-                                            >
-                                                Gửi
-                                            </button>
+                                            <p className="text-white bg-gray-800 px-2.5 py-1.5 rounded-lg">
+                                                {msg.message}
+                                            </p>
                                         </div>
+                                    )) : <p className="text-gray-400 text-sm">Chưa có tin nhắn nào.</p>}
+                                </div>
+
+                                {/* Message Input */}
+                                <div className="p-5 border-t border-gray-700 ">
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={newMessage}
+                                            onChange={(e) => setNewMessage(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                                            placeholder="Nhập tin nhắn..."
+                                            className="flex-1 bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                        />
+                                        <button
+                                            onClick={sendMessage}
+                                            className="bg-amber-50 text-dark-100 px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                                        >
+                                            Gửi
+                                        </button>
                                     </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </>
+
+
                 </div>
 
                 {/* Settings Modal */}

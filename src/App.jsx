@@ -45,7 +45,7 @@ const App = () => {
           <Route path={ROUTES.BY_COUNTRY} element={< ByCountry />} />
 
           <Route path={ROUTES.ROOM} element={<Room />} />
-          <Route path="/xem-chung/:id" element={<WatchParty />} />
+
           <Route path="/xem-chung/tao-phong/:episodeId" element={<CreateRoom />} />
 
           <Route path={ROUTES.SEARCH} element={<SearchResults />} />
@@ -59,7 +59,7 @@ const App = () => {
         </Route>
         <Route path={ROUTES.LOGIN} element={<Login />} />
         <Route path={ROUTES.REGISTER} element={<Register />} />
-
+        <Route path="/xem-chung/:id" element={<WatchParty />} />
         <Route element={<ProtectedRoute />}>
           <Route path={ROUTES.ADMIN} element={<AdminLayout />}>
             <Route index element={<Dashboard />} />

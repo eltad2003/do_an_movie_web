@@ -53,10 +53,12 @@ export const useWatchRoomById = (roomId) => {
             console.error(error)
         }
     }
+
     useEffect(() => {
         fetchRoomById()
     }, [roomId])
 
+   
 
 
     return { room, fetchRoomById }
