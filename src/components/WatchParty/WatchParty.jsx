@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react'
-import { Play, Users, MessageCircle, Settings, Share2, Crown, Volume2, VolumeX, Maximize, Copy, Check, LogOut } from 'lucide-react'
+import { Play, Users, MessageCircle, Settings, Share2, Crown, Volume2, VolumeX, Maximize, Copy, Check, LogOut, ChevronLeft } from 'lucide-react'
 import VideoPlayer from '../WatchMovie/VideoPlayer'
 import { useWatchRoomById } from '../../hooks/useWatchRoom'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import VideoSocket from './VideoSocket'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
@@ -77,7 +77,10 @@ const WatchParty = () => {
             <div className="wrapper">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-5">
-                    <h2>{room.title}</h2>
+                    <Link to="/xem-chung" className='flex items-center gap-2'>
+                        <ChevronLeft className='w-7 h-7 text-white' />
+                        <h2>{room.title}</h2>
+                    </Link>
                     <div className="flex items-center gap-4">
                         {isUserHost() &&
                             <button
@@ -111,7 +114,7 @@ const WatchParty = () => {
                             </div>
 
                             {/* Movie Info */}
-                
+
                         </div>
                     </div>
 

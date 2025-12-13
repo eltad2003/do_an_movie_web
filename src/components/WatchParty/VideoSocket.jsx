@@ -86,7 +86,7 @@ const VideoSocket = ({ room, user, videoUrl }) => {
         switch (action.type) {
             case 'JOIN':
                 // Nếu mình là HOST, mình phải có trách nhiệm gửi dữ liệu chuẩn cho người mới
-                if (room.hostId === user.id || room.hostName === user.name) {
+                if (isHost) {
                     console.log("Người mới vào, Host đang gửi dữ liệu đồng bộ...");
                     sendSyncSignal();
                 }
@@ -194,7 +194,7 @@ const VideoSocket = ({ room, user, videoUrl }) => {
                         <div>
 
                             <button
-                                onClick={() => handleRemoteAction('SYNC')}
+                                onClick={() => handleUserAction('SYNC')}
                                 className='inline-flex items-center gap-2 text-sm px-1.5 py-0.5 cursor-pointer text-light-100 rounded-lg border-1 border-white'>
                                 <RefreshCcw className='w-5 h-5' /> Đồng bộ
                             </button>
