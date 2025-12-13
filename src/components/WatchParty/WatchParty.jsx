@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { Play, Users, MessageCircle, Settings, Share2, Crown, Volume2, VolumeX, Maximize, Copy, Check } from 'lucide-react'
+import React, { useContext, useState } from 'react'
+import { Play, Users, MessageCircle, Settings, Share2, Crown, Volume2, VolumeX, Maximize, Copy, Check, LogOut } from 'lucide-react'
 import VideoPlayer from '../WatchMovie/VideoPlayer'
 import { useWatchRoomById } from '../../hooks/useWatchRoom'
 import { useParams } from 'react-router-dom'
+import VideoSocket from './VideoSocket'
+import { AuthContext } from '../../context/AuthContext'
+import { toast } from 'react-toastify'
 
 const WatchParty = () => {
+    const { user } = useContext(AuthContext)
     const { id } = useParams()
-    const [isHost, setIsHost] = useState(false)
-    const [roomCode, setRoomCode] = useState(id)
+    const [copied, setCopied] = useState(false)
 
     const [messages, setMessages] = useState([
         { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
@@ -17,16 +20,13 @@ const WatchParty = () => {
     const [newMessage, setNewMessage] = useState('')
     const [isChatOpen, setIsChatOpen] = useState(true)
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-    const [copied, setCopied] = useState(false)
 
-    const [movieInfo] = useState({
-        title: 'Spider-Man: No Way Home',
-        currentTime: '45:23',
-        duration: '148:00',
-        isPlaying: true
-    })
 
     const { room } = useWatchRoomById(id)
+
+    const isUserHost = () => {
+        return room.hostId === user.user.id || room.hostName === user.user.name
+    }
 
     const sendMessage = () => {
         if (newMessage.trim()) {
@@ -40,6 +40,35 @@ const WatchParty = () => {
             setNewMessage('')
         }
     }
+    const handleCloseRoom = async () => {
+        if (window.confirm('Bạn có chắc muốn đóng phòng này?')) {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_BE}/api/watch-rooms/${room.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).accessToken}`
+                    },
+                })
+                if (!res.ok) {
+                    throw new Error('Failed to close room');
+                }
+
+                toast.success('Đóng phòng thành công')
+                window.location.href = '/xem-chung';
+
+            } catch (error) {
+                console.error('Error close room:', error);
+            }
+        }
+    }
+
+    const handleCopyRoomCode = () => {
+        alert('Đã sao chép mã phòng!')
+        navigator.clipboard.writeText(room.id)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+    }
 
     if (!room) return null
 
@@ -47,16 +76,26 @@ const WatchParty = () => {
         <main>
             <div className="wrapper">
                 {/* Header */}
-                <header className="flex justify-between items-center mb-5">
+                <div className="flex justify-between items-center mb-5">
                     <h2>{room.title}</h2>
-                    {/* Settings */}
-                    <button
-                        onClick={() => setIsSettingsOpen(true)}
-                        className="p-2 bg-dark-100 text-white rounded-lg hover:bg-dark-200 transition-colors"
-                    >
-                        <Settings className="w-5 h-5" />
-                    </button>
-                </header>
+                    <div className="flex items-center gap-4">
+                        {isUserHost() &&
+                            <button
+                                className='font-semibold inline-flex items-center gap-2 text-red-400 p-2 bg-dark-100 hover:text-red-700 transition-colors cursor-pointer rounded-lg'
+                                onClick={handleCloseRoom}
+                            >
+                                <LogOut className='w-6 h-6' /> Kết thúc
+                            </button>}
+                        {/* Settings */}
+                        <button
+                            onClick={() => setIsSettingsOpen(true)}
+                            className="p-2 bg-dark-100 text-white rounded-lg hover:bg-dark-200 transition-colors"
+                        >
+                            <Settings className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                </div>
 
                 {/* Main Content */}
                 <div className="flex flex-col lg:flex-row gap-6">
@@ -65,52 +104,14 @@ const WatchParty = () => {
                         <div className="bg-dark-100 rounded-lg overflow-hidden">
                             {/* Video Player */}
                             <div className="relative aspect-video">
-                                {/* <iframe
-                                    src={room.videoUrl}
-                                    className='w-full h-full'
-                                    allowFullScreen
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture "
-                                    title="Video Player"
-                                /> */}
-                                <VideoPlayer videoUrl={room.videoUrl} />
-                                {/* <video className="w-full h-full object-cover" src={room.videoUrl} controls /> */}
 
-                                {/* Sync Status */}
-                                <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                                    Đồng bộ
-                                </div>
+                                <VideoSocket videoUrl={room.videoUrl} room={room} user={user.user} />
 
-                                {/* Participants Count */}
-                                <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
-                                    <Users className="w-4 h-4" />
-                                    {room.currentViewers}
-                                </div>
+
                             </div>
 
                             {/* Movie Info */}
-                            <div className="p-4 bg-dark-200">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <h3 className="text-white font-bold text-lg">
-                                            <span>{room.movieName} {room.episodeName}</span>
-                                        </h3>
-                                        <p className="text-gray-400">
-                                            {movieInfo.currentTime} / {movieInfo.duration}
-                                        </p>
-                                    </div>
-
-                                    {/* Host Controls */}
-                                    {isHost && (
-                                        <div className="flex items-center gap-2">
-                                            <span className="bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                                                <Crown className="w-4 h-4" />
-                                                Chủ phòng
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+                
                         </div>
                     </div>
 
@@ -141,7 +142,10 @@ const WatchParty = () => {
                             </div>
 
                             {/* Invite Button */}
-                            <button className="w-full mt-4 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 font-bold py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                            <button
+                                className="btn w-full inline-flex items-center justify-center"
+                                onClick={handleCopyRoomCode}
+                            >
                                 <Share2 className="w-4 h-4" />
                                 Mời bạn bè
                             </button>
@@ -209,56 +213,58 @@ const WatchParty = () => {
                 </div>
 
                 {/* Settings Modal */}
-                {isSettingsOpen && (
-                    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                        <div className="bg-dark-100 rounded-lg p-6 w-full max-w-md">
-                            <h3 className="text-white text-xl font-bold mb-4">Cài đặt phòng</h3>
+                {
+                    isSettingsOpen && (
+                        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                            <div className="bg-dark-100 rounded-lg p-6 w-full max-w-md">
+                                <h3 className="text-white text-xl font-bold mb-4">Cài đặt phòng</h3>
 
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-gray-400 mb-2">Tên phòng</label>
-                                    <input
-                                        type="text"
-                                        defaultValue="Phòng xem phim của tôi"
-                                        className="w-full bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-light-100/30"
-                                    />
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-gray-400 mb-2">Tên phòng</label>
+                                        <input
+                                            type="text"
+                                            defaultValue="Phòng xem phim của tôi"
+                                            className="w-full bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-400 mb-2">Quyền điều khiển</label>
+                                        <select className="w-full bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none">
+                                            <option>Chỉ chủ phòng</option>
+                                            <option>Tất cả thành viên</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-gray-400">Cho phép chat</span>
+                                        <button className="bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 px-3 py-1 rounded-full text-sm font-semibold">
+                                            BẬT
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-gray-400 mb-2">Quyền điều khiển</label>
-                                    <select className="w-full bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none">
-                                        <option>Chỉ chủ phòng</option>
-                                        <option>Tất cả thành viên</option>
-                                    </select>
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    <span className="text-gray-400">Cho phép chat</span>
-                                    <button className="bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 px-3 py-1 rounded-full text-sm font-semibold">
-                                        BẬT
+                                <div className="flex gap-3 mt-6">
+                                    <button
+                                        onClick={() => setIsSettingsOpen(false)}
+                                        className="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                                    >
+                                        Hủy
+                                    </button>
+                                    <button
+                                        onClick={() => setIsSettingsOpen(false)}
+                                        className="flex-1 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 font-bold py-2 rounded-lg hover:opacity-90 transition-opacity"
+                                    >
+                                        Lưu
                                     </button>
                                 </div>
                             </div>
-
-                            <div className="flex gap-3 mt-6">
-                                <button
-                                    onClick={() => setIsSettingsOpen(false)}
-                                    className="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"
-                                >
-                                    Hủy
-                                </button>
-                                <button
-                                    onClick={() => setIsSettingsOpen(false)}
-                                    className="flex-1 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 font-bold py-2 rounded-lg hover:opacity-90 transition-opacity"
-                                >
-                                    Lưu
-                                </button>
-                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-        </main>
+                    )
+                }
+            </div >
+        </main >
     )
 }
 

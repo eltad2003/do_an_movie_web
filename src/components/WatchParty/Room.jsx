@@ -82,7 +82,7 @@ const Room = () => {
 
     const filteredRooms = rooms.filter(room => {
         const matchesSearch = room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            room.movieName.toLowerCase().includes(searchQuery.toLowerCase())
+            room.movieName.toLowerCase().includes(searchQuery.toLowerCase()) || room.id.toString().includes(searchQuery)
 
         const matchesFilter = filterType === 'all' ||
             (filterType === 'public' && !room.hasPassword) ||
@@ -125,7 +125,7 @@ const Room = () => {
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                                 <input
                                     type="text"
-                                    placeholder="Tìm kiếm phòng hoặc phim..."
+                                    placeholder="Tìm kiếm theo mã phòng hoặc phim..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full bg-dark-100 text-white pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none"
@@ -152,7 +152,7 @@ const Room = () => {
                 <section className='mb-30'>
                     {filteredRooms.length > 0 ? (
                         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                            {filteredRooms.map((room) => (
+                            {filteredRooms.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((room) => (
                                 <RoomCard key={room.id} room={room} />
                             ))}
                         </ul>
@@ -165,11 +165,7 @@ const Room = () => {
                             <p className="text-gray-400 mb-6">
                                 Hãy thử thay đổi từ khóa tìm kiếm hoặc tạo phòng mới
                             </p>
-                            <Link to="/xem-chung/tao-phong">
-                                <button className="bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 font-bold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity">
-                                    Tạo phòng đầu tiên
-                                </button>
-                            </Link>
+                           
                         </div>
                     )}
                 </section>

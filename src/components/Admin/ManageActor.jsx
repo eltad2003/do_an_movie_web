@@ -80,7 +80,7 @@ const ManageActor = () => {
                     <table className='w-full'>
                         <thead className='bg-gray-50 border-b border-gray-400'>
                             <tr>
-                                <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>STT</th>
+                                <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>ID</th>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>Tên diễn viên</th>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-left'>Slug</th>
                                 <th className='px-6 py-3 text-xs font-semibold uppercase text-center'>Thao Tác</th>

@@ -7,10 +7,10 @@ import { back } from '../../utils/helpers';
 const CreateRoom = () => {
   const { episodeId } = useParams();
   const [hasPassword, setHasPassword] = useState(false);
-  const { navigate } = useNavigate()
+  const navigate = useNavigate()
   const [createRoom, setCreateRoom] = useState({
     title: 'Phòng xem phim ',
-    password: '',
+    password: null,
     episodeId: episodeId
   });
 
@@ -30,7 +30,9 @@ const CreateRoom = () => {
       }
       const data = await res.json();
       toast.success('Tạo phòng thành công')
-      navigate(`/xem-chung/${data.id}`);
+      setTimeout(() => {
+        navigate(`/xem-chung/${data.id}`);
+      }, 1500)
 
 
     } catch (error) {

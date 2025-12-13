@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import logoGoogle from '/google-color.svg'
 import { ROUTES } from '../../utils/constants'
+import { ChevronLeft } from 'lucide-react'
 
 const Login = () => {
     const { login, loginGoogle } = useContext(AuthContext)
@@ -56,7 +57,12 @@ const Login = () => {
             <div className='pattern' />
             <div className='auth-form wrapper'>
                 <form onSubmit={handleLogin}>
-                    <h2 >Đăng nhập</h2>
+                    <div className='flex items-center gap-1'>
+                        <Link to='/' className='text-white'>
+                            <ChevronLeft />
+                        </Link>
+                        <h2 >Đăng nhập</h2>
+                    </div>
                     <div>
                         <label htmlFor="username">Tên đăng nhập</label>
                         <input type="text" name="username" required={true} onChange={handleChange} />

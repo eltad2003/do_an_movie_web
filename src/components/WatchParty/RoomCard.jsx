@@ -11,21 +11,17 @@ const RoomCard = ({ room }) => {
     const [typePassword, setTypePassword] = useState(false);
     const navigate = useNavigate()
 
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'watching': return 'bg-green-900 text-green-100'
-            case 'waiting': return 'bg-yellow-900 text-yellow-100'
-            case 'paused': return 'bg-red-900 text-red-100'
-            default: return 'bg-gray-900 text-gray-100'
+    const getStatusColor = (active) => {
+        switch (active) {
+            case true: return 'bg-green-900 text-green-100'
+            default: return 'bg-red-900 text-red-100'
         }
     }
 
-    const getStatusText = (status) => {
-        switch (status) {
-            case 'watching': return 'Đang xem'
-            case 'waiting': return 'Chờ bắt đầu'
-            case 'paused': return 'Tạm dừng'
-            default: return 'Không xác định'
+    const getStatusText = (active) => {
+        switch (active) {
+            case true: return 'Đang chiếu'
+            default: return 'Đã kết thúc'
         }
     }
 
@@ -45,7 +41,7 @@ const RoomCard = ({ room }) => {
     }
 
     return (
-        <div className="bg-dark-100 rounded-2xl mb-10">
+        <div className={`bg-dark-100 ${!room.active && 'opacity-50'} rounded-2xl mb-10`}>
             {/* Movie Poster & Info */}
             <div className="relative">
                 <img
@@ -62,9 +58,14 @@ const RoomCard = ({ room }) => {
 
                 {/* Room Status */}
                 <div className="absolute top-3 left-3 flex gap-2">
-                    {/* <span className={`px-2 py-1 rounded-full text-sm font-semibold ${getStatusColor(room.status)}`}>
-                        {getStatusText(room.status)}
-                    </span> */}
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(room.active)} inline-flex items-center gap-2`}>
+                        {room.active ? (
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        ) : (
+                            <div className="w-2 h-2 bg-red-500 rounded-full" />
+                        )}
+                        {getStatusText(room.active)}
+                    </span>
                     {room.hasPassword ? (
                         <span className="bg-red-900/80 text-red-100 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
                             <Lock className="w-3 h-3" />
@@ -143,12 +144,16 @@ const RoomCard = ({ room }) => {
                     ) : (
                         <>
                             {/* Show participants when NOT typing password */}
-                            <div className="flex items-center gap-2 flex-1">
-                                <Users className="w-4 h-4 text-gray-400" />
-                                <span className="text-gray-400 text-sm">
-                                    {room.currentViewers} đang xem
-                                </span>
-                            </div>
+                            {room.active ? (
+                                <div className="flex items-center gap-2 flex-1">
+                                    <Users className="w-4 h-4 text-gray-400" />
+                                    <span className="text-gray-400 text-sm">
+                                        {room.currentViewers} đang xem
+                                    </span>
+                                </div>
+                            ) : (
+                                <div></div>
+                            )}
 
                             {/* Join button */}
                             {room.hasPassword ? (
@@ -161,7 +166,10 @@ const RoomCard = ({ room }) => {
                                 </button>
                             ) : (
                                 <Link to={`/xem-chung/${room.id}`}>
-                                    <button className="btn">Tham gia</button>
+                                    <button
+                                        className="btn disabled:cursor-not-allowed"
+                                        disabled={!room.active}
+                                    >Tham gia</button>
                                 </Link>
                             )}
                         </>

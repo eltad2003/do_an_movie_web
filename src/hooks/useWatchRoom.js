@@ -50,7 +50,7 @@ export const useWatchRoomById = (roomId) => {
             const data = await res.json()
             setRoom(data)
         } catch (error) {
-            console.error('Error fetching rooms:', error)
+            console.error(error)
         }
     }
     useEffect(() => {

@@ -64,7 +64,7 @@ const App = () => {
           <Route path={ROUTES.ADMIN} element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path={ROUTES.MANAGE_MOVIES} element={<ManageMovie />} />
-            <Route path={ROUTES.MANAGE_DETAILMOVIE} element={<ManageDetailMovie />} />
+            <Route path={ROUTES.MANAGE_DETAIL_MOVIE} element={<ManageDetailMovie />} />
             <Route path={ROUTES.MANAGE_USERS} element={<ManageUser />} />
             <Route path={ROUTES.MANAGE_CATEGORIES} element={<ManageCategory />} />
             <Route path={ROUTES.MANAGE_COUNTRIES} element={<ManageCountry />} />
