@@ -47,7 +47,7 @@ const RoomCard = ({ room }) => {
                 <img
                     src={room.posterUrl}
                     alt="poster"
-                    className="w-full h-48 object-cover"
+                    className="w-full h-54 object-cover"
                     onError={(e) => {
                         e.target.src = '/watch-party.webp'
                     }}
@@ -158,7 +158,7 @@ const RoomCard = ({ room }) => {
                             {/* Join button */}
                             {room.hasPassword ? (
                                 <button
-                                    className="btn inline-flex items-center gap-1"
+                                    className="btn inline-flex  items-center gap-1 text-sm"
                                     onClick={() => setTypePassword(true)}
                                 >
                                     <Lock className='w-4 h-4' />
@@ -167,7 +167,7 @@ const RoomCard = ({ room }) => {
                             ) : (
                                 <Link to={`/xem-chung/${room.id}`}>
                                     <button
-                                        className="btn disabled:cursor-not-allowed"
+                                        className="btn disabled:cursor-not-allowed text-sm"
                                         disabled={!room.active}
                                     >Tham gia</button>
                                 </Link>

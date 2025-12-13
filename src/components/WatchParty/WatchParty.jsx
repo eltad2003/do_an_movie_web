@@ -11,7 +11,6 @@ const WatchParty = () => {
     const { user } = useContext(AuthContext)
     const { id } = useParams()
 
-
     const [messages, setMessages] = useState([
         { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
         { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
@@ -62,7 +61,6 @@ const WatchParty = () => {
                 if (!res.ok) {
                     throw new Error('Failed to close room');
                 }
-
                 toast.success('Đóng phòng thành công')
                 window.location.href = '/xem-chung';
 
@@ -80,19 +78,19 @@ const WatchParty = () => {
                 {/* Header */}
                 <div className="flex justify-between items-center mb-5">
                     <Link to="/xem-chung" className='flex items-center gap-2'>
-                        <ChevronLeft className='w-7 h-7 text-white' />
+                        <ChevronLeft className='w-7 h-7 text-white hover:text-light-200' />
                         <h2>{room.title}</h2>
                     </Link>
                     <div className="flex items-center gap-4">
                         {isHost &&
                             <button
-                                className='font-semibold inline-flex items-center gap-2 text-red-600 p-2 bg-dark-200 cursor-pointer rounded-lg border border-red-600'
+                                className='font-semibold inline-flex items-center text-sm gap-2 text-red-600 p-2 bg-dark-200 cursor-pointer rounded-lg border border-red-600'
                                 onClick={handleCloseRoom}
                             >
-                                <LogOut className='w-6 h-6' /> Kết thúc
+                                <LogOut className='w-5 h-5' /> Kết thúc
                             </button>
                         }
-                        <div className="p-2 gap-2 flex justify-between items-center bg-dark-100 text-white rounded-lg border border-gray-700">
+                        <div className="p-2 gap-2 flex justify-between items-center text-sm bg-dark-100 text-white rounded-lg border border-gray-700">
                             <h3 className="text-white font-bold flex items-center gap-2">
                                 <MessageCircle className="w-5 h-5" />
                                 Chat

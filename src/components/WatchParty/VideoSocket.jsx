@@ -22,6 +22,7 @@ const VideoSocket = ({ room, user, videoUrl }) => {
 
                 stompClient.subscribe(`/topic/room/${room.id}`, (message) => {
                     const action = JSON.parse(message.body);
+                    console.log(action);
                     handleRemoteAction(action);
                 });
 
@@ -35,7 +36,6 @@ const VideoSocket = ({ room, user, videoUrl }) => {
             reconnectDelay: 5000,
         });
 
-        // 1. KÍCH HOẠT KẾT NỐI (Bạn bị thiếu dòng này)
         stompClient.activate();
         stompClientRef.current = stompClient;
 
@@ -201,13 +201,11 @@ const VideoSocket = ({ room, user, videoUrl }) => {
                 <Users className="w-4 h-4" />
                 {room.currentViewers}
             </div>
-            <div className="p-4 bg-dark-200">
+            <div className="p-4 bg-dark-200 rouneded rounded-b-lg">
                 <div className="flex justify-between items-start">
                     <div className='flex flex-col gap-3'>
-                        <h3 className="text-white font-bold text-lg">
-                            <span>{room.movieName} - {room.episodeName}</span>
-                        </h3>
-                        <div className='flex items-center gap-2'>
+
+                        <div className='flex items-center gap-3'>
                             <button
                                 onClick={() => handleUserAction('SYNC')}
                                 className='inline-flex items-center gap-2 text-sm px-1.5 py-0.5 cursor-pointer text-light-100 rounded-lg border-1 border-white'>
@@ -223,6 +221,9 @@ const VideoSocket = ({ room, user, videoUrl }) => {
                                 Mời bạn bè
                             </button>
                         </div>
+                        <h2 >
+                            <span>{room.movieName} - <span className='text-white/70 font-medium '>{room.episodeName}</span></span>
+                        </h2>
                     </div>
 
                     {/* Host Controls */}
