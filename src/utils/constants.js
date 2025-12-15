@@ -26,7 +26,8 @@ export const ROUTES = {
     MANAGE_CATEGORIES: 'quan-ly-the-loai',
     MANAGE_COUNTRIES: 'quan-ly-quoc-gia',
     MANAGE_ACTORS: 'quan-ly-dien-vien',
-    MANAGE_DIRECTORS: 'quan-ly-dao-dien'
+    MANAGE_DIRECTORS: 'quan-ly-dao-dien',
+    MANAGE_ROOMS: 'quan-ly-phong-xem-chung'
 }
 
 export const API_ENDPOINTS = {

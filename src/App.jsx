@@ -30,6 +30,7 @@ import ManageDirector from './components/Admin/ManageDirector'
 import History from './components/Profile/History'
 import Favorite from './components/Profile/Favorite'
 import { ROUTES } from './utils/constants'
+import ManageRooms from './components/Admin/ManageRooms'
 
 const App = () => {
   return (
@@ -71,6 +72,7 @@ const App = () => {
             <Route path={ROUTES.MANAGE_COUNTRIES} element={<ManageCountry />} />
             <Route path={ROUTES.MANAGE_ACTORS} element={<ManageActor />} />
             <Route path={ROUTES.MANAGE_DIRECTORS} element={<ManageDirector />} />
+            <Route path={ROUTES.MANAGE_ROOMS} element={<ManageRooms />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

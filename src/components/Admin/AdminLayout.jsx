@@ -10,7 +10,8 @@ import {
     Tag,
     Drama,
     LogOut,
-    Earth
+    Earth,
+    TvMinimal
 } from 'lucide-react'
 
 function AdminLayout() {
@@ -32,7 +33,7 @@ function AdminLayout() {
         { icon: Earth, label: 'Quản lý Quốc Gia', path: '/admin/quan-ly-quoc-gia' },
         { icon: Drama, label: 'Quản lý Diễn Viên', path: '/admin/quan-ly-dien-vien' },
         { icon: Drama, label: 'Quản lý Đạo Diễn', path: '/admin/quan-ly-dao-dien' },
-
+        {icon: TvMinimal, label: 'Quản lý phòng xem', path: '/admin/quan-ly-phong-xem-chung' }
     ]
 
     useEffect(() => {
@@ -84,7 +85,7 @@ function AdminLayout() {
                                     <Link
                                         key={index}
                                         to={item.path}
-                                        className="flex items-center px-4 py-2 gap-3 rounded-lg text-white hover:bg-gray-700 hover:text-light-100 hover:font-bold transition-colors duration-200"
+                                        className="flex items-center px-4 py-2 gap-3 rounded-lg text-white hover:bg-gray-800 hover:text-light-100 hover:font-bold transition-colors duration-200"
                                     >
                                         <IconComponent />
                                         <span className="font-medium">{item.label}</span>
