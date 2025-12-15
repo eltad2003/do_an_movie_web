@@ -6,48 +6,28 @@ import { Link, useParams } from 'react-router-dom'
 import VideoSocket from './VideoSocket'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
+import { useSocket } from '../../hooks/useSocket'
 
 const WatchParty = () => {
     const { user } = useContext(AuthContext)
     const { id } = useParams()
-
-    const [messages, setMessages] = useState([
-        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
-        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
-        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
-        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
-        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
-        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
-        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
-        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
-        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
-        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
-        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
-        { id: 1, user: 'Minh', message: 'Phim này hay quá!', time: '20:15' },
-        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
-        { id: 2, user: 'Lan', message: 'Đồng ý, cốt truyện rất hấp dẫn', time: '20:16' },
-
-        { id: 3, user: 'Bạn', message: 'Cảnh này kinh quá 😱', time: '20:17' }
-    ])
-    const [newMessage, setNewMessage] = useState('')
     const [isChatOpen, setIsChatOpen] = useState(false)
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false)
     const { room } = useWatchRoomById(id)
-    if (!room) return null
-    const isHost = room.hostId === user.user.id || room.hostName === user.user.name
+    const {
+        videoRef,
+        isConnected,
+        isHost,
+        messages,
+        newMessage,
+        handleUserAction,
+        sendRequestSync,
+        setNewMessage,
+        sendMessage,
+        sendLeaveSignal
+    } = useSocket(room, user.user);
 
-    const sendMessage = () => {
-        if (newMessage.trim()) {
-            const message = {
-                id: messages.length + 1,
-                user: 'Bạn',
-                message: newMessage,
-                time: new Date().toLocaleTimeString('vi-VN')
-            }
-            setMessages([...messages, message])
-            setNewMessage('')
-        }
-    }
+    if (!room) return null
+
     const handleCloseRoom = async () => {
         if (window.confirm('Bạn có chắc muốn đóng phòng này?')) {
             try {
@@ -77,7 +57,7 @@ const WatchParty = () => {
             <div className="wrapper mb-10">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-5">
-                    <Link to="/xem-chung" className='flex items-center gap-2'>
+                    <Link to="/xem-chung" className='flex items-center gap-2' onClick={sendLeaveSignal}>
                         <ChevronLeft className='w-7 h-7 text-white hover:text-light-200' />
                         <h2>{room.title}</h2>
                     </Link>
@@ -102,12 +82,7 @@ const WatchParty = () => {
                                 {isChatOpen ? <Minus /> : <Plus />}
                             </button>
                         </div>
-                        {/* <button
-                            onClick={() => setIsSettingsOpen(true)}
-                            className="p-2 bg-dark-100 text-white rounded-lg hover:bg-dark-200 transition-colors"
-                        >
-                            <Settings className="w-5 h-5" />
-                        </button> */}
+
                     </div>
 
                 </div>
@@ -117,7 +92,7 @@ const WatchParty = () => {
                     {/* Video Player Area */}
                     <div className='w-full'>
 
-                        <VideoSocket videoUrl={room.videoUrl} room={room} user={user.user} />
+                        <VideoSocket videoUrl={room.videoUrl} room={room} handleUserAction={handleUserAction} isConnected={isConnected} isHost={isHost} sendRequestSync={sendRequestSync} videoRef={videoRef} />
                     </div>
 
                     <>
@@ -140,14 +115,14 @@ const WatchParty = () => {
                                     {messages.length > 0 ? messages.map((msg) => (
                                         <div key={msg.id} className="flex flex-col">
                                             <div className="flex items-center gap-2 mb-1">
-                                                <span className="text-light-100 font-bold ">
-                                                    {msg.user}
+                                                <span className={`${msg.senderName === 'Bạn' ? 'text-yellow-400' : ' text-light-100'} font-bold `}>
+                                                    {msg.senderName}
                                                 </span>
                                                 <span className="text-gray-500 text-xs">
                                                     {msg.time}
                                                 </span>
                                             </div>
-                                            <p className="text-white bg-gray-800 px-2.5 py-1.5 rounded-lg">
+                                            <p className={`text-white ${msg.message === 'đã rời phòng' || msg.message === 'đã tham gia phòng' ? 'p-0' : 'bg-gray-800 px-2.5 py-1.5'}  rounded-lg w-fit`}>
                                                 {msg.message}
                                             </p>
                                         </div>
@@ -180,57 +155,7 @@ const WatchParty = () => {
 
                 </div>
 
-                {/* Settings Modal */}
-                {
-                    isSettingsOpen && (
-                        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                            <div className="bg-dark-100 rounded-lg p-6 w-full max-w-md">
-                                <h3 className="text-white text-xl font-bold mb-4">Cài đặt phòng</h3>
 
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-gray-400 mb-2">Tên phòng</label>
-                                        <input
-                                            type="text"
-                                            defaultValue="Phòng xem phim của tôi"
-                                            className="w-full bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-light-100/30"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-gray-400 mb-2">Quyền điều khiển</label>
-                                        <select className="w-full bg-dark-200 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none">
-                                            <option>Chỉ chủ phòng</option>
-                                            <option>Tất cả thành viên</option>
-                                        </select>
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-400">Cho phép chat</span>
-                                        <button className="bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 px-3 py-1 rounded-full text-sm font-semibold">
-                                            BẬT
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-3 mt-6">
-                                    <button
-                                        onClick={() => setIsSettingsOpen(false)}
-                                        className="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"
-                                    >
-                                        Hủy
-                                    </button>
-                                    <button
-                                        onClick={() => setIsSettingsOpen(false)}
-                                        className="flex-1 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 font-bold py-2 rounded-lg hover:opacity-90 transition-opacity"
-                                    >
-                                        Lưu
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )
-                }
             </div >
         </main >
     )

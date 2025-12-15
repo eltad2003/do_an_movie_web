@@ -3,52 +3,12 @@ import { Crown, RefreshCcw, Share2, Users, WifiSync } from 'lucide-react';
 import React, { useRef, useEffect, useState } from 'react';
 import SockJS from "sockjs-client/dist/sockjs";
 import Hls from 'hls.js';
-import { toast } from 'react-toastify';
-
-const VideoSocket = ({ room, user, videoUrl }) => {
-    const videoRef = useRef(null);
-    const stompClientRef = useRef(null);
-    const [isRemoteUpdate, setIsRemoteUpdate] = useState(false);
-    const [isConnected, setIsConnected] = useState(false); // Thêm state để biết đã kết nối chưa
-    const isHost = room.hostId === user.id || room.hostName === user.name;
+import { useSocket } from '../../hooks/useSocket';
 
 
+const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUserAction, sendRequestSync }) => {
 
-    useEffect(() => {
-        // Cấu hình Client
-        const stompClient = new Client({
-            // Lưu ý: webSocketFactory nên trả về một instance mới
-            webSocketFactory: () => new SockJS(`${import.meta.env.VITE_BE}/ws-watch-party`),
-            onConnect: () => {
-                console.log('Connected to WebSocket');
-                setIsConnected(true); // Đánh dấu là đã kết nối
 
-                stompClient.subscribe(`/topic/room/${room.id}`, (message) => {
-                    const action = JSON.parse(message.body);
-                    console.log(action);
-                    handleRemoteAction(action);
-                });
-
-                sendJoinSignal(stompClient)
-            },
-            onDisconnect: () => {
-                console.log('Disconnected');
-                setIsConnected(false);
-            },
-            // Tự động kết nối lại nếu rớt mạng
-            reconnectDelay: 5000,
-        });
-
-        stompClient.activate();
-        stompClientRef.current = stompClient;
-
-        return () => {
-            // Hủy kết nối khi component unmount
-            if (stompClient.active) {
-                stompClient.deactivate();
-            }
-        };
-    }, [room.id]);
 
     // Thiết lập HLS nếu cần
     useEffect(() => {
@@ -66,130 +26,9 @@ const VideoSocket = ({ room, user, videoUrl }) => {
         }
     }, [videoUrl]);
 
-    // Hàm gửi tín hiệu JOIN
-    const sendJoinSignal = (client) => {
-        if (client && client.connected) {
-            client.publish({
-                destination: `/app/room/${room.id}/action`,
-                body: JSON.stringify({
-                    type: 'JOIN',
-                    roomId: room.id,
-                    senderId: user.id,
-                    senderName: user.name
-                })
-            });
-        }
-    };
-
-    const sendSyncSignal = () => {
-        if (stompClientRef.current && stompClientRef.current.connected) {
-            const video = videoRef.current;
-            stompClientRef.current.publish({
-                destination: `/app/room/${room.id}/action`,
-                body: JSON.stringify({
-                    type: 'SYNC',
-                    roomId: room.id,
-                    timestamp: video.currentTime,
-                    senderId: user.id,
-                    senderName: user.name,
-                    isPlaying: !video.paused
-                })
-            });
-        }
-    }
-    const sendRequestSync = () => {
-        if (stompClientRef.current && stompClientRef.current.connected) {
-            console.log("Đang yêu cầu chủ phòng đồng bộ...");
-            stompClientRef.current.publish({
-                destination: `/app/room/${room.id}/action`,
-                body: JSON.stringify({
-                    type: 'REQUEST_SYNC', // Gửi tín hiệu "Cho tôi xin thời gian chuẩn"
-                    roomId: room.id,
-                    senderId: user.id,
-                    senderName: user.name
-                })
-            });
-        }
-    };
-
-    const handleRemoteAction = (action) => {
-        if (action.senderId === user.id) return;
-        const video = videoRef.current;
-
-        switch (action.type) {
-            case 'JOIN':
-            case 'REQUEST_SYNC':
-                // Nếu mình là HOST, mình phải có trách nhiệm gửi dữ liệu chuẩn cho người mới
-                if (isHost) {
-                    console.log("Host đang gửi dữ liệu đồng bộ...");
-                    sendSyncSignal();
-                }
-                break;
-
-            case 'SYNC':
-                // Nhận dữ liệu đồng bộ 
-                setIsRemoteUpdate(true);
-                if (Math.abs(video.currentTime - action.timestamp) > 0.5) {
-                    video.currentTime = action.timestamp;
-                }
-                // Đồng bộ trạng thái Play/Pause
-                if (action.isPlaying) {
-                    video.play().catch(() => { });
-                } else {
-                    video.pause();
-                }
-                setIsRemoteUpdate(false)
-                break;
-
-            case 'PLAY':
-                setIsRemoteUpdate(true);
-                video.play().catch(() => { });
-                setTimeout(() => setIsRemoteUpdate(false), 500);
-                break;
-
-            case 'PAUSE':
-                setIsRemoteUpdate(true);
-                video.pause();
-                setTimeout(() => setIsRemoteUpdate(false), 500);
-                break;
-
-            case 'SEEK':
-                setIsRemoteUpdate(true);
-                video.currentTime = action.timestamp;
-                setTimeout(() => setIsRemoteUpdate(false), 500);
-                break;
-
-            default:
-                break;
-        }
-
-    };
-
-    const handleUserAction = (type) => {
-        if (isRemoteUpdate) return;
-
-        // 2. KIỂM TRA KẾT NỐI TRƯỚC KHI GỬI
-        // Nếu stompClient chưa tồn tại hoặc chưa kết nối thì không gửi lệnh
-        if (stompClientRef.current && stompClientRef.current.connected) {
-            const video = videoRef.current;
-            stompClientRef.current.publish({
-                destination: `/app/room/${room.id}/action`,
-                body: JSON.stringify({
-                    type: type,
-                    roomId: room.id,
-                    timestamp: video.currentTime,
-                    senderId: user.id,
-                    senderName: user.name
-                })
-            });
-        } else {
-            console.warn("Socket chưa kết nối, không thể gửi lệnh:", type);
-        }
-    };
 
     return (
         <div className='w-full aspect-video relative'>
-            {/* Hiển thị trạng thái kết nối để debug */}
             {isConnected ? (
                 <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -242,7 +81,6 @@ const VideoSocket = ({ room, user, videoUrl }) => {
                         </h2>
                     </div>
 
-                    {/* Host Controls */}
                     {isHost && (
                         <div className="flex items-center gap-2">
                             <span className="bg-yellow-300 text-dark-100 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">

@@ -73,7 +73,7 @@ const Navbar = () => {
                 )}
             </div>
             {isOpenProfile && (
-                <div className='absolute top-full right-0 m-1 flex flex-col bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
+                <div className='absolute top-full right-0 m-1 w-[250px] flex flex-col bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
                     <p className='mb-2 text-white p-1 border-b-2 border-gray-700' title={user.user.name}>{user.user.name}</p>
                     <Link to={ROUTES.PROFILE} className='inline-flex gap-4 text-white hover:text-light-100 hover:bg-gray-800 p-1.5 rounded-lg mb-3'><UserPen />Hồ sơ</Link>
                     {user && user.user.roleName === 'ROLE_ADMIN' && (
