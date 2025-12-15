@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
-import { Eye, Trash2, Lock, Globe, Users, Clock, Search } from 'lucide-react'
+import { Eye, Trash2, Lock, Globe, Users, Clock, Search, Info } from 'lucide-react'
 import { useWatchRoom } from '../../hooks/useWatchRoom'
-import { formatDate } from '../../utils/helpers'
+import { formatDate, handleCopy } from '../../utils/helpers'
 import { Link } from 'react-router-dom'
 
 const ManageRooms = () => {
@@ -127,14 +127,15 @@ const ManageRooms = () => {
                                                     <p className="font-semibold text-gray-800 line-clamp-1">
                                                         {room.title}
                                                     </p>
-                                                    <p className="text-xs text-gray-500 mt-1">
+                                                    <p className="text-xs text-gray-500 mt-1" onClick={() => handleCopy(room.id)} title={room.id}>
                                                         ID: {room.id.substring(0, 8)}...
                                                     </p>
-                                                    <div className="flex items-center gap-2 mt-1">
+                                                    <div className="flex items-center gap-2 mt-2">
                                                         {room.hasPassword ? (
-                                                            <span className="inline-flex items-center gap-1 text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded" title={room.password}>
+                                                            <span className="relative inline-flex items-center gap-1 text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded" title={`Mật khẩu: ${room.password}`}>
                                                                 <Lock className="w-3 h-3" />
                                                                 Riêng tư
+                                                                <Info size={16} className='absolute -top-2 -right-2 ' />
                                                             </span>
                                                         ) : (
                                                             <span className="inline-flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
@@ -169,7 +170,7 @@ const ManageRooms = () => {
                                         <td className='px-4 py-4 text-center'>
                                             {room.active ? (
                                                 <span className="inline-block px-3 py-1 bg-green-600 text-green-100 text-xs font-semibold rounded-full">
-                                                    Hoạt động
+                                                    Đang chiếu
                                                 </span>
                                             ) : (
                                                 <span className="inline-block px-3 py-1 bg-red-700 text-red-100 text-xs font-semibold rounded-full">
@@ -196,23 +197,13 @@ const ManageRooms = () => {
 
                                         {/* Actions */}
                                         <td className='px-4 py-4'>
-                                            <div className="flex items-center justify-center gap-2">
-                                                <Link
-                                                    to={`/xem-chung/${room.id}`}
-                                                    target="_blank"
-                                                    className='p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700s inline-flex items-center gap-1 text-sm'
-                                                >
-                                                    <Eye size={16} />
-                                                    Xem
-                                                </Link>
-                                                <button
-                                                    onClick={() => handleDeleteRoom(room.id)}
-                                                    className='p-2 bg-red-600 text-white rounded-lg hover:bg-red-700s inline-flex items-center gap-1 text-sm'
-                                                >
-                                                    <Trash2 size={16} />
-                                                    Xóa
-                                                </button>
-                                            </div>
+                                            <button
+                                                onClick={() => handleDeleteRoom(room.id)}
+                                                className='p-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 inline-flex items-center gap-1 text-sm'
+                                            >
+                                                <Trash2 size={20} />
+                                                Xóa
+                                            </button>
                                         </td>
                                     </tr>
                                 )) : (

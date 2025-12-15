@@ -1,6 +1,7 @@
 import { Crown, RefreshCcw, Share2, Users, WifiSync } from 'lucide-react';
 import React, { useEffect } from 'react';
 import Hls from 'hls.js';
+import { handleCopy } from '../../utils/helpers';
 
 
 
@@ -62,10 +63,7 @@ const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUser
                                 </button>
                             )}
                             <button
-                                onClick={() => {
-                                    alert('Đã sao chép mã phòng!')
-                                    navigator.clipboard.writeText(room.id)
-                                }}
+                                onClick={() => handleCopy(room.id)}
                                 className="px-1.5 py-0.5 inline-flex items-center gap-2 text-sm cursor-pointer text-light-100 rounded-lg border-1 border-white" >
                                 <Share2 className="w-5 h-5" />
                                 Mời bạn bè

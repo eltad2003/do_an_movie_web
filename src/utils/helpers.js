@@ -58,3 +58,9 @@ export const formatDate = (dateString) => {
 export const back = () => {
     window.history.back()
 }
+
+export const handleCopy = (text) => {
+    alert('Đã sao chép vào bộ nhớ tạm!')
+    navigator.clipboard.writeText(text)
+
+}
