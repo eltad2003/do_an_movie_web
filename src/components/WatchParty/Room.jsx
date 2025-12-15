@@ -25,28 +25,27 @@ const Room = () => {
     })
 
     return (
-        <main >
-            <div className='relative h-[40dvh] xl:h-[60dvh] bg-cover bg-center w-full'
+        <main>
+            <div className='relative h-[50dvh] bg-cover bg-center w-full'
                 style={{
                     backgroundImage: "url(./watch-party.webp)",
                     objectFit: 'cover',
                     backgroundPosition: 'center center',
-                }}
+                }}  
             >
                 <div className="overlay-gradient" />
-
-
-                <div className='absolute inset-0 mt-5'>
-                    <h1 >
-                        Phòng xem chung
-                    </h1>
-                    <p className="text-white/50 text-center mx-auto text-sm md:text-base max-w-md mt-2">
-                        Tham gia hoặc tạo phòng để xem phim cùng bạn bè. Chia sẻ cảm xúc và thảo luận
+                <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/20 to-transparent'></div>
+                <div className='absolute inset-0 bg-gradient-to-l from-primary via-primary/20 to-transparent'></div>
+                <div className='absolute inset-0 mt-5 '>
+                    <h1 className='text-white/80'> Phòng xem chung </h1>
+                    <p className="text-white/60 text-center mx-auto text-sm md:text-base max-w-md mt-2">
+                        Tham gia hoặc tạo phòng để xem phim cùng bạn bè. Chia sẻ cảm xúc và thảo luận về bộ phim ngay trong phòng chat!
                     </p>
                 </div>
             </div>
-            <div className="wrapper">
+            <div className="wrapper" >
                 {/* Controls */}
+
                 <section className="my-8">
                     <div className="flex gap-3 items-center ">
 

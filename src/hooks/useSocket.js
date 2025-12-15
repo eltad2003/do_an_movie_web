@@ -154,7 +154,7 @@ export const useSocket = (room, user) => {
                 } else {
                     video.pause();
                 }
-                setIsRemoteUpdate(false)
+                setTimeout(() => setIsRemoteUpdate(false), 500);
                 break;
 
             case 'PLAY':
@@ -172,6 +172,11 @@ export const useSocket = (room, user) => {
             case 'SEEK':
                 setIsRemoteUpdate(true);
                 video.currentTime = action.timestamp;
+                if (!action.isPlaying) {
+                    video.play().catch(() => { });
+                } else {
+                    video.pause();
+                }
                 setTimeout(() => setIsRemoteUpdate(false), 500);
                 break;
             case 'CHAT':

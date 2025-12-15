@@ -7,7 +7,7 @@ const MovieCard = ({ movie: { id, name, posterUrl, originName, year, slug, ratin
     const { isFavorite, addFavorite, deleteFavorite } = useFavorite(id)
 
     return (
-        <div className='relative rounded-xl bg-dark-100 group transition-all duration-300 cursor-pointer group'>
+        <div className='relative rounded-xl bg-dark-200 group transition-all duration-300 cursor-pointer group'>
             <Link to={`/phim/${slug}`} className='aspect-[2/3] block overflow-hidden '>
                 <img
                     src={posterUrl} alt="poster"

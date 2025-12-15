@@ -67,7 +67,7 @@ const Navbar = () => {
                 />
 
                 {user ? <Type to={ROUTES.ROOMS} label="Xem chung" /> : (
-                    <div className='text-lg text-gradient hover:text-light-200 transition-colors cursor-pointer' onClick={() => toast.error('Vui lòng đăng nhập để sử dụng tính năng này')}>
+                    <div className='text-lg hover:text-light-100 transition-colors cursor-pointer' onClick={() => toast.error('Vui lòng đăng nhập để sử dụng tính năng này')}>
                         Xem chung
                     </div>
                 )}

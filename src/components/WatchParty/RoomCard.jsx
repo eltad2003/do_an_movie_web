@@ -41,7 +41,7 @@ const RoomCard = ({ room }) => {
     }
 
     return (
-        <div className={`bg-dark-100 ${!room.active && 'opacity-50'} rounded-2xl mb-10`}>
+        <div className={`bg-dark-200 ${!room.active && 'opacity-50'} rounded-2xl mb-10`}>
             {/* Movie Poster & Info */}
             <div className="relative">
                 <img
@@ -144,7 +144,7 @@ const RoomCard = ({ room }) => {
                     ) : (
                         <>
                             {/* Show participants when NOT typing password */}
-                            {room.active ? (
+                            {room.active && room.currentViewers > 0 ? (
                                 <div className="flex items-center gap-2 flex-1">
                                     <Users className="w-4 h-4 text-gray-400" />
                                     <span className="text-gray-400 text-sm">

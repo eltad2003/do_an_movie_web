@@ -112,19 +112,27 @@ const WatchParty = () => {
                                 </div>
                                 {/* Messages */}
                                 <div className=" overflow-y-auto px-6 py-3 space-y-3 flex-1 h-[100px]">
-                                    {messages.length > 0 ? messages.map((msg) => (
-                                        <div key={msg.id} className="flex flex-col">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <span className={`${msg.senderName === 'Bạn' ? 'text-yellow-400' : ' text-light-100'} font-bold `}>
-                                                    {msg.senderName}
-                                                </span>
-                                                <span className="text-gray-500 text-xs">
-                                                    {msg.time}
-                                                </span>
-                                            </div>
-                                            <p className={`text-white ${msg.message === 'đã rời phòng' || msg.message === 'đã tham gia phòng' ? 'p-0' : 'bg-gray-800 px-2.5 py-1.5'}  rounded-lg w-fit`}>
-                                                {msg.message}
-                                            </p>
+                                    {messages.length > 0 ? messages.map((msg, index) => (
+                                        <div key={index} className="flex flex-col">
+                                            {msg.message === 'đã rời phòng' || msg.message === 'đã tham gia phòng' ? (
+                                                <p className="text-gray-400 text-sm italic mb-1 text-center">{msg.senderName} {msg.message}</p>
+                                            ) : (
+                                                <>
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <span className={`${msg.senderName === 'Bạn' ? 'text-yellow-400' : ' text-light-100'} font-bold `}>
+                                                            {msg.senderName}
+                                                        </span>
+                                                        <span className="text-gray-500 text-xs">
+                                                            {msg.time}
+                                                        </span>
+                                                    </div>
+                                                    <p className='text-white px-2.5 py-1.5 rounded-lg w-fit bg-gray-800'>
+                                                        {msg.message}
+                                                    </p>
+
+                                                </>
+                                            )}
+
                                         </div>
                                     )) : <p className="text-gray-400 text-sm">Chưa có tin nhắn nào.</p>}
                                 </div>

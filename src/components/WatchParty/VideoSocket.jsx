@@ -1,15 +1,10 @@
-import { Client } from '@stomp/stompjs';
 import { Crown, RefreshCcw, Share2, Users, WifiSync } from 'lucide-react';
-import React, { useRef, useEffect, useState } from 'react';
-import SockJS from "sockjs-client/dist/sockjs";
+import React, { useEffect } from 'react';
 import Hls from 'hls.js';
-import { useSocket } from '../../hooks/useSocket';
+
 
 
 const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUserAction, sendRequestSync }) => {
-
-
-
     // Thiết lập HLS nếu cần
     useEffect(() => {
         const video = videoRef.current;
@@ -18,7 +13,7 @@ const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUser
             hls.loadSource(videoUrl);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                videoRef.current.play();
+                // videoRef.current.play();
             });
             return () => {
                 if (hls) hls.destroy();
