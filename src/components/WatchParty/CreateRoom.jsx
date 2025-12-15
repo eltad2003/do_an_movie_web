@@ -9,7 +9,7 @@ const CreateRoom = () => {
   const [hasPassword, setHasPassword] = useState(false);
   const navigate = useNavigate()
   const [createRoom, setCreateRoom] = useState({
-    title: 'Phòng xem phim ',
+    title: 'Cùng xem ',
     password: null,
     episodeId: episodeId
   });

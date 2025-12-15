@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useNav } from '../../hooks/useNav'
 import DropDown from './DropDown'
 import { Clock, Heart, LogOut, Menu, Shield, User, UserPen, X } from 'lucide-react'
@@ -66,17 +66,22 @@ const Navbar = () => {
                     onToggle={() => handleDropdownToggle('country')}
                 />
 
-                <Type to={ROUTES.ROOM} label="Xem chung" />
+                {user ? <Type to={ROUTES.ROOMS} label="Xem chung" /> : (
+                    <div className='text-lg text-gradient hover:text-light-200 transition-colors cursor-pointer' onClick={() => toast.error('Vui lòng đăng nhập để sử dụng tính năng này')}>
+                        Xem chung
+                    </div>
+                )}
             </div>
             {isOpenProfile && (
-                <div className='absolute top-full right-0 m-1 w-48 bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
-                    <Link to={ROUTES.PROFILE} className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><UserPen />Hồ sơ</Link>
+                <div className='absolute top-full right-0 m-1 flex flex-col bg-dark-100 rounded-lg shadow-lg p-4 z-50'>
+                    <p className='mb-2 text-white p-1 border-b-2 border-gray-700' title={user.user.name}>{user.user.name}</p>
+                    <Link to={ROUTES.PROFILE} className='inline-flex gap-4 text-white hover:text-light-100 hover:bg-gray-800 p-1.5 rounded-lg mb-3'><UserPen />Hồ sơ</Link>
                     {user && user.user.roleName === 'ROLE_ADMIN' && (
-                        <Link to="/admin" className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Shield />Quản trị</Link>
+                        <Link to="/admin" className='inline-flex gap-4 text-white hover:text-light-100 hover:bg-gray-800 p-1.5 rounded-lg mb-3'><Shield />Quản trị</Link>
                     )}
-                    <Link to={ROUTES.HISTORY} className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Clock />Lịch sử</Link>
-                    <Link to={ROUTES.FAVORITE} className='inline-flex gap-4 text-white hover:text-light-100 mb-3'><Heart />Yêu thích</Link>
-                    <Link onClick={handleLogout} className='inline-flex gap-4 text-white hover:text-light-100'><LogOut />Đăng xuất</Link>
+                    <Link to={ROUTES.HISTORY} className='inline-flex gap-4 text-white hover:text-light-100 hover:bg-gray-800 p-1.5 rounded-lg mb-3'><Clock />Lịch sử</Link>
+                    <Link to={ROUTES.FAVORITE} className='inline-flex gap-4 text-white hover:text-light-100 hover:bg-gray-800 p-1.5 rounded-lg mb-3'><Heart />Yêu thích</Link>
+                    <Link onClick={handleLogout} className='inline-flex gap-4 text-white hover:text-light-100 hover:bg-gray-800 p-1.5 rounded-lg'><LogOut />Đăng xuất</Link>
                 </div>
             )}
 
@@ -114,7 +119,7 @@ const Navbar = () => {
                         isDropdownOpen={openDropdown === 'category'}
                         onToggle={() => handleDropdownToggle('category')}
                     />
-                    <Type to={ROUTES.ROOM} label="Xem chung" />
+                    <Type to={ROUTES.ROOMS} label="Xem chung" />
                 </div>
             )}
         </nav>

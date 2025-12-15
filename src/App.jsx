@@ -43,12 +43,11 @@ const App = () => {
           <Route path={ROUTES.WATCH_MOVIE} element={< WatchMovie />} />
           <Route path={ROUTES.BY_CATEGORY} element={< ByCategory />} />
           <Route path={ROUTES.BY_COUNTRY} element={< ByCountry />} />
-
-          <Route path={ROUTES.ROOM} element={<Room />} />
-
-          <Route path="/xem-chung/tao-phong/:episodeId" element={<CreateRoom />} />
-
           <Route path={ROUTES.SEARCH} element={<SearchResults />} />
+
+          <Route path={ROUTES.ROOMS} element={<Room />} />
+          <Route path={ROUTES.CREAT_ROOM} element={<CreateRoom />} />
+
 
 
           <Route path={ROUTES.PROFILE} element={<Profile />} />
@@ -57,9 +56,11 @@ const App = () => {
 
           <Route path="*" element={<NotFound />} />
         </Route>
+
         <Route path={ROUTES.LOGIN} element={<Login />} />
         <Route path={ROUTES.REGISTER} element={<Register />} />
-        <Route path="/xem-chung/:id" element={<WatchParty />} />
+        <Route path={ROUTES.ROOM} element={<WatchParty />} />
+
         <Route element={<ProtectedRoute />}>
           <Route path={ROUTES.ADMIN} element={<AdminLayout />}>
             <Route index element={<Dashboard />} />

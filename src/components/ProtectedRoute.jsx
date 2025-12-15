@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { Outlet, useNavigate } from 'react-router-dom'
 import UnAuthorization from './Pages/UnAuthorization'
+import { ROUTES } from '../utils/constants'
+import { toast } from 'react-toastify'
 
 const ProtectedRoute = () => {
     const { user } = useContext(AuthContext)
@@ -12,7 +14,7 @@ const ProtectedRoute = () => {
 
     useEffect(() => {
         if (!user) {
-            navigate('/login')
+            toast.error('Vui lòng đăng nhập để truy cập trang quản trị')
         }
     }, [user, navigate])
 

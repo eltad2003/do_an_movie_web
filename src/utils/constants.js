@@ -15,7 +15,9 @@ export const ROUTES = {
     HISTORY: '/lich-su',
     FAVORITE: '/yeu-thich',
 
-    ROOM: '/xem-chung',
+    ROOMS: '/xem-chung',
+    ROOM: '/xem-chung/:id',
+    CREAT_ROOM: '/xem-chung/tao-phong/:episodeId',
 
     ADMIN: '/admin',
     MANAGE_MOVIES: 'quan-ly-phim',

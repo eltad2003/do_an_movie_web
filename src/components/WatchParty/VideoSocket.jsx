@@ -3,6 +3,7 @@ import { Crown, RefreshCcw, Share2, Users, WifiSync } from 'lucide-react';
 import React, { useRef, useEffect, useState } from 'react';
 import SockJS from "sockjs-client/dist/sockjs";
 import Hls from 'hls.js';
+import { toast } from 'react-toastify';
 
 const VideoSocket = ({ room, user, videoUrl }) => {
     const videoRef = useRef(null);
@@ -10,6 +11,8 @@ const VideoSocket = ({ room, user, videoUrl }) => {
     const [isRemoteUpdate, setIsRemoteUpdate] = useState(false);
     const [isConnected, setIsConnected] = useState(false); // Thêm state để biết đã kết nối chưa
     const isHost = room.hostId === user.id || room.hostName === user.name;
+
+
 
     useEffect(() => {
         // Cấu hình Client
@@ -94,6 +97,20 @@ const VideoSocket = ({ room, user, videoUrl }) => {
             });
         }
     }
+    const sendRequestSync = () => {
+        if (stompClientRef.current && stompClientRef.current.connected) {
+            console.log("Đang yêu cầu chủ phòng đồng bộ...");
+            stompClientRef.current.publish({
+                destination: `/app/room/${room.id}/action`,
+                body: JSON.stringify({
+                    type: 'REQUEST_SYNC', // Gửi tín hiệu "Cho tôi xin thời gian chuẩn"
+                    roomId: room.id,
+                    senderId: user.id,
+                    senderName: user.name
+                })
+            });
+        }
+    };
 
     const handleRemoteAction = (action) => {
         if (action.senderId === user.id) return;
@@ -101,30 +118,27 @@ const VideoSocket = ({ room, user, videoUrl }) => {
 
         switch (action.type) {
             case 'JOIN':
+            case 'REQUEST_SYNC':
                 // Nếu mình là HOST, mình phải có trách nhiệm gửi dữ liệu chuẩn cho người mới
                 if (isHost) {
-                    console.log("Người mới vào, Host đang gửi dữ liệu đồng bộ...");
+                    console.log("Host đang gửi dữ liệu đồng bộ...");
                     sendSyncSignal();
                 }
                 break;
 
             case 'SYNC':
-                // Nhận dữ liệu đồng bộ (chỉ áp dụng nếu mình lệch quá nhiều hoặc mới vào)
+                // Nhận dữ liệu đồng bộ 
                 setIsRemoteUpdate(true);
-
-                // Nhảy tới đúng giây
                 if (Math.abs(video.currentTime - action.timestamp) > 0.5) {
                     video.currentTime = action.timestamp;
                 }
-
                 // Đồng bộ trạng thái Play/Pause
                 if (action.isPlaying) {
                     video.play().catch(() => { });
                 } else {
                     video.pause();
                 }
-
-                setTimeout(() => setIsRemoteUpdate(false), 500);
+                setIsRemoteUpdate(false)
                 break;
 
             case 'PLAY':
@@ -206,11 +220,13 @@ const VideoSocket = ({ room, user, videoUrl }) => {
                     <div className='flex flex-col gap-3'>
 
                         <div className='flex items-center gap-3'>
-                            <button
-                                onClick={() => handleUserAction('SYNC')}
-                                className='inline-flex items-center gap-2 text-sm px-1.5 py-0.5 cursor-pointer text-light-100 rounded-lg border-1 border-white'>
-                                <RefreshCcw className='w-5 h-5' /> Đồng bộ
-                            </button>
+                            {!isHost && (
+                                <button
+                                    onClick={sendRequestSync}
+                                    className='inline-flex items-center gap-2 text-sm px-1.5 py-0.5 cursor-pointer text-light-100 rounded-lg border-1 border-white'>
+                                    <RefreshCcw className='w-5 h-5' /> Đồng bộ
+                                </button>
+                            )}
                             <button
                                 onClick={() => {
                                     alert('Đã sao chép mã phòng!')
