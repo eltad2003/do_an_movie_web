@@ -16,7 +16,7 @@ const ByCategory = () => {
     return (
         <main>
             {errorMessage && <p>Error: {errorMessage}</p>}
-            <div className='wrapper'>
+            <div className='wrapper mb-20'>
                 <h2 className='mt-5 mb-5'>Phim {slugCat}</h2>
                 {/* <Filter /> */}
                 <ul>

@@ -5,6 +5,7 @@ export const movieService = {
   getMovies: () => api.get(`/movies`),
   getMovieDetail: (slug) => api.get(`/movies/${slug}`),
   getComments: (movieId) => api.get(`/public/comments/movie/${movieId}`),
+  getRecommendMovies: (movieId) => api.get(`/movies/${movieId}/recommendations`),
 
   searchMovies: (query) => api.get(`/movies/search?keyword=${query}`),
   getCategories: () => api.get('/categories'),

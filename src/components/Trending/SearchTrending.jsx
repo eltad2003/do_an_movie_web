@@ -31,7 +31,7 @@ const SearchTrending = () => {
                 Tìm kiếm thịnh hành
             </h2>
 
-            <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={2000}  >
+            <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={2000} removeArrowOnDeviceType={["tablet", "mobile"]} >
                 {listMovies.map((movie) => (
                     <div key={movie.$id}>
                         <Link to={`/tim-kiem?q=${movie.searchQuery}`}>

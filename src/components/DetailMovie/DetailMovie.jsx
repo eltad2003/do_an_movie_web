@@ -6,6 +6,7 @@ import Episodes from './Episodes'
 import { useDetailMovie } from '../../hooks/useDetailMovie'
 import InfoMovie from './Info/InfoMovie'
 import Header from './Header'
+import RecommendMovies from './RecommendMovies'
 
 const DetailMovie = () => {
     const { slug } = useParams()
@@ -19,10 +20,11 @@ const DetailMovie = () => {
             {detailMovie && (
                 <div>
                     <Header detailMovie={detailMovie} episodes={episodes} movieId={detailMovie.id} />
-                    <div className='wrapper'>
+                    <div className='wrapper mb-20'>
                         <InfoMovie detailMovie={detailMovie} />
                         <Episodes episodes={episodes.sort((a, b) => a.name.localeCompare(b.name))} detailMovie={detailMovie} />
                         <Comment movieId={detailMovie.id} />
+                        <RecommendMovies movieId={detailMovie.id} />
                     </div>
                 </div>
             )}

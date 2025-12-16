@@ -311,11 +311,11 @@ const ManageMovie = () => {
                                 {filteredMovies.map((movie) => (
                                     <tr key={movie.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-3">
-                                            <div className="flex items-center">
+                                            <div className="flex items-center gap-4">
                                                 <img
                                                     src={movie.thumbUrl}
                                                     alt={movie.name}
-                                                    className="w-16 h-12 rounded object-cover mr-4"
+                                                    className="w-21 h-15 rounded object-cover"
 
                                                 />
                                                 <div>

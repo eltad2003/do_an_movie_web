@@ -30,7 +30,7 @@ const MovieTrending = () => {
     }
 
     return (
-        <Carousel responsive={responsive}  >
+        <Carousel responsive={responsive} removeArrowOnDeviceType={["tablet", "mobile"]} showDots={true} infinite={true}  >
             {trendingMovies.map((detailMovie) => (
                 <div className='relative w-full h-[80dvh] xl:h-[90dvh] mb-20 overflow-hidden group cursor-grab' key={detailMovie.id}>
 

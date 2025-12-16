@@ -56,7 +56,7 @@ const Comment = ({ movieId }) => {
     }, [movieId])
 
     return (
-        <section className='section mb-40'>
+        <section className='section'>
             <h2 >Bình luận</h2>
 
             {/* comment form */}
