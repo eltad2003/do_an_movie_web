@@ -67,7 +67,7 @@ const Navbar = () => {
                 />
 
                 {user ? <Type to={ROUTES.ROOMS} label="Xem chung" /> : (
-                    <div className='text-lg hover:text-light-100 transition-colors cursor-pointer' onClick={() => toast.error('Vui lòng đăng nhập để sử dụng tính năng này')}>
+                    <div className='text-gradient text-lg hover:text-light-100 transition-colors cursor-pointer' onClick={() => toast.error('Vui lòng đăng nhập để sử dụng tính năng này')}>
                         Xem chung
                     </div>
                 )}
@@ -85,7 +85,7 @@ const Navbar = () => {
                 </div>
             )}
 
-            {/* mobile */}
+            {/* --------------------mobile-------------------------------------- */}
             <div className='lg:hidden relative flex items-center gap-4'>
                 <button onClick={() => setIsOpenSideBar(!isOpenSideBar)} className='focus:outline-none'>
                     {isOpenSideBar ? <X className='text-white' /> : <Menu className='text-white' />}
@@ -119,7 +119,11 @@ const Navbar = () => {
                         isDropdownOpen={openDropdown === 'category'}
                         onToggle={() => handleDropdownToggle('category')}
                     />
-                    <Type to={ROUTES.ROOMS} label="Xem chung" />
+                    {user ? <Type to={ROUTES.ROOMS} label="Xem chung" /> : (
+                        <div className='text-light-100  cursor-pointer' onClick={() => toast.error('Vui lòng đăng nhập để sử dụng tính năng này')}>
+                            Xem chung
+                        </div>
+                    )}
                 </div>
             )}
         </nav>

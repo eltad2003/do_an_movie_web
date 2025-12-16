@@ -9,13 +9,18 @@ const ManageCategory = () => {
   const { user } = useContext(AuthContext)
   const { categories, setCategories } = useCategories()
   const [newCategory, setNewCategory] = useState({ name: '', slug: '' })
-  // const [editingCategory, setEditingCategory] = useState()
+  const [editingCategory, setEditingCategory] = useState(null)
   const [showModal, setShowModal] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setNewCategory({ ...newCategory, [name]: value, slug: generateSlug(value) })
+    if (isEditing) {
+      setEditingCategory({ ...editingCategory, [name]: value, slug: name === 'name' ? generateSlug(value) : editingCategory.slug })
+    } else {
+      setNewCategory({ ...newCategory, [name]: value, slug: generateSlug(value) })
+    }
   }
 
   const handleAddCategory = async (e) => {
@@ -39,6 +44,38 @@ const ManageCategory = () => {
     } catch (error) {
       console.error('Error adding category:', error)
       toast.error('Thêm thể loại thất bại')
+    }
+  }
+
+  const handleEditCategory = (category) => {
+    setEditingCategory(category)
+    setIsEditing(true)
+    setShowModal(true)
+  }
+
+  const handleUpdateCategory = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BE}/admin/categories/${editingCategory.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.accessToken}`
+        },
+        body: JSON.stringify({ name: editingCategory.name, slug: editingCategory.slug })
+      })
+      if (!res.ok) {
+        throw new Error('Failed to update category')
+      }
+      const updatedCategory = await res.json()
+      setCategories(categories.map(cat => cat.id === editingCategory.id ? updatedCategory : cat))
+      setEditingCategory(null)
+      setIsEditing(false)
+      setShowModal(false)
+      toast.success('Cập nhật thể loại thành công')
+    } catch (error) {
+      console.error('Error updating category:', error)
+      toast.error('Cập nhật thể loại thất bại')
     }
   }
   const handleDeleteCategory = async (id) => {
@@ -73,7 +110,11 @@ const ManageCategory = () => {
 
       <div className='p-10 rounded-lg'>
         <button
-          onClick={() => setShowModal(!showModal)}
+          onClick={() => {
+            setIsEditing(false)
+            setNewCategory({ name: '', slug: '' })
+            setShowModal(true)
+          }}
           className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
         >
           Thêm thể loại
@@ -96,7 +137,9 @@ const ManageCategory = () => {
                   <td className='px-6 py-4'>{category.slug}</td>
                   <td className='px-6 py-4'>
                     <div className="flex items-center justify-center gap-2">
-                      <button className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
+                      <button
+                        onClick={() => handleEditCategory(category)}
+                        className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
                         <Edit size={16} />
                       </button>
                       <button
@@ -120,16 +163,16 @@ const ManageCategory = () => {
           <div className="fixed inset-0 bg-dark-100/50 flex items-center justify-center">
             <div className="bg-white rounded-lg w-96">
               <div className='bg-green-600 font-semibold text-white text-center rounded-t-lg'>
-                <h2 className="text-xl font-semibold mb-4">Thêm thể loại</h2>
+                <h2 className="text-xl font-semibold mb-4">{isEditing ? 'Chỉnh sửa thể loại' : 'Thêm thể loại'}</h2>
               </div>
 
-              <form className='p-6' onSubmit={handleAddCategory}>
+              <form className='p-6' onSubmit={isEditing ? handleUpdateCategory : handleAddCategory}>
                 <div className="mb-4">
                   <label className="block font-semibold text-gray-700 mb-2">Tên Thể Loại</label>
                   <input
                     type="text"
                     name='name'
-                    value={newCategory.name}
+                    value={isEditing ? editingCategory?.name || '' : newCategory.name}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                     onChange={handleInputChange}
                   />
@@ -139,7 +182,7 @@ const ManageCategory = () => {
                   <input
                     type="text"
                     name='slug'
-                    value={newCategory.slug}
+                    value={isEditing ? editingCategory?.slug || '' : newCategory.slug}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                     onChange={handleInputChange}
                   />
@@ -147,11 +190,15 @@ const ManageCategory = () => {
                 <div className="flex justify-end gap-2">
                   <button
                     type='submit'
-                    className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">Thêm</button>
+                    className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">{isEditing ? 'Cập nhật' : 'Thêm'}</button>
                   <button
                     type="button"
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer font-semibold bg-gray-300 rounded-lg"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => {
+                      setShowModal(false)
+                      setIsEditing(false)
+                      setEditingCategory(null)
+                    }}
                   >
                     Hủy
                   </button>

@@ -9,12 +9,18 @@ const ManageDirector = () => {
     const { user } = useContext(AuthContext)
     const { directors, setDirectors } = useDirectors()
     const [newDirector, setNewDirector] = useState({ name: '', slug: '' })
+    const [editingDirector, setEditingDirector] = useState(null)
     const [showModal, setShowModal] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
-        setNewDirector({ ...newDirector, [name]: value, slug: generateSlug(value) })
+        if (isEditing) {
+            setEditingDirector({ ...editingDirector, [name]: value, slug: name === 'name' ? generateSlug(value) : editingDirector.slug })
+        } else {
+            setNewDirector({ ...newDirector, [name]: value, slug: generateSlug(value) })
+        }
     }
 
     const handleDeleteDirector = async (id) => {
@@ -63,6 +69,38 @@ const ManageDirector = () => {
         }
     }
 
+    const handleEditDirector = (director) => {
+        setEditingDirector(director)
+        setIsEditing(true)
+        setShowModal(true)
+    }
+
+    const handleUpdateDirector = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/admin/directors/${editingDirector.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                },
+                body: JSON.stringify({ name: editingDirector.name, slug: editingDirector.slug })
+            })
+            if (!res.ok) {
+                throw new Error('Failed to update director')
+            }
+            const updatedDirector = await res.json()
+            setDirectors(directors.map(dir => dir.id === editingDirector.id ? updatedDirector : dir))
+            setEditingDirector(null)
+            setIsEditing(false)
+            setShowModal(false)
+            toast.success('Cập nhật đạo diễn thành công')
+        } catch (error) {
+            console.error('Error updating director:', error)
+            toast.error('Cập nhật đạo diễn thất bại')
+        }
+    }
+
 
 
     return (
@@ -72,7 +110,11 @@ const ManageDirector = () => {
             </div>
             <div className='p-10 rounded-lg'>
                 <button
-                    onClick={() => setShowModal(!showModal)}
+                    onClick={() => {
+                        setIsEditing(false)
+                        setNewDirector({ name: '', slug: '' })
+                        setShowModal(true)
+                    }}
                     className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
                 >
                     Thêm đạo diễn
@@ -95,7 +137,9 @@ const ManageDirector = () => {
                                     <td className='px-6 py-4'>{director.slug}</td>
                                     <td className='px-6 py-4'>
                                         <div className="flex items-center justify-center gap-2">
-                                            <button className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
+                                            <button
+                                                onClick={() => handleEditDirector(director)}
+                                                className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
                                                 <Edit size={16} />
                                             </button>
                                             <button
@@ -119,17 +163,17 @@ const ManageDirector = () => {
 
                         <div className="bg-white rounded-lg w-96">
                             <div className='bg-green-600 font-semibold text-white text-center rounded-t-lg'>
-                                <h2 className="text-xl font-semibold mb-4">Thêm đạo diễn</h2>
+                                <h2 className="text-xl font-semibold mb-4">{isEditing ? 'Chỉnh sửa đạo diễn' : 'Thêm đạo diễn'}</h2>
                             </div>
 
-                            <form className='p-6' onSubmit={addDirector}>
+                            <form className='p-6' onSubmit={isEditing ? handleUpdateDirector : addDirector}>
                                 <div className="mb-4">
                                     <label className="block font-semibold text-gray-700 mb-2">Tên đạo diễn</label>
                                     <input
                                         type="text"
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         name='name'
-                                        value={newDirector.name}
+                                        value={isEditing ? editingDirector?.name || '' : newDirector.name}
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -139,16 +183,20 @@ const ManageDirector = () => {
                                         type="text"
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         name='slug'
-                                        value={newDirector.slug}
+                                        value={isEditing ? editingDirector?.slug || '' : newDirector.slug}
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="flex justify-end gap-2">
-                                    <button className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">Thêm</button>
+                                    <button type="submit" className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">{isEditing ? 'Cập nhật' : 'Thêm'}</button>
                                     <button
-                                        type="submit"
+                                        type="button"
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer font-semibold bg-gray-300 rounded-lg"
-                                        onClick={() => setShowModal(false)}
+                                        onClick={() => {
+                                            setShowModal(false)
+                                            setIsEditing(false)
+                                            setEditingDirector(null)
+                                        }}
                                     >
                                         Hủy
                                     </button>

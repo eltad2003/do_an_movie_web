@@ -9,13 +9,19 @@ const ManageCountry = () => {
     const { user } = useContext(AuthContext)
     const { countries, setCountries } = useCountries()
     const [newCategory, setNewCategory] = useState({ name: '', slug: '' })
+    const [editingCountry, setEditingCountry] = useState(null)
     const [showModal, setShowModal] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
 
 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
-        setNewCategory({ ...newCategory, [name]: value, slug: generateSlug(value) })
+        if (isEditing) {
+            setEditingCountry({ ...editingCountry, [name]: value, slug: name === 'name' ? generateSlug(value) : editingCountry.slug })
+        } else {
+            setNewCategory({ ...newCategory, [name]: value, slug: generateSlug(value) })
+        }
     }
 
     const handleAddCountry = async (e) => {
@@ -39,6 +45,38 @@ const ManageCountry = () => {
         } catch (error) {
             console.error('Error adding country:', error)
             toast.error('Thêm quốc gia thất bại')
+        }
+    }
+
+    const handleEditCountry = (country) => {
+        setEditingCountry(country)
+        setIsEditing(true)
+        setShowModal(true)
+    }
+
+    const handleUpdateCountry = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/admin/countries/${editingCountry.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                },
+                body: JSON.stringify({ name: editingCountry.name, slug: editingCountry.slug })
+            })
+            if (!res.ok) {
+                throw new Error('Failed to update country')
+            }
+            const updatedCountry = await res.json()
+            setCountries(countries.map(c => c.id === editingCountry.id ? updatedCountry : c))
+            setEditingCountry(null)
+            setIsEditing(false)
+            setShowModal(false)
+            toast.success('Cập nhật quốc gia thành công')
+        } catch (error) {
+            console.error('Error updating country:', error)
+            toast.error('Cập nhật quốc gia thất bại')
         }
     }
     const handleDeleteCountry = async (id) => {
@@ -72,7 +110,11 @@ const ManageCountry = () => {
 
             <div className='p-10 rounded-lg'>
                 <button
-                    onClick={() => setShowModal(!showModal)}
+                    onClick={() => {
+                        setIsEditing(false)
+                        setNewCategory({ name: '', slug: '' })
+                        setShowModal(true)
+                    }}
                     className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
                 >
                     Thêm quốc gia
@@ -95,7 +137,9 @@ const ManageCountry = () => {
                                     <td className='px-6 py-4'>{country.slug}</td>
                                     <td className='px-6 py-4'>
                                         <div className="flex items-center justify-center gap-2">
-                                            <button className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
+                                            <button
+                                                onClick={() => handleEditCountry(country)}
+                                                className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
                                                 <Edit size={16} />
                                             </button>
                                             <button
@@ -119,16 +163,16 @@ const ManageCountry = () => {
                     <div className="fixed inset-0 bg-dark-100/50 flex items-center justify-center">
                         <div className="bg-white rounded-lg w-96">
                             <div className='bg-green-600 font-semibold text-white text-center rounded-t-lg'>
-                                <h2 className="text-xl font-semibold mb-4">Thêm quốc gia</h2>
+                                <h2 className="text-xl font-semibold mb-4">{isEditing ? 'Chỉnh sửa quốc gia' : 'Thêm quốc gia'}</h2>
                             </div>
 
-                            <form className='p-6' onSubmit={handleAddCountry}>
+                            <form className='p-6' onSubmit={isEditing ? handleUpdateCountry : handleAddCountry}>
                                 <div className="mb-4">
                                     <label className="block font-semibold text-gray-700 mb-2">Tên quốc gia</label>
                                     <input
                                         type="text"
                                         name='name'
-                                        value={newCategory.name}
+                                        value={isEditing ? editingCountry?.name || '' : newCategory.name}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         onChange={handleInputChange}
                                     />
@@ -138,7 +182,7 @@ const ManageCountry = () => {
                                     <input
                                         type="text"
                                         name='slug'
-                                        value={newCategory.slug}
+                                        value={isEditing ? editingCountry?.slug || '' : newCategory.slug}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         onChange={handleInputChange}
                                     />
@@ -146,11 +190,15 @@ const ManageCountry = () => {
                                 <div className="flex justify-end gap-2">
                                     <button
                                         type='submit'
-                                        className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">Thêm</button>
+                                        className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">{isEditing ? 'Cập nhật' : 'Thêm'}</button>
                                     <button
                                         type="button"
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer font-semibold bg-gray-300 rounded-lg"
-                                        onClick={() => setShowModal(false)}
+                                        onClick={() => {
+                                            setShowModal(false)
+                                            setIsEditing(false)
+                                            setEditingCountry(null)
+                                        }}
                                     >
                                         Hủy
                                     </button>

@@ -9,11 +9,17 @@ const ManageActor = () => {
     const { user } = useContext(AuthContext)
     const { actors, setActors } = useActors()
     const [newActor, setNewActor] = useState({ name: '', slug: '' })
+    const [editingActor, setEditingActor] = useState(null)
     const [showModal, setShowModal] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
-        setNewActor({ ...newActor, [name]: value, slug: generateSlug(value) })
+        if (isEditing) {
+            setEditingActor({ ...editingActor, [name]: value, slug: name === 'name' ? generateSlug(value) : editingActor.slug })
+        } else {
+            setNewActor({ ...newActor, [name]: value, slug: generateSlug(value) })
+        }
     }
 
     const handleDeleteActor = async (id) => {
@@ -62,6 +68,38 @@ const ManageActor = () => {
         }
     }
 
+    const handleEditActor = (actor) => {
+        setEditingActor(actor)
+        setIsEditing(true)
+        setShowModal(true)
+    }
+
+    const handleUpdateActor = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/admin/actors/${editingActor.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`
+                },
+                body: JSON.stringify({ name: editingActor.name, slug: editingActor.slug })
+            })
+            if (!res.ok) {
+                throw new Error('Failed to update actor')
+            }
+            const updatedActor = await res.json()
+            setActors(actors.map(act => act.id === editingActor.id ? updatedActor : act))
+            setEditingActor(null)
+            setIsEditing(false)
+            setShowModal(false)
+            toast.success('Cập nhật diễn viên thành công')
+        } catch (error) {
+            console.error('Error updating actor:', error)
+            toast.error('Cập nhật diễn viên thất bại')
+        }
+    }
+
 
 
     return (
@@ -71,7 +109,11 @@ const ManageActor = () => {
             </div>
             <div className='p-10 rounded-lg'>
                 <button
-                    onClick={() => setShowModal(!showModal)}
+                    onClick={() => {
+                        setIsEditing(false)
+                        setNewActor({ name: '', slug: '' })
+                        setShowModal(true)
+                    }}
                     className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
                 >
                     Thêm diễn viên
@@ -94,7 +136,9 @@ const ManageActor = () => {
                                     <td className='px-6 py-4'>{actor.slug}</td>
                                     <td className='px-6 py-4'>
                                         <div className="flex items-center justify-center gap-2">
-                                            <button className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
+                                            <button
+                                                onClick={() => handleEditActor(actor)}
+                                                className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
                                                 <Edit size={16} />
                                             </button>
                                             <button
@@ -118,17 +162,17 @@ const ManageActor = () => {
 
                         <div className="bg-white rounded-lg w-96">
                             <div className='bg-green-600 font-semibold text-white text-center rounded-t-lg'>
-                                <h2 className="text-xl font-semibold mb-4">Thêm diễn viên</h2>
+                                <h2 className="text-xl font-semibold mb-4">{isEditing ? 'Chỉnh sửa diễn viên' : 'Thêm diễn viên'}</h2>
                             </div>
 
-                            <form className='p-6' onSubmit={addActor}>
+                            <form className='p-6' onSubmit={isEditing ? handleUpdateActor : addActor}>
                                 <div className="mb-4">
                                     <label className="block font-semibold text-gray-700 mb-2">Tên diễn viên</label>
                                     <input
                                         type="text"
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         name='name'
-                                        value={newActor.name}
+                                        value={isEditing ? editingActor?.name || '' : newActor.name}
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -138,16 +182,20 @@ const ManageActor = () => {
                                         type="text"
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                         name='slug'
-                                        value={newActor.slug}
+                                        value={isEditing ? editingActor?.slug || '' : newActor.slug}
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="flex justify-end gap-2">
-                                    <button className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">Thêm</button>
+                                    <button type="submit" className="cursor-pointer hover:bg-green-700 px-4 py-2 bg-green-600 font-semibold text-white rounded-lg">{isEditing ? 'Cập nhật' : 'Thêm'}</button>
                                     <button
-                                        type="submit"
+                                        type="button"
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer font-semibold bg-gray-300 rounded-lg"
-                                        onClick={() => setShowModal(false)}
+                                        onClick={() => {
+                                            setShowModal(false)
+                                            setIsEditing(false)
+                                            setEditingActor(null)
+                                        }}
                                     >
                                         Hủy
                                     </button>

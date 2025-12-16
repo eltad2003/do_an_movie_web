@@ -135,7 +135,7 @@ const ManageRooms = () => {
                                                             <span className="relative inline-flex items-center gap-1 text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded" title={`Mật khẩu: ${room.password}`}>
                                                                 <Lock className="w-3 h-3" />
                                                                 Riêng tư
-                                                                <Info size={16} className='absolute -top-2 -right-2 ' />
+                                                                <Info size={14} className='absolute -top-1.5 -right-1.5' />
                                                             </span>
                                                         ) : (
                                                             <span className="inline-flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
