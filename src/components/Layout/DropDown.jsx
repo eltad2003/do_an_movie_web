@@ -18,13 +18,13 @@ const DropDown = ({ text, data, isDropdownOpen, onToggle, slug }) => {
             </button>
 
             {isDropdownOpen && (
-                <div className='absolute p-2 top-full left-0 right-0 z-50 bg-dark-100  rounded-lg mt-3 grid grid-cols-3 lg:grid-cols-4 md:max-w-md lg:w-[620px] overflow-y-auto '>
+                <div className='absolute p-3 top-full left-0 right-0 z-50 bg-dark-200  rounded-lg mt-1 grid grid-cols-3 lg:grid-cols-4 md:max-w-md lg:w-[670px] overflow-y-auto '>
                     {data && data.length > 0 ? (
                         data.map((item) => (
                             <Link
                                 key={item.slug}
                                 to={`/${slug}/${item.slug}`}
-                                className='block p-2 text-white hover:text-light-100 hover:bg-gray-700/50 transition-colors rounded'
+                                className=' p-2 text-white/80 hover:text-light-100 hover:bg-gray-700/50 transition-colors rounded-lg'
                                 onClick={closeDropdown}
                             >
                                 {item.name}

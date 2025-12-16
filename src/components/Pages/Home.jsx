@@ -17,38 +17,40 @@ const Home = () => {
     const { listMovies, totalPages, isLoading, errorMessage } = useMovies(currentPage)
 
     return (
-        <main >
-            {/* <div className='pattern' /> */}
+        <>
+            <main >
+                {/* <div className='pattern' /> */}
 
-            <div >
-                <MovieTrending />
-                <Search />
-                <SearchTrending />
-                {/* all movie */}
-                <section className='p-6'>
-                    <h2 >Danh sách phim mới</h2>
-                    {isLoading ? (
-                        <Skeleton />
-                    ) : errorMessage ? (
-                        <p className="text-red-500">{errorMessage}</p>
-                    ) : (
-                        <ul className='mb-20'>
-                            {listMovies.map((movie) => (
-                                <MovieCard key={movie.id} movie={movie} />
-                            ))}
-                        </ul>
-                    )}
-                    {totalPages > 1 && (
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            setCurrentPage={setCurrentPage}
-                        />
-                    )}
-                </section>
+                <div >
+                    <MovieTrending />
+                    <Search />
+                    <SearchTrending />
+                    {/* all movie */}
+                    <section className='p-6'>
+                        <h2 >Danh sách phim mới</h2>
+                        {isLoading ? (
+                            <Skeleton />
+                        ) : errorMessage ? (
+                            <p className="text-red-500">{errorMessage}</p>
+                        ) : (
+                            <ul className='mb-20'>
+                                {listMovies.map((movie) => (
+                                    <MovieCard key={movie.id} movie={movie} />
+                                ))}
+                            </ul>
+                        )}
+                        {totalPages > 1 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        )}
+                    </section>
 
-            </div>
-        </main>
+                </div>
+            </main>
+        </>
     )
 }
 
