@@ -49,7 +49,7 @@ const MovieTrending = () => {
                     </div>
 
                     {/* Content */}
-                    <div className='absolute bottom-2 xl:bottom-15 left-0 flex items-center md:ml-3'>
+                    <div className='absolute bottom-2 xl:bottom-15 left-0 flex items-center '>
                         <div className='container mx-auto px-5'>
                             <div className='max-w-2xl space-y-2 md:space-y-6'>
                                 <h1 className='text-start md:text-3xl lg:text-4xl'>
@@ -100,7 +100,7 @@ const MovieTrending = () => {
                                     </Link>
                                     <Link
                                         to={`/phim/${detailMovie.slug}`}
-                                        className='flex items-center gap-2 px-4 py-3 bg-white/10 backdrop-blur-sm hover:text-purple-400 text-white font-semibold rounded-lg border-2 border-white/30 transition-colors'
+                                        className='flex items-center gap-2 px-4 py-3 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-lg border-2 border-white/50'
                                     >
                                         <Info size={20} />
                                         Chi tiết

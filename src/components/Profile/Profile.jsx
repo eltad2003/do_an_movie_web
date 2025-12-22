@@ -83,6 +83,14 @@ const Profile = () => {
                         <h2>Thông tin cơ bản</h2>
                     </div>
                     <div className="space-y-6">
+                        <div className='flex items-center justify-center'>
+                            <img
+                                src={`https://i.pravatar.cc/150?u=${userInfo.id}`}
+                                alt={userInfo.name}
+                                className="rounded-full border-3 border-gray-200 w-32 h-32"
+                            />
+                        </div>
+
                         <div>
                             <label className="block text-sm font-semibold text-light-100 mb-2">
                                 Tên đăng nhập
