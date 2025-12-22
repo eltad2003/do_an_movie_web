@@ -18,7 +18,11 @@ const ManageUser = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [filterRole, setFilterRole] = useState('ALL')
     const [selectedUsers, setSelectedUsers] = useState([])
+    const [pageData, setPageData] = useState([])
 
+    const handlePageChange = (currentData, currentPage) => {
+        setPageData(currentData)
+    }
 
     const fetchAllUser = async () => {
         try {
@@ -129,7 +133,7 @@ const ManageUser = () => {
             <div className="p-10">
                 {/* Search and Filter Bar */}
                 <div className="mb-6">
-                    <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                    <div className="flex gap-4 items-center">
                         {/* Search */}
                         <div className="relative flex-1 max-w-md">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -211,7 +215,7 @@ const ManageUser = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-300">
-                                {filteredUsers.map(user => (
+                                {filteredUsers.length > 0 && filteredUsers.map(user => (
                                     <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-4 py-4">
                                             <input
@@ -282,23 +286,9 @@ const ManageUser = () => {
                 </div>
 
                 {/* Pagination */}
-                <div className="mt-6 flex items-center justify-between">
-                    <div className="text-sm text-gray-700">
-                        Hiển thị <span className="">{filteredUsers.length}</span> trên tổng số{' '}
-                        <span className="">{users.length}</span> người dùng
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <button className="px-3 py-2 text-sm  text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                            Trước
-                        </button>
-                        <button className="px-3 py-2 text-sm  text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
-                            1
-                        </button>
-                        <button className="px-3 py-2 text-sm  text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                            Sau
-                        </button>
-                    </div>
-                </div>
+                {users.length > 9 && (
+                    <Pagination data={filteredUsers} onPageChange={handlePageChange} />
+                )}
             </div>
         </div>
     )

@@ -5,12 +5,19 @@ import { Eye, Trash2, Lock, Globe, Users, Clock, Search, Info } from 'lucide-rea
 import { useWatchRoom } from '../../hooks/useWatchRoom'
 import { formatDate, handleCopy } from '../../utils/helpers'
 import { Link } from 'react-router-dom'
+import Pagination from '../UI/Pagination'
 
 const ManageRooms = () => {
     const { user } = useContext(AuthContext)
     const { rooms, loading } = useWatchRoom()
     const [searchQuery, setSearchQuery] = useState('')
     const [filterType, setFilterType] = useState('all')
+    const [pageData, setPageData] = useState([])
+
+    const handlePageChange = (currentData, currentPage) => {
+        setPageData(currentData)
+    }
+
     const handleDeleteRoom = async (id) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa phòng này không?')) {
             try {
@@ -110,7 +117,7 @@ const ManageRooms = () => {
                                 </tr>
                             </thead>
                             <tbody className='divide-y divide-gray-200'>
-                                {filteredRooms.length > 0 ? filteredRooms.map((room) => (
+                                {filteredRooms.length > 0 ? pageData.map((room) => (
                                     <tr key={room.id} className='hover:bg-gray-50s'>
                                         {/* Room Info */}
                                         <td className='p-3'>
@@ -221,7 +228,9 @@ const ManageRooms = () => {
                         </table>
                     </div>
                 </div>
-
+                {rooms.length > 9 && (
+                    <Pagination data={filteredRooms} onPageChange={handlePageChange} />
+                )}
 
             </div>
         </div>

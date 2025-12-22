@@ -20,125 +20,16 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../../context/AuthContext'
 import Loading from '../../UI/Loading'
+import Pagination from '../../UI/Pagination'
 
 const ManageMovie = () => {
-    // const [movies, setMovies] = useState([
-    //     {
-    //         id: "15341840eedadf2f5",
-    //         name: "Biệt Đội Siêu Anh Hùng 4: Hồi Kết",
-    //         origin_name: "Avengers: Endgame",
-    //         slug: "biet-doi-sieu-anh-hung-4-hoi-ket",
-    //         type: "Phim bộ",
-    //         description: "Sau những sự kiện tàn khốc trong Infinity War...",
-    //         poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-    //         thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-    //         trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
-    //         duration: "2 tiếng 36 phút",
-    //         director: ["Anthony Russo", "Joe Russo"],
-    //         actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
-    //         country: "Mỹ",
-    //         subtitle: true,
-    //         year: 2019,
-    //         category: [
-    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
-    //         ],
-    //         rating: 8.4,
-    //         views: 1250000,
-    //         status: "released",
-    //         created_at: "2024-01-15",
-    //         updated_at: "2024-01-20"
-    //     },
-    //     {
-    //         id: "25341840eedadf2f6",
-    //         name: "Spider-Man: No Way Home",
-    //         origin_name: "Spider-Man: No Way Home",
-    //         slug: "spider-man-no-way-home",
-    //         type: "Phim lẻ",
-    //         description: "Peter Parker phải đối mặt với những hậu quả...",
-    //         poster_url: "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-    //         thumb_url: "https://image.tmdb.org/t/p/w200/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-    //         trailer_url: "https://www.youtube.com/watch?v=JfVOs4VSpmA",
-    //         duration: "2 tiếng 28 phút",
-    //         director: ["Jon Watts"],
-    //         actors: ["Tom Holland", "Zendaya", "Benedict Cumberbatch"],
-    //         country: "Mỹ",
-    //         subtitle: true,
-    //         year: 2021,
-    //         category: [
-    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" },
-    //         ],
-    //         rating: 8.2,
-    //         views: 980000,
-    //         status: "released",
-    //         created_at: "2024-01-10",
-    //         updated_at: "2024-01-15"
-    //     },
-    //     {
-    //         id: "35341840eedadf2f7",
-    //         name: "The Dark Knight",
-    //         origin_name: "The Dark Knight",
-    //         slug: "the-dark-knight",
-    //         type: "Phim lẻ",
-    //         description: "Batman phải đối mặt với Joker...",
-    //         poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-    //         thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-    //         trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
-    //         duration: "2 tiếng 36 phút",
-    //         director: ["Anthony Russo", "Joe Russo"],
-    //         actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
-    //         country: "Mỹ",
-    //         subtitle: true,
-    //         year: 2019,
-    //         category: [
-    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
-    //         ],
-    //         rating: 8.4,
-    //         views: 1250000,
-    //         status: "released",
-    //         created_at: "2024-01-15",
-    //         updated_at: "2024-01-20"
-    //     },
-    //     {
-    //         id: "45341840eedadf2f8",
-    //         name: "Ghost in the Shell",
-    //         origin_name: "Ghost in the Shell",
-    //         slug: "ghost-in-the-shell",
-    //         type: "Phim lẻ",
-    //         description: "Ghost in the Shell phải đối mặt với những hậu quả...",
-    //         poster_url: "https://image.tmdb.org/t/p/w500/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-    //         thumb_url: "https://image.tmdb.org/t/p/w200/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg",
-    //         trailer_url: "https://www.youtube.com/watch?v=TcMBFSGVi1c",
-    //         duration: "2 tiếng 36 phút",
-    //         director: ["Anthony Russo", "Joe Russo"],
-    //         actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
-    //         country: "Mỹ",
-    //         subtitle: true,
-    //         year: 2019,
-    //         category: [
-    //             { "id": "5e0b6c4b5c3c4a0017b2c123", "name": "Hành Động", "slug": "hanh-dong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c124", "name": "Viễn Tưởng", "slug": "vien-tuong" },
-    //             { "id": "5e0b6c4b5c3c4a0017b2c125", "name": "Phiêu Lưu", "slug": "phieu-luu" }
-    //         ],
-    //         rating: 8.4,
-    //         views: 1250000,
-    //         status: "released",
-    //         created_at: "2024-01-15",
-    //         updated_at: "2024-01-20"
-    //     }
-    // ])
     const { user } = useContext(AuthContext)
     const [movies, setMovies] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [filterStatus, setFilterStatus] = useState('ALL')
     const [filterYear, setFilterYear] = useState('ALL')
     const [showAddMovie, setShowAddMovie] = useState(false)
-
+    const [pageData, setPageData] = useState([])
 
 
     const filteredMovies = movies.filter(movie => {
@@ -149,6 +40,10 @@ const ManageMovie = () => {
 
         return matchSearch && matchStatus && matchYear
     })
+
+    const handlePageChange = (currentData, currentPage) => {
+        setPageData(currentData)
+    }
 
     const getStatusBadge = (status) => {
         const statusConfig = {
@@ -227,22 +122,12 @@ const ManageMovie = () => {
             {/* Header */}
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-5">
                 <h1 className="text-3xl font-bold mb-2">Quản lý phim</h1>
-                {/* <div className="flex items-center space-x-6">
-                        <div className="text-right">
-                            <div className="text-2xl font-bold">{movies.length}</div>
-                            <div className="text-sm text-purple-100">Tổng số phim</div>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-2xl font-bold">{movies.filter(m => m.status === 'released').length}</div>
-                            <div className="text-sm text-purple-100">Đã phát hành</div>
-                        </div>
-                    </div> */}
             </div>
 
             <div className="p-6">
                 {/* Search and Filter Bar */}
                 <div className="mb-10">
-                    <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                    <div className="flex flex-col lg:flex-row gap-4 justify-between">
                         {/* Search */}
                         <div className="relative flex-1 max-w-md">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -308,7 +193,7 @@ const ManageMovie = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-300">
-                                {filteredMovies.map((movie) => (
+                                {pageData.map((movie) => (
                                     <tr key={movie.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-3">
                                             <div className="flex items-center gap-4">
@@ -328,22 +213,24 @@ const ManageMovie = () => {
                                         <td className="px-6 py-3">
                                             <div className="flex items-center">
                                                 <Star size={16} className="text-yellow-400 fill-current mr-1" />
-                                                {movie.rating || 'N/A'}
+                                                {movie.rating.toFixed(1) || 'N/A'}
                                             </div>
                                         </td>
                                         <td className="px-6 py-3">
-                                            {movie.categories && movie.categories.length > 0 ? (
-                                                movie.categories.map(cat => (
-                                                    <span
-                                                        key={cat.id}
-                                                        className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1"
-                                                    >
-                                                        {cat.name}
-                                                    </span>
-                                                ))
-                                            ) : (
+                                            {movie.categories.length > 0 ? movie.categories.map(cat => (
+                                                <span
+                                                    key={cat.id}
+                                                    className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1"
+                                                >
+                                                    {cat.name}
+                                                </span>
+
+                                            )) : (
                                                 <span className="text-gray-400 text-sm">Chưa có</span>
                                             )}
+                                            {/* {movie.categories.length > 3 && (
+                                                <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">+{movie.categories.length - 2}</span>
+                                            )} */}
                                         </td>
                                         <td className="px-6 py-3 text-gray-900">{formatViews(movie.views || 0)}</td>
                                         <td>{getStatusBadge(movie.status)}</td>
@@ -368,8 +255,6 @@ const ManageMovie = () => {
                         </table>
                     </div>
                 </div>
-
-
                 {/* Empty State */}
                 {filteredMovies.length === 0 && (
                     <div className="text-center py-12">
@@ -380,23 +265,10 @@ const ManageMovie = () => {
                 )}
 
                 {/* Pagination */}
-                <div className="mt-6 flex items-center justify-between">
-                    <div className="text-sm text-gray-700">
-                        Hiển thị <span className="font-medium">{filteredMovies.length}</span> trên tổng số{' '}
-                        <span className="font-medium">{movies.length}</span> phim
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <button className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                            Trước
-                        </button>
-                        <button className="px-3 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-md hover:bg-purple-700">
-                            1
-                        </button>
-                        <button className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                            Sau
-                        </button>
-                    </div>
-                </div>
+                {movies.length > 9 && (
+
+                    <Pagination data={filteredMovies} onPageChange={handlePageChange} />
+                )}
             </div>
         </div>
     )
