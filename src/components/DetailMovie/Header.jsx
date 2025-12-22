@@ -6,6 +6,7 @@ import { AuthContext } from '../../context/AuthContext'
 import Modal from 'react-modal'
 import { useSaveHistory } from '../../hooks/useHistory'
 import { useFavorite } from '../../hooks/useFavorite'
+import { toast } from 'react-toastify'
 
 const Header = ({ detailMovie, episodes, movieId }) => {
     const { user } = useContext(AuthContext)
@@ -28,8 +29,6 @@ const Header = ({ detailMovie, episodes, movieId }) => {
             <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/0 to-transparent'></div>
             <div className='absolute md:hidden inset-0 bg-gradient-to-l from-primary via-primary/0 to-transparent'></div>
 
-
-
             {/* Content */}
             <div className="absolute bottom-5 left-0 right-0 p-6">
                 <div className="flex flex-col items-center md:flex-row md:items-end gap-6">
@@ -38,12 +37,12 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         <img
                             src={detailMovie.posterUrl}
                             alt="poster"
-                            className="w-54 h-full rounded-lg object-cover border-2 border-white shadow-lg"
+                            className="w-54 h-full rounded-lg object-cover border-2 border-white shadow-xl"
                         />
                     </div>
 
                     {/* movie info */}
-                    <div className="space-y-5">
+                    <div className="space-y-5 mb-0 md:mb-8">
                         <div className=''>
                             <h1 className='md:text-start'>{detailMovie.name}</h1>
                             <h2 className='font-semibold text-yellow-400 text-center md:text-start line-clamp-1'>{detailMovie.originName}</h2>
@@ -98,11 +97,17 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : 'fill-none'}`} />Yêu thích
                             </button>
 
-                            <Link to={`/xem-chung/tao-phong/${detailMovie.slug}`}>
-                                <button className="bg-blue-700 text-white">
+                            {user ? (
+                                <Link to={`/xem-chung/tao-phong/${episodes[0].id}`}>
+                                    <button className="bg-blue-700 text-white disabled:opacity-50">
+                                        <Tv className="w-5 h-5 fill-blue-700" />Xem chung
+                                    </button>
+                                </Link>
+                            ) : (
+                                <button className="bg-blue-700 text-white disabled:opacity-50" onClick={() => toast.error('Bạn cần đăng nhập để sử dụng tình năng này')}>
                                     <Tv className="w-5 h-5 fill-blue-700" />Xem chung
                                 </button>
-                            </Link>
+                            )}
 
                         </div>
                     </div>

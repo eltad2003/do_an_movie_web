@@ -1,4 +1,4 @@
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, Search, Trash2 } from 'lucide-react'
 import React, { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import { generateSlug } from '../../utils/helpers'
@@ -12,7 +12,7 @@ const ManageCategory = () => {
   const [editingCategory, setEditingCategory] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -100,6 +100,12 @@ const ManageCategory = () => {
     }
   }
 
+  const filterCategories = categories.filter(category => {
+    const matchesSearch = category.name.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return matchesSearch
+  })
+
 
 
   return (
@@ -109,16 +115,28 @@ const ManageCategory = () => {
       </div>
 
       <div className='p-10 rounded-lg'>
-        <button
-          onClick={() => {
-            setIsEditing(false)
-            setNewCategory({ name: '', slug: '' })
-            setShowModal(true)
-          }}
-          className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
-        >
-          Thêm thể loại
-        </button>
+        <div className="flex gap-3 ">
+          <button
+            onClick={() => {
+              setIsEditing(false)
+              setNewCategory({ name: '', slug: '' })
+              setShowModal(true)
+            }}
+            className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
+          >
+            Thêm thể loại
+          </button>
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Tìm kiếm thể loại..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full  pl-10 pr-4 py-2 rounded-lg border border-gray-400 focus:outline-none"
+            />
+          </div>
+        </div>
         <div className='overflow-auto rounded-lg shadow-sm border border-gray-400'>
           <table className='w-full'>
             <thead className='bg-gray-50 border-b border-gray-400'>
@@ -130,7 +148,7 @@ const ManageCategory = () => {
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-300'>
-              {categories.length > 0 ? categories.map((category, index) => (
+              {filterCategories.length > 0 ? filterCategories.map((category, index) => (
                 <tr key={index}>
                   <td className='px-6 py-4'>{category.id}</td>
                   <td className='px-6 py-4'>{category.name}</td>

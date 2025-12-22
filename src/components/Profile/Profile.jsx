@@ -77,7 +77,7 @@ const Profile = () => {
         <main >
             <div className='pattern' />
             <div className="wrapper max-w-3xl">
-                <section className="section  mt-10">
+                <div className="section ">
                     <div className="flex justify-center items-center mb-6 gap-3">
                         <User />
                         <h2>Thông tin cơ bản</h2>
@@ -167,7 +167,7 @@ const Profile = () => {
                             )}
                         </div>
                     </div>
-                </section>
+                </div>
 
                 {/* change password*/}
                 <ChangePassword token={user.accessToken} />

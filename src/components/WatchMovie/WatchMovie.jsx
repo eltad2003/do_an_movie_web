@@ -8,6 +8,7 @@ import InfoMovie from './InfoMovie'
 import VideoPlayer from './VideoPlayer'
 import Episodes from '../DetailMovie/Episodes'
 import ListEpisode from './ListEpisode'
+import VideoPlayer2 from './VideoPlayer2'
 
 
 const WatchMovie = () => {
@@ -23,7 +24,7 @@ const WatchMovie = () => {
       {/* <div className='pattern'></div> */}
       {errorMessage && <p className="text-red-500 text-center p-5">{errorMessage}</p>}
       {detailMovie && (
-        
+
         <div className='wrapper'>
           <header className='flex items-center gap-3 mb-5'>
             <Link to={`/phim/${detailMovie.slug}`}>
@@ -33,17 +34,15 @@ const WatchMovie = () => {
           </header>
 
           {episodes.map(ep => ep.slug === epSlug && (
-            <VideoPlayer
-              key={ep.id}
-              videoUrl={ep.videoUrl}
-            />
+            // <VideoPlayer key={ep.id} videoUrl={ep.videoUrl} />
+            <VideoPlayer2 key={ep.id} videoUrl={ep.videoUrl} />
           ))}
 
           <div>
             <InfoMovie detailMovie={detailMovie} episodes={episodes} epSlug={epSlug} />
             {/* <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} /> */}
             <ListEpisode episodes={episodes.sort((a, b) => a.name.localeCompare(b.name))} detailMovie={detailMovie} epSlug={epSlug} />
-            <Comment movieId={detailMovie.id}/>
+            <Comment movieId={detailMovie.id} />
           </div>
 
         </div>

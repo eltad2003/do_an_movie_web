@@ -175,10 +175,10 @@ const Comment = ({ movieId }) => {
                                 className="w-12 h-12 rounded-full mr-3 border-2 border-gray-200"
                             />
                             <div>
-                                <p className='font-bold '>{comment.user.name || 'User'}</p>
+                                <p className='font-bold '>{comment.user.name || 'User '}</p>
                                 <p className='text-xs text-gray-400 italic'>{formatDate(comment.createdAt)}</p>
 
-                                <p className='text-white/70 mt-2'>{comment.content}</p>
+                                <p className='text-light-100 mt-2 text-sm'>{comment.content}</p>
                                 {comment.user.username === user?.user.username && (
                                     <div className='flex gap-2 text-sm items-center mt-1'>
                                         <button className='text-white/50 hover:text-white' onClick={() => handleEditComment(comment)}>Sửa</button>

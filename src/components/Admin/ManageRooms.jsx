@@ -113,7 +113,7 @@ const ManageRooms = () => {
                                 {filteredRooms.length > 0 ? filteredRooms.map((room) => (
                                     <tr key={room.id} className='hover:bg-gray-50s'>
                                         {/* Room Info */}
-                                        <td className='px-4 py-4'>
+                                        <td className='p-3'>
                                             <div className="flex items-start gap-3">
                                                 <img
                                                     src={room.posterUrl}
@@ -149,7 +149,7 @@ const ManageRooms = () => {
                                         </td>
 
                                         {/* Movie Info */}
-                                        <td className='px-4 py-4'>
+                                        <td className='p-3'>
                                             <p className=" text-gray-800 font-semibold line-clamp-1">
                                                 {room.movieName}
                                             </p>
@@ -159,7 +159,7 @@ const ManageRooms = () => {
                                         </td>
 
                                         {/* Host */}
-                                        <td className='px-4 py-4'>
+                                        <td className='p-3'>
                                             <p className="text-sm text-gray-800 font-semibold line-clamp-1">
                                                 {room.hostName}
                                             </p>
@@ -167,7 +167,7 @@ const ManageRooms = () => {
                                         </td>
 
                                         {/* Status */}
-                                        <td className='px-4 py-4 text-center'>
+                                        <td className='p-3 text-center'>
                                             {room.active ? (
                                                 <span className="inline-block px-3 py-1 bg-green-600 text-green-100 text-xs font-semibold rounded-full">
                                                     Đang chiếu
@@ -180,7 +180,7 @@ const ManageRooms = () => {
                                         </td>
 
                                         {/* Viewers */}
-                                        <td className='px-4 py-4 text-center'>
+                                        <td className='p-3 text-center'>
                                             <div className="inline-flex items-center gap-1 text-gray-700">
                                                 <Users className="w-4 h-4" />
                                                 <span className="font-semibold">{room.currentViewers}</span>
@@ -188,7 +188,7 @@ const ManageRooms = () => {
                                         </td>
 
                                         {/* Created At */}
-                                        <td className='px-4 py-4'>
+                                        <td className='p-3'>
                                             <div className="flex items-center gap-1 text-sm text-gray-600">
                                                 <Clock className="w-4 h-4" />
                                                 {formatDate(room.createdAt)}
@@ -196,7 +196,7 @@ const ManageRooms = () => {
                                         </td>
 
                                         {/* Actions */}
-                                        <td className='px-4 py-4'>
+                                        <td className='p-3'>
                                             <button
                                                 onClick={() => handleDeleteRoom(room.id)}
                                                 className='p-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 inline-flex items-center gap-1 text-sm'

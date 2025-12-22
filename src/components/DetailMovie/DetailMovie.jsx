@@ -20,12 +20,12 @@ const DetailMovie = () => {
             {detailMovie && (
                 <div>
                     <Header detailMovie={detailMovie} episodes={episodes} movieId={detailMovie.id} />
-                    <div className='wrapper mb-20'>
+                    <div className='wrapper'>
                         <InfoMovie detailMovie={detailMovie} />
                         <Episodes episodes={episodes.sort((a, b) => a.name.localeCompare(b.name))} detailMovie={detailMovie} />
                         <Comment movieId={detailMovie.id} />
-                        <RecommendMovies movieId={detailMovie.id} />
                     </div>
+                    <RecommendMovies movieId={detailMovie.id} />
                 </div>
             )}
 

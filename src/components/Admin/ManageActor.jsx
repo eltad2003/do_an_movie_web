@@ -12,6 +12,8 @@ const ManageActor = () => {
     const [editingActor, setEditingActor] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -100,7 +102,10 @@ const ManageActor = () => {
         }
     }
 
-
+    const filterActors = actors.filter(actor => {
+        const matchesSearch = actor.name.toLowerCase().includes(searchQuery.toLowerCase())
+        return matchesSearch
+    })
 
     return (
         <div className="min-h-dvh">
@@ -108,16 +113,29 @@ const ManageActor = () => {
                 <h1 className="text-3xl font-bold mb-2">Quản lý Diễn viên</h1>
             </div>
             <div className='p-10 rounded-lg'>
-                <button
-                    onClick={() => {
-                        setIsEditing(false)
-                        setNewActor({ name: '', slug: '' })
-                        setShowModal(true)
-                    }}
-                    className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
-                >
-                    Thêm diễn viên
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => {
+                            setIsEditing(false)
+                            setNewActor({ name: '', slug: '' })
+                            setShowModal(true)
+                        }}
+                        className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
+                    >
+                        Thêm diễn viên
+                    </button>
+                    <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm theo tên diễn viên..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full  pl-10 pr-4 py-2 rounded-lg border border-gray-400 focus:outline-none"
+                        />
+                    </div>
+                </div>
+
                 <div className='overflow-auto rounded-lg shadow-sm border border-gray-400'>
                     <table className='w-full'>
                         <thead className='bg-gray-50 border-b border-gray-400'>
@@ -129,7 +147,7 @@ const ManageActor = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-300'>
-                            {actors.length > 0 ? actors.map((actor, index) => (
+                            {filterActors.length > 0 ? filterActors.map((actor, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{actor.id}</td>
                                     <td className='px-6 py-4'>{actor.name}</td>

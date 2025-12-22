@@ -25,8 +25,6 @@ const ChangePassword = ({ token }) => {
                 },
                 body: JSON.stringify(passwordData)
             })
-            //if new password and confirm password not match
-            //if current password is incorrect
             if (!res.ok) {
                 const errorMessage = await res.text()
                 toast.error(errorMessage)
@@ -46,7 +44,7 @@ const ChangePassword = ({ token }) => {
     }
 
     return (
-        <section className="section mb-10">
+        <div className="section">
             {!showChangePassword ? (
                 <div className="text-center">
                     <button
@@ -120,7 +118,7 @@ const ChangePassword = ({ token }) => {
                     </div>
                 </form>
             )}
-        </section>
+        </div>
 
     )
 }

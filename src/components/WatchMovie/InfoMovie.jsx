@@ -1,10 +1,13 @@
 import { ChevronRight, Heart, Tv } from 'lucide-react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import InfoGenres from '../DetailMovie/Info/InfoGenres'
 import { useFavorite } from '../../hooks/useFavorite'
+import { AuthContext } from '../../context/AuthContext'
+import { toast } from 'react-toastify'
 
 const InfoMovie = ({ episodes, epSlug, detailMovie: { id, name, slug, originName, description, posterUrl, categories } }) => {
+    const { user } = useContext(AuthContext)
     const { isFavorite, addFavorite, deleteFavorite } = useFavorite(id)
     return (
         <div className='section'>
@@ -19,11 +22,17 @@ const InfoMovie = ({ episodes, epSlug, detailMovie: { id, name, slug, originName
                         <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : 'fill-none'}`} />Yêu thích
                     </button>
 
-                    <Link to={`/xem-chung/tao-phong/${episodes.find(ep => ep.slug === epSlug)?.id}`}>
-                        <button className="bg-blue-700 text-white">
+                    {user ? (
+                        <Link to={`/xem-chung/tao-phong/${episodes.find(ep => ep.slug === epSlug)?.id}`}>
+                            <button className="bg-blue-700 text-white">
+                                <Tv className="w-5 h-5 fill-blue-700" />Xem chung
+                            </button>
+                        </Link>
+                    ) : (
+                        <button className="bg-blue-700 text-white" onClick={() => toast.error('Bạn cần đăng nhập để sử dụng tình năng này')}>
                             <Tv className="w-5 h-5 fill-blue-700" />Xem chung
                         </button>
-                    </Link>
+                    )}
 
                 </div>
                 <div className='flex lg:flex-row flex-col gap-6 items-start' >
@@ -37,7 +46,7 @@ const InfoMovie = ({ episodes, epSlug, detailMovie: { id, name, slug, originName
                         </div>
                         <div className='space-y-3'>
                             <div className='max-w-sm'>
-                                <p className='text-white font-bold text-xl'>{name}</p>
+                                <p className='text-white font-bold text-lg line-clamp-1 md:line-clamp-none'>{name}</p>
                                 <p className='text-yellow-400 font-semibold '>{originName}</p>
                             </div>
                             <InfoGenres detailMovie={{ categories }} />

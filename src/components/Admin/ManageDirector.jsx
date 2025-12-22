@@ -12,7 +12,7 @@ const ManageDirector = () => {
     const [editingDirector, setEditingDirector] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
-
+    const [searchQuery, setSearchQuery] = useState('')
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -100,7 +100,10 @@ const ManageDirector = () => {
             toast.error('Cập nhật đạo diễn thất bại')
         }
     }
-
+    const filteredDirectors = directors.filter(director => {
+        const matchesSearch = director.name.toLowerCase().includes(searchQuery.toLowerCase())
+        return matchesSearch
+    })
 
 
     return (
@@ -109,16 +112,28 @@ const ManageDirector = () => {
                 <h1 className="text-3xl font-bold mb-2">Quản lý Đạo Diễn</h1>
             </div>
             <div className='p-10 rounded-lg'>
-                <button
-                    onClick={() => {
-                        setIsEditing(false)
-                        setNewDirector({ name: '', slug: '' })
-                        setShowModal(true)
-                    }}
-                    className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
-                >
-                    Thêm đạo diễn
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => {
+                            setIsEditing(false)
+                            setNewDirector({ name: '', slug: '' })
+                            setShowModal(true)
+                        }}
+                        className='px-4 py-2 bg-green-600 font-semibold rounded-lg text-white mb-6 cursor-pointer'
+                    >
+                        Thêm đạo diễn
+                    </button>
+                    <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm đạo diễn..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full  pl-10 pr-4 py-2 rounded-lg border border-gray-400 focus:outline-none"
+                        />
+                    </div>
+                </div>
                 <div className='overflow-auto rounded-lg shadow-sm border border-gray-400'>
                     <table className='w-full'>
                         <thead className='bg-gray-50 border-b border-gray-400'>
@@ -130,7 +145,7 @@ const ManageDirector = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-300'>
-                            {directors.length > 0 ? directors.map((director, index) => (
+                            {filteredDirectors.length > 0 ? filteredDirectors.map((director, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{director.id}</td>
                                     <td className='px-6 py-4'>{director.name}</td>
