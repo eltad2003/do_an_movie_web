@@ -46,14 +46,13 @@ const App = () => {
           <Route path={ROUTES.BY_COUNTRY} element={< ByCountry />} />
           <Route path={ROUTES.SEARCH} element={<SearchResults />} />
 
-          <Route path={ROUTES.ROOMS} element={<Room />} />
-          <Route path={ROUTES.CREAT_ROOM} element={<CreateRoom />} />
-
-
-
-          <Route path={ROUTES.PROFILE} element={<Profile />} />
-          <Route path={ROUTES.HISTORY} element={<History />} />
-          <Route path={ROUTES.FAVORITE} element={<Favorite />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path={ROUTES.ROOMS} element={<Room />} />
+            <Route path={ROUTES.CREAT_ROOM} element={<CreateRoom />} />
+            <Route path={ROUTES.PROFILE} element={<Profile />} />
+            <Route path={ROUTES.HISTORY} element={<History />} />
+            <Route path={ROUTES.FAVORITE} element={<Favorite />} />
+          </Route>
 
           <Route path="*" element={<NotFound />} />
         </Route>
@@ -81,7 +80,7 @@ const App = () => {
 
       <ToastContainer
         position="top-right"
-        autoClose={1000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

@@ -3,7 +3,8 @@ import { useSearch } from '../../hooks/useSearch'
 import { useSearchParams } from 'react-router-dom'
 import MovieCard from '../MovieCard'
 import Loading from '../UI/Loading'
-import Filter from '../Filter/Filter'
+import FilterMovie from '../UI/FilterMovie'
+
 
 const SearchResults = () => {
     const [searchParams] = useSearchParams()
@@ -20,7 +21,7 @@ const SearchResults = () => {
             {errorMessage && <p className='text-red-500 text-center p-5'>{errorMessage}</p>}
             <div className='container p-5 mx-auto '>
                 <h2 className='text-white text-2xl font-bold mb-5'>Kết quả tìm kiếm cho "{query}" ({searchResults.length})</h2>
-                <Filter />
+                <FilterMovie />
                 <ul>
                     {!searchResults || searchResults.length === 0 ? (
                         <p className='text-gray-400 italic'>Không tìm thấy kết quả nào</p>

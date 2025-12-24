@@ -29,13 +29,13 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
             <h2 >Danh sách tập</h2>
             {/* range episode */}
             {groupEpisode.length > 1 && (
-                <div className='mb-5'>
+                <div className='my-5'>
                     <label htmlFor='episode-range' className='mr-2'>Chọn khoảng tập:</label>
                     <select
                         id='episode-range'
                         value={selectedRange}
                         onChange={handleChangeRange}
-                        className='bg-dark-200 text-white p-2 rounded-lg'
+                        className='bg-dark-200 text-light-100 p-1.5 rounded-lg border border-gray-700 focus:outline-none'
                     >
                         {groupEpisode.map((group, index) => (
                             <option key={index} value={index}>

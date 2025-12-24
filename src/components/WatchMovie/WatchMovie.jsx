@@ -41,7 +41,7 @@ const WatchMovie = () => {
           <div>
             <InfoMovie detailMovie={detailMovie} episodes={episodes} epSlug={epSlug} />
             {/* <Episodes episodes={episodes} detailMovie={detailMovie} epSlug={epSlug} /> */}
-            <ListEpisode episodes={episodes.sort((a, b) => a.name.localeCompare(b.name))} detailMovie={detailMovie} epSlug={epSlug} />
+            <ListEpisode episodes={episodes.sort((a, b) => a.name.localeCompare(b.name, "vi", { numeric: true }))} detailMovie={detailMovie} epSlug={epSlug} />
             <Comment movieId={detailMovie.id} />
           </div>
 

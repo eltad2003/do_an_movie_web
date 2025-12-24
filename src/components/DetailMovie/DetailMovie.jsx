@@ -22,7 +22,7 @@ const DetailMovie = () => {
                     <Header detailMovie={detailMovie} episodes={episodes} movieId={detailMovie.id} />
                     <div className='wrapper'>
                         <InfoMovie detailMovie={detailMovie} />
-                        <Episodes episodes={episodes.sort((a, b) => a.name.localeCompare(b.name))} detailMovie={detailMovie} />
+                        <Episodes episodes={episodes.sort((a, b) => a.name.localeCompare(b.name, "vi", { numeric: true }))} detailMovie={detailMovie} />
                         <Comment movieId={detailMovie.id} />
                     </div>
                     <RecommendMovies movieId={detailMovie.id} />
