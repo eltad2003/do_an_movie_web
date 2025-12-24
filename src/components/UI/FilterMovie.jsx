@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { useNav } from '../../hooks/useNav'
 import { ArrowRightIcon, FilterIcon, X } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 
 const FilterMovie = () => {
     const isCountryPage = window.location.pathname.includes('/quoc-gia/')
     const isCategoryPage = window.location.pathname.includes('/the-loai/')
+    const isSearchPage = window.location.pathname.includes('/tim-kiem')
+    const [searchParams] = useSearchParams()
+    const query = searchParams.get('q') || ''
     const { categories, countries } = useNav()
     const [isOpen, setIsOpen] = useState(false)
     const filterOptions = {
@@ -29,14 +33,24 @@ const FilterMovie = () => {
                     {/* Filter Content */}
                     <div className='mb-6'>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-
+                            {isSearchPage && (
+                                <div>
+                                    <label className="block text-white/70 text-sm mb-2">Từ khóa</label>
+                                    <input
+                                        type="text"
+                                        name="q"
+                                        defaultValue={query}
+                                        placeholder="Nhập từ khóa..."
+                                        className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none"
+                                    />
+                                </div>
+                            )}
                             {/* Thể loại */}
                             <div className={isCategoryPage ? 'hidden' : ''}>
                                 <label className="block text-white/70 text-sm mb-2">Thể loại</label>
-
                                 <select
                                     name='category'
-                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none"
                                 >
                                     <option value="">Tất cả thể loại</option>
                                     {categories.map(cat => (
@@ -50,7 +64,7 @@ const FilterMovie = () => {
                                 <label className="block text-white/70 text-sm mb-2">Quốc gia</label>
                                 <select
                                     name='country'
-                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none"
                                 >
                                     <option value="">Tất cả quốc gia</option>
                                     {countries.map(country => (
@@ -64,7 +78,7 @@ const FilterMovie = () => {
                                 <label className="block text-white/70 text-sm mb-2">Loại phim</label>
                                 <select
                                     name='type'
-                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none"
                                 >
                                     <option value="">Tất cả loại</option>
                                     {filterOptions.types.map(type => (
@@ -78,14 +92,13 @@ const FilterMovie = () => {
                                 <label className="block text-white/70 text-sm mb-2">Năm</label>
                                 <select
                                     name="year"
-                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-100/30"
+                                    className="w-full bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none"
                                 >
                                     <option value="" >Tất cả năm</option>
                                     {filterOptions.years.map(year => (
                                         <option key={year.value} value={year.value}>{year.label}</option>
                                     ))}
                                 </select>
-
                             </div>
 
                         </div>
