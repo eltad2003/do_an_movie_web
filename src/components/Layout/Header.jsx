@@ -21,11 +21,11 @@ const Navbar = () => {
         setOpenDropdown(openDropdown === name ? null : name)
     }
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         setIsOpenProfile(false)
-        logout()
-        toast.success('Đăng xuất thành công!')
-        window.location.replace('/')
+        await logout()
+       
+        // window.location.replace('/')
     }
 
     const Type = ({ to, label }) => {

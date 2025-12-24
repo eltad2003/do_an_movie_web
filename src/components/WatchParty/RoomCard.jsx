@@ -4,12 +4,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { formatDate } from '../../utils/helpers'
 import ReactModal from 'react-modal'
 import { toast } from 'react-toastify'
+import { useSocket } from '../../hooks/useSocket'
 
 const RoomCard = ({ room }) => {
     const [password, setPassword] = useState('')
-
     const [typePassword, setTypePassword] = useState(false);
     const navigate = useNavigate()
+    const {views} = useSocket(room, {}); // Dummy user object to get views
 
     const getStatusColor = (active) => {
         switch (active) {
@@ -41,7 +42,7 @@ const RoomCard = ({ room }) => {
     }
 
     return (
-        <div className={`bg-dark-200 ${!room.active && 'opacity-50'} rounded-2xl mb-10`}>
+        <div className={`bg-dark-200 ${!room.active && 'opacity-50'} rounded-lg mb-10`}>
             {/* Movie Poster & Info */}
             <div className="relative">
                 <img
@@ -144,11 +145,11 @@ const RoomCard = ({ room }) => {
                     ) : (
                         <>
                             {/* Show participants when NOT typing password */}
-                            {room.active && room.currentViewers > 0 ? (
+                            {room.active && views > 0 ? (
                                 <div className="flex items-center gap-2 flex-1">
                                     <Users className="w-4 h-4 text-gray-400" />
                                     <span className="text-gray-400 text-sm">
-                                        {room.currentViewers} đang xem
+                                        {views} đang xem
                                     </span>
                                 </div>
                             ) : (

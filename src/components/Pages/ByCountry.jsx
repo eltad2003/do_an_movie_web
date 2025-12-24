@@ -5,13 +5,17 @@ import Pagination from '../UI/Pagination';
 import MovieCard from '../MovieCard';
 import Skeleton from '../UI/Skeleton';
 import { useMovies } from '../../hooks/useMovies';
+import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import More from '../UI/More';
 
 const ByCountry = () => {
     const { slugCountry } = useParams();
     const { listMovies, isLoading, errorMessage } = useMovies()
-    if (isLoading) return <Skeleton />
+    const [moviePerPage, setMoviePerPage] = useState(10)
     const filteredMovies = listMovies.filter(movie => movie.countries.map(country => country.slug).includes(slugCountry));
-    console.log(filteredMovies);
+
+    if (isLoading) return <Skeleton />
 
     return (
         <main>
@@ -19,13 +23,15 @@ const ByCountry = () => {
             <div className='wrapper mb-20'>
                 <h2 className='mt-5 mb-5'>Phim {slugCountry}</h2>
                 <ul>
-                    {filteredMovies.length > 0 ? filteredMovies.map(movie => (
+                    {filteredMovies.length > 0 ? filteredMovies.slice(0, moviePerPage).map(movie => (
                         <MovieCard key={movie.id} movie={movie} />
                     )) :
                         <p className='text-gray-500'>Không tìm thấy phim nào từ quốc gia này.</p>
                     }
                 </ul>
-                {/* <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} /> */}
+                {filteredMovies.length > moviePerPage && (
+                    <More moviePerPage={moviePerPage} setMoviePerPage={setMoviePerPage} />
+                )}
             </div>
         </main>
     )

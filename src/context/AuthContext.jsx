@@ -17,6 +17,7 @@ const AuthProvider = ({ children }) => {
     const getTokenExpirationTime = useCallback((token) => {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]))
+            // console.log(payload.exp*1000);
             return payload.exp * 1000 // milliseconds
         } catch (error) {
             console.error('Error decoding token:', error)
@@ -218,9 +219,27 @@ const AuthProvider = ({ children }) => {
     }
 
     const logout = async () => {
-        setUser(null)
-        localStorage.removeItem('user')
-        toast.info('Đã đăng xuất')
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BE}/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user?.accessToken}`
+                },
+                body: JSON.stringify({
+                    refreshToken: user?.refreshToken
+                })
+            })
+            if (!res.ok) {
+                throw new Error('Logout request failed')
+            }
+            setUser(null)
+            localStorage.removeItem('user')
+            toast.info('Đã đăng xuất')
+
+        } catch (error) {
+            console.error('Error during logout:', error)
+        }
     }
 
     return (

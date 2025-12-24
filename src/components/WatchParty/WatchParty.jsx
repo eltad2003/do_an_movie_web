@@ -19,6 +19,7 @@ const WatchParty = () => {
         isHost,
         messages,
         newMessage,
+        views,
         handleUserAction,
         sendRequestSync,
         setNewMessage,
@@ -91,8 +92,16 @@ const WatchParty = () => {
                 <div className="flex flex-col lg:flex-row gap-5">
                     {/* Video Player Area */}
                     <div className='w-full'>
-
-                        <VideoSocket videoUrl={room.videoUrl} room={room} handleUserAction={handleUserAction} isConnected={isConnected} isHost={isHost} sendRequestSync={sendRequestSync} videoRef={videoRef} />
+                        <VideoSocket
+                            videoUrl={room.videoUrl}
+                            room={room}
+                            handleUserAction={handleUserAction}
+                            isConnected={isConnected}
+                            isHost={isHost}
+                            sendRequestSync={sendRequestSync}
+                            videoRef={videoRef}
+                            views={views}
+                        />
                     </div>
 
                     <>

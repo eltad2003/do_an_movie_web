@@ -4,10 +4,12 @@ import { toast } from 'react-toastify'
 import { Film, X } from 'lucide-react'
 import MovieCard from '../MovieCard'
 import { Link } from 'react-router-dom'
+import More from '../UI/More'
 
 const Favorite = () => {
     const { user } = useContext(AuthContext)
     const [favorites, setFavorites] = useState([])
+    const [moviePerPage, setMoviePerPage] = useState(10)
 
     const fetchFavoriteMovie = async () => {
         try {
@@ -105,6 +107,9 @@ const Favorite = () => {
                             </div>
                         ))}
                     </ul>
+                    {favorites.length > moviePerPage && (
+                        <More moviePerPage={moviePerPage} setMoviePerPage={setMoviePerPage} />
+                    )}
                 </section>
             </div>
         </main>

@@ -5,7 +5,7 @@ import { handleCopy } from '../../utils/helpers';
 
 
 
-const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUserAction, sendRequestSync }) => {
+const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUserAction, sendRequestSync, views }) => {
     // Thiết lập HLS nếu cần
     useEffect(() => {
         const video = videoRef.current;
@@ -19,6 +19,9 @@ const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUser
             return () => {
                 if (hls) hls.destroy();
             };
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoUrl;
+            // videoRef.current.play();
         }
     }, [videoUrl]);
 
@@ -48,7 +51,7 @@ const VideoSocket = ({ room, videoUrl, videoRef, isConnected, isHost, handleUser
             {/* Participants Count */}
             <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
                 <Users className="w-4 h-4" />
-                {room.currentViewers}
+                {views}
             </div>
             <div className="p-4 bg-dark-200 rouneded rounded-b-lg">
                 <div className="flex justify-between items-start">

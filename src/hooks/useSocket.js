@@ -9,6 +9,7 @@ export const useSocket = (room, user) => {
     const [isConnected, setIsConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState();
+    const [views, setViews] = useState(0);
     //  {id: '',
     //     senderName: '',
     //     message: '',
@@ -60,7 +61,8 @@ export const useSocket = (room, user) => {
                     type: 'JOIN',
                     roomId: room.id,
                     senderId: String(user.id),
-                    senderName: user.name
+                    senderName: user.name,
+                    currentViewers: views
                 })
             });
         }
@@ -73,7 +75,8 @@ export const useSocket = (room, user) => {
                     type: 'LEAVE',
                     roomId: room.id,
                     senderId: String(user.id),
-                    senderName: user.name
+                    senderName: user.name,
+                    currentViewers: views
                 })
             });
         }
@@ -122,6 +125,9 @@ export const useSocket = (room, user) => {
                     message: 'đã tham gia phòng',
                     time: new Date().toLocaleTimeString('vi-VN')
                 }])
+                setViews(prev => prev + 1);
+                console.log(views);
+
                 if (isHost) {
                     console.log("Host đang gửi dữ liệu đồng bộ...");
                     sendSyncSignal();
@@ -134,6 +140,9 @@ export const useSocket = (room, user) => {
                     message: 'đã rời phòng',
                     time: new Date().toLocaleTimeString('vi-VN')
                 }])
+                setViews(prev => Math.max(0, prev - 1));
+                console.log(views);
+
                 break;
             case 'REQUEST_SYNC':
                 if (isHost) {
@@ -244,6 +253,7 @@ export const useSocket = (room, user) => {
         isHost,
         messages,
         newMessage,
+        views,
         handleUserAction,
         sendRequestSync,
         setNewMessage,

@@ -8,49 +8,45 @@ import Pagination from '../UI/Pagination'
 import SearchTrending from '../Trending/SearchTrending'
 import Skeleton from '../UI/Skeleton'
 import MovieTrending from '../Trending/MovieTrending'
+import { ChevronDown } from 'lucide-react'
+import More from '../UI/More'
 
 
 
 
 const Home = () => {
-    const [currentPage, setCurrentPage] = useState(1)
-    const { listMovies, totalPages, isLoading, errorMessage } = useMovies(currentPage)
-
+    const { listMovies, isLoading, errorMessage } = useMovies()
+    const [moviePerPage, setMoviePerPage] = useState(10)
     return (
-        <>
-            <main >
-                {/* <div className='pattern' /> */}
 
-                <div >
-                    <MovieTrending />
-                    <Search />
-                    <SearchTrending />
-                    {/* all movie */}
-                    <section className='p-6'>
-                        <h2 >Danh sách phim mới</h2>
-                        {isLoading ? (
-                            <Skeleton />
-                        ) : errorMessage ? (
-                            <p className="text-red-500">{errorMessage}</p>
-                        ) : (
-                            <ul className='mb-20'>
-                                {listMovies.map((movie) => (
-                                    <MovieCard key={movie.id} movie={movie} />
-                                ))}
-                            </ul>
-                        )}
-                        {totalPages > 1 && (
-                            <Pagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        )}
-                    </section>
+        <main >
+            <div >
+                <MovieTrending />
+                <Search />
+                <SearchTrending />
 
-                </div>
-            </main>
-        </>
+                <section className='p-6 mb-20'>
+                    <h2 >Danh sách phim mới</h2>
+                    {isLoading ? (
+                        <Skeleton />
+                    ) : errorMessage ? (
+                        <p className="text-red-500">{errorMessage}</p>
+                    ) : (
+                        <ul>
+                            {listMovies.slice(0, moviePerPage).map((movie) => (
+                                <MovieCard key={movie.id} movie={movie} />
+
+                            ))}
+                        </ul>
+                    )}
+                    {listMovies.length > moviePerPage && (
+                        <More moviePerPage={moviePerPage} setMoviePerPage={setMoviePerPage} />
+                    )}
+                </section>
+
+            </div>
+        </main>
+
     )
 }
 

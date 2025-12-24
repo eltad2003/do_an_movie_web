@@ -9,13 +9,15 @@ const ChangePassword = ({ token }) => {
         confirmPassword: ''
     })
     const [showChangePassword, setShowChangePassword] = useState(false)
+    
     const handlePasswordChange = (e) => {
         setPasswordData({
             ...passwordData,
             [e.target.name]: e.target.value
         })
     }
-    const handleChangePassword = async () => {
+    const handleChangePassword = async (e) => {
+        e.preventDefault()
         try {
             const res = await fetch(`${import.meta.env.VITE_BE}/change-password`, {
                 method: 'POST',

@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom'
 import { Users, Play, Crown, Lock, Globe, Clock, Search, Plus, Filter } from 'lucide-react'
 import RoomCard from './RoomCard'
 import { useWatchRoom } from '../../hooks/useWatchRoom'
+import More from '../UI/More'
 
 const Room = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [filterType, setFilterType] = useState('all') // all, public, private
-
+    const [roomPerPage, setRoomPerPage] = useState(12)
 
     const { rooms } = useWatchRoom()
 
@@ -26,31 +27,28 @@ const Room = () => {
 
     return (
         <main>
-            <div className='relative h-[50dvh] bg-cover bg-center w-full'
+            <div className='relative h-[30dvh] xl:h-[50dvh] bg-cover bg-center w-full'
                 style={{
                     backgroundImage: "url(./watch-party.webp)",
                     objectFit: 'cover',
                     backgroundPosition: 'center center',
-                }}  
+                }}
             >
                 <div className="overlay-gradient" />
-                <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/20 to-transparent'></div>
-                <div className='absolute inset-0 bg-gradient-to-l from-primary via-primary/20 to-transparent'></div>
+                <div className='absolute inset-0 bg-gradient-to-r from-primary via-primary/10 to-transparent'></div>
+                <div className='absolute inset-0 bg-gradient-to-l from-primary via-primary/10 to-transparent'></div>
                 <div className='absolute inset-0 mt-5 '>
                     <h1 className='text-white/80'> Phòng xem chung </h1>
-                    <p className="text-white/60 text-center mx-auto text-sm md:text-base max-w-md mt-2">
+                    <p className="text-white/60 text-center mx-auto text-xs md:text-base max-w-md mt-2">
                         Tham gia hoặc tạo phòng để xem phim cùng bạn bè. Chia sẻ cảm xúc và thảo luận về bộ phim ngay trong phòng chat!
                     </p>
                 </div>
             </div>
-            <div className="wrapper" >
+            <div className="p-2 md:p-6 mb-20" >
                 {/* Controls */}
 
                 <section className="my-8">
                     <div className="flex gap-3 items-center ">
-
-                        {/* Search & Filter */}
-
                         <div className="flex gap-3 flex-1">
                             {/* Search */}
                             <div className="relative flex-1 max-w-md">
@@ -83,9 +81,9 @@ const Room = () => {
                 </section>
 
                 {/* Rooms Grid */}
-                <section className='mb-30'>
+                <section >
                     {filteredRooms.length > 0 ? (
-                        <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4  gap-5">
+                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                             {filteredRooms.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((room) => (
                                 <RoomCard key={room.id} room={room} />
                             ))}
@@ -101,6 +99,9 @@ const Room = () => {
                             </p>
 
                         </div>
+                    )}
+                    {filteredRooms.length > roomPerPage && (
+                        <More moviePerPage={roomPerPage} setMoviePerPage={setRoomPerPage} />
                     )}
                 </section>
             </div>
