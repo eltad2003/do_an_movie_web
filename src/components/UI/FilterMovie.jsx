@@ -7,10 +7,13 @@ const FilterMovie = () => {
     const isCountryPage = window.location.pathname.includes('/quoc-gia/')
     const isCategoryPage = window.location.pathname.includes('/the-loai/')
     const isSearchPage = window.location.pathname.includes('/tim-kiem')
+    //chi danh` cho trang tim kiem
     const [searchParams] = useSearchParams()
     const query = searchParams.get('q') || ''
+    
     const { categories, countries } = useNav()
     const [isOpen, setIsOpen] = useState(false)
+
     const filterOptions = {
         years: Array.from({ length: 16 }, (_, i) => {
             const year = 2025 - i
@@ -24,12 +27,12 @@ const FilterMovie = () => {
         ]
     }
     return (
-        <div className="mb-4 sticky top-22 z-50 ">
+        <div className="mb-4 sticky top-21 z-50 ">
             <button className="btn rounded inline-flex items-center gap-2" onClick={() => setIsOpen(!isOpen)}>
                 <FilterIcon className="w-5 h-5" /> Bộ lọc phim
             </button>
             {isOpen && (
-                <form className="bg-dark-100/80 p-4 mb-6 absolute top-full mt-3 backdrop-blur-sm min-h-screen w-full z-50">
+                <form className="bg-dark-100/80 p-4 mb-6 absolute top-full mt-1 backdrop-blur-sm min-h-screen w-full z-50">
                     {/* Filter Content */}
                     <div className='mb-6'>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">

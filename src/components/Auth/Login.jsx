@@ -12,6 +12,7 @@ const Login = () => {
         username: '',
         password: ''
     })
+
     const navigate = useNavigate()
 
     const handleLogin = async (e) => {
@@ -30,6 +31,7 @@ const Login = () => {
             toast.error('Đã có lỗi xảy ra. Vui lòng thử lại.')
         }
     }
+
     const handleChange = (e) => {
         setCreds({ ...creds, [e.target.name]: e.target.value })
     }
@@ -84,8 +86,34 @@ const Login = () => {
                         <p className='text-white/50'>Bạn mới sử dụng ChillFilx?</p>
                         <a href={ROUTES.REGISTER} className='text-light-100 font-bold hover:underline'>Đăng ký ngay.</a>
                     </div>
+                    <div>
+                        <a href={ROUTES.RESET_PASSWORD} className='text-light-100 hover:underline text-sm' >Quên mật khẩu?</a>
+                    </div>
                 </form>
-
+                {/* {isOpen && (
+                    <div className='fixed inset-0 bg-black/70 flex items-center justify-center'>
+                        <form className='bg-white p-6 rounded-lg w-full max-w-sm' onSubmit={handleLinkForgotPassword}>
+                            <h2 className='text-black mb-4'>Đặt lại mật khẩu</h2>
+                            <div>
+                                <label htmlFor="email" className='text-black'>Email </label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className='w-full mb-3 px-4 py-2 rounded bg-gray-50 border border-gray-400 text-black  focus:outline-none'
+                                    required
+                                />
+                            </div>
+                            <div className='flex justify-end'>
+                                <button type='button' className='px-4 py-2 bg-red-600 text-white rounded-lg' onClick={() => setIsOpen(false)}>Đóng</button>
+                                <button type='submit' className='btn btn-primary ml-2'>Gửi</button>
+                            </div>
+                            <div className='mt-4 text-xs text-gray-600 italic'>
+                                Vui lòng nhập email đã đăng ký tài khoản. Chúng tôi sẽ gửi hướng dẫn đặt lại mật khẩu đến email của bạn.
+                            </div>
+                        </form>
+                    </div>
+                )} */}
             </div>
         </main>
     )

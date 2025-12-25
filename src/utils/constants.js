@@ -2,6 +2,7 @@ export const ROUTES = {
     HOME: '/',
     LOGIN: '/dang-nhap',
     REGISTER: '/dang-ky',
+    RESET_PASSWORD: '/quen-mat-khau',
 
     MOVIE_DETAIL: '/phim/:slug',
     WATCH_MOVIE: '/xem-phim/:slug',

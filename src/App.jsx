@@ -31,6 +31,8 @@ import History from './components/Profile/History'
 import Favorite from './components/Profile/Favorite'
 import { ROUTES } from './utils/constants'
 import ManageRooms from './components/Admin/ManageRooms'
+import ProtectedRouteAdmin from './components/ProtectedRouteAdmin'
+import ForgotPassword from './components/Auth/ForgotPassword'
 
 const App = () => {
   return (
@@ -60,8 +62,9 @@ const App = () => {
         <Route path={ROUTES.LOGIN} element={<Login />} />
         <Route path={ROUTES.REGISTER} element={<Register />} />
         <Route path={ROUTES.ROOM} element={<WatchParty />} />
+        <Route path={ROUTES.RESET_PASSWORD} element={<ForgotPassword />} />
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRouteAdmin />}>
           <Route path={ROUTES.ADMIN} element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path={ROUTES.MANAGE_MOVIES} element={<ManageMovie />} />
