@@ -21,7 +21,6 @@ function AdminLayout() {
 
     const handleLogout = async () => {
         await logout()
-        toast.success('Đăng xuất thành công!')
     }
 
 
@@ -33,7 +32,7 @@ function AdminLayout() {
         { icon: Earth, label: 'Quản lý Quốc Gia', path: '/admin/quan-ly-quoc-gia' },
         { icon: Drama, label: 'Quản lý Diễn Viên', path: '/admin/quan-ly-dien-vien' },
         { icon: Drama, label: 'Quản lý Đạo Diễn', path: '/admin/quan-ly-dao-dien' },
-        {icon: TvMinimal, label: 'Quản lý phòng xem', path: '/admin/quan-ly-phong-xem-chung' }
+        { icon: TvMinimal, label: 'Quản lý phòng xem', path: '/admin/quan-ly-phong-xem-chung' }
     ]
 
     useEffect(() => {

@@ -14,8 +14,16 @@ const ForgotPassword = () => {
         confirmPassword: ''
     })
     const navigate = useNavigate()
+
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+    }
+
+    const onBack = () => {
+        if (step === 2) {
+            setStep(1)
+            setData({ token: '', newPassword: '', confirmPassword: '' })
+        }
     }
 
     const handleLinkForgotPassword = async (e) => {
@@ -77,13 +85,6 @@ const ForgotPassword = () => {
 
         } finally {
             setIsLoading(false)
-        }
-    }
-
-    const onBack = () => {
-        if (step === 2) {
-            setStep(1)
-            setData({ token: '', newPassword: '', confirmPassword: '' })
         }
     }
 

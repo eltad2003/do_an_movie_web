@@ -158,8 +158,7 @@ const AuthProvider = ({ children }) => {
 
                 setUser(userData)
                 localStorage.setItem('user', JSON.stringify(userData))
-
-                return { success: true, message: 'Đăng nhập thành công' }
+                return { success: true, message: 'Đăng nhập thành công', user: data.user }
             } else {
                 const errorData = await res.text()
                 return { success: false, message: errorData }
@@ -183,7 +182,7 @@ const AuthProvider = ({ children }) => {
             const interval = window.setInterval(() => {
                 if (popup.closed) {
                     clearInterval(interval)
-                    resolve({ success: false, message: 'Đăng nhập bằng Google thất bại' })
+                    resolve({ success: false, message: 'Vui lòng thử lại sau!' })
                     return
                 }
 
