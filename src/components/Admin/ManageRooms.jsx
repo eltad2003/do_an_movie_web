@@ -14,7 +14,7 @@ const ManageRooms = () => {
     const [filterType, setFilterType] = useState('all')
     const [pageData, setPageData] = useState([])
 
-    const handlePageChange = (currentData, currentPage) => {
+    const handlePageChange = (currentData) => {
         setPageData(currentData)
     }
 
@@ -228,7 +228,7 @@ const ManageRooms = () => {
                         </table>
                     </div>
                 </div>
-                {rooms.length > 9 && (
+                {rooms.length > 10 && (
                     <Pagination data={filteredRooms} onPageChange={handlePageChange} />
                 )}
 

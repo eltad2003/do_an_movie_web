@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { generateSlug } from '../../utils/helpers'
 import { AuthContext } from '../../context/AuthContext'
 import { useCategories } from '../../hooks/useManage'
+import Pagination from '../UI/Pagination'
 
 const ManageCategory = () => {
   const { user } = useContext(AuthContext)
@@ -13,6 +14,11 @@ const ManageCategory = () => {
   const [showModal, setShowModal] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [pageData, setPageData] = useState([])
+
+  const handlePageChange = (currentData) => {
+    setPageData(currentData)
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -148,7 +154,7 @@ const ManageCategory = () => {
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-300'>
-              {filterCategories.length > 0 ? filterCategories.map((category, index) => (
+              {filterCategories.length > 0 ? pageData.map((category, index) => (
                 <tr key={index}>
                   <td className='px-6 py-4'>{category.id}</td>
                   <td className='px-6 py-4'>{category.name}</td>
@@ -175,7 +181,11 @@ const ManageCategory = () => {
               )}
             </tbody>
           </table>
+
         </div>
+        {filterCategories.length > 10 && (
+          <Pagination data={filterCategories} onPageChange={handlePageChange} />
+        )}
 
         {showModal && (
           <div className="fixed inset-0 bg-dark-100/50 flex items-center justify-center">
@@ -193,6 +203,7 @@ const ManageCategory = () => {
                     value={isEditing ? editingCategory?.name || '' : newCategory.name}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
                 <div className="mb-4">

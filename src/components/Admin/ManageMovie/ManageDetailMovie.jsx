@@ -119,6 +119,7 @@ const ManageDetailMovie = () => {
     const removeCountry = (countryId) => {
         setSelectedCountries(prev => prev.filter(c => c.id !== countryId))
     }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsSubmitting(true)
@@ -443,6 +444,7 @@ const ManageDetailMovie = () => {
                                                 e.target.value = ''
                                             }}
                                             value=""
+
                                         >
                                             <option value="">Chọn đạo diễn</option>
                                             {directors?.map((director) => (
@@ -487,6 +489,7 @@ const ManageDetailMovie = () => {
                                                 e.target.value = ''
                                             }}
                                             value=""
+
                                         >
                                             <option value="">Chọn diễn viên</option>
                                             {actors?.map((actor) => (
@@ -531,6 +534,7 @@ const ManageDetailMovie = () => {
                                                 e.target.value = ''
                                             }}
                                             value=""
+
                                         >
                                             <option value="">Chọn thể loại</option>
                                             {categories?.map((category) => (
@@ -575,6 +579,7 @@ const ManageDetailMovie = () => {
                                                 e.target.value = ''
                                             }}
                                             value=""
+
                                         >
                                             <option value="">Chọn quốc gia</option>
                                             {countries?.map((country) => (
@@ -635,12 +640,14 @@ const ManageDetailMovie = () => {
                         </div>
 
                         <div className="mt-8 flex gap-4 justify-end">
-                            <button
-                                type="button"
-                                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                            >
-                                Hủy
-                            </button>
+                            <Link to="/admin/quan-ly-phim">
+                                <button
+                                    type="button"
+                                    className="px-6 py-3 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                                >
+                                    Hủy
+                                </button>
+                            </Link>
 
                             <button
                                 type="submit"

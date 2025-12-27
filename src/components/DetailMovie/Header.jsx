@@ -7,6 +7,7 @@ import Modal from 'react-modal'
 import { useSaveHistory } from '../../hooks/useHistory'
 import { useFavorite } from '../../hooks/useFavorite'
 import { toast } from 'react-toastify'
+import { increaseViewCount } from '../../hooks/useIncreView'
 
 const Header = ({ detailMovie, episodes, movieId }) => {
     const { user } = useContext(AuthContext)
@@ -78,7 +79,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                         <div className="action-button">
                             <Link
                                 to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}
-                                onClick={() => user && saveHistory(episodes[0]?.id)}
+                                onClick={() => user ? saveHistory(episodes[0]?.id) && increaseViewCount(detailMovie.id) : increaseViewCount(detailMovie.id)}
                             >
                                 <button className="bg-red-700 text-white font-bold disabled:opacity-50" disabled={episodes.length === 0}>
                                     <Play className="w-5 h-5 fill-current" />Xem ngay
@@ -104,7 +105,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                     </button>
                                 </Link>
                             ) : (
-                                <button className="bg-blue-700 text-white disabled:opacity-50" onClick={() => toast.error('Bạn cần đăng nhập để sử dụng tình năng này')}>
+                                <button className="bg-blue-700 text-white disabled:opacity-50" onClick={() => toast.error('Bạn cần đăng nhập để sử dụng tính năng này')}>
                                     <Tv className="w-5 h-5 fill-blue-700" />Xem chung
                                 </button>
                             )}

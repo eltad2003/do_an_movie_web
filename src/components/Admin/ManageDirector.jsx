@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { AuthContext } from '../../context/AuthContext'
 import { generateSlug } from '../../utils/helpers'
 import { useDirectors } from '../../hooks/useManage'
+import Pagination from '../UI/Pagination'
 
 const ManageDirector = () => {
     const { user } = useContext(AuthContext)
@@ -13,6 +14,11 @@ const ManageDirector = () => {
     const [showModal, setShowModal] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
+    const [pageData, setPageData] = useState([])
+
+    const handlePageChange = (data) => {
+        setPageData(data)
+    }
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -145,7 +151,7 @@ const ManageDirector = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-300'>
-                            {filteredDirectors.length > 0 ? filteredDirectors.map((director, index) => (
+                            {filteredDirectors.length > 0 ? pageData.map((director, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{director.id}</td>
                                     <td className='px-6 py-4'>{director.name}</td>
@@ -173,6 +179,9 @@ const ManageDirector = () => {
                         </tbody>
                     </table>
                 </div>
+                {filteredDirectors.length > 10 && (
+                    <Pagination data={filteredDirectors} onPageChange={handlePageChange} />
+                )}
                 {showModal && (
                     <div className="fixed inset-0 bg-dark-100/50 flex items-center justify-center">
 

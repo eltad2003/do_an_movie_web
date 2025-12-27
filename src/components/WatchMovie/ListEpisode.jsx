@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { chunkArray } from '../../utils/helpers'
 import { useSaveHistory } from '../../hooks/useHistory'
 import { AuthContext } from '../../context/AuthContext'
+import { increaseViewCount } from '../../hooks/useIncreView'
 
 const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
     const { user } = useContext(AuthContext)
@@ -57,7 +58,7 @@ const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
                         key={idx}
                         className={`text-sm px-3 py-2 rounded-lg ${ep.slug === epSlug ? 'bg-yellow-700' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'} inline-flex gap-2 items-center justify-center  transition`}
                         disabled={ep.slug === epSlug}
-                        onClick={() => user && saveHistory(ep.id)}
+                        onClick={() => user ? saveHistory(ep.id) : increaseViewCount(ep.movieId)}
                     >
                         <Play className='w-4 h-4' />
                         {ep.name}

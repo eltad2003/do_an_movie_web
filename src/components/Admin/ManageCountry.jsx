@@ -4,6 +4,7 @@ import { generateSlug } from '../../utils/helpers'
 import { toast } from 'react-toastify'
 import { Edit, Search, Trash2 } from 'lucide-react'
 import { useCountries } from '../../hooks/useManage'
+import Pagination from '../UI/Pagination'
 
 const ManageCountry = () => {
     const { user } = useContext(AuthContext)
@@ -13,7 +14,11 @@ const ManageCountry = () => {
     const [showModal, setShowModal] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
+    const [pageData, setPageData] = useState([])
 
+    const handlePageChange = (currentData) => {
+        setPageData(currentData)
+    }
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -147,7 +152,7 @@ const ManageCountry = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-300'>
-                            {filteredCountries.length > 0 ? filteredCountries.map((country, index) => (
+                            {filteredCountries.length > 0 ? pageData.map((country, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{country.id}</td>
                                     <td className='px-6 py-4'>{country.name}</td>
@@ -175,7 +180,9 @@ const ManageCountry = () => {
                         </tbody>
                     </table>
                 </div>
-
+                {filteredCountries.length > 10 && (
+                    <Pagination data={filteredCountries} onPageChange={handlePageChange} />
+                )}
                 {showModal && (
                     <div className="fixed inset-0 bg-dark-100/50 flex items-center justify-center">
                         <div className="bg-white rounded-lg w-96">

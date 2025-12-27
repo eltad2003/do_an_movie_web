@@ -61,8 +61,8 @@ const ManageMovie = () => {
     }
 
     const formatViews = (views) => {
-        if (views >= 1000000) return `${(views / 1000000).toFixed(1)}M`
-        if (views >= 1000) return `${(views / 1000).toFixed(1)}K`
+        if (views >= 1000000) return `${(views / 1000000).toFixed(1)}T`
+        if (views >= 1000) return `${(views / 1000).toFixed(2)}N`
         return views.toString()
     }
 
@@ -232,7 +232,7 @@ const ManageMovie = () => {
                                                 <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">+{movie.categories.length - 2}</span>
                                             )} */}
                                         </td>
-                                        <td className="px-6 py-3 text-gray-900">{formatViews(movie.views || 0)}</td>
+                                        <td className="px-6 py-3 text-gray-900" title={`${movie.views} lượt xem`}>{formatViews(movie.views || 0)}</td>
                                         <td>{getStatusBadge(movie.status)}</td>
                                         <td className="px-6 py-3 text-center">
                                             <div className="flex items-center justify-center gap-2">
@@ -265,7 +265,7 @@ const ManageMovie = () => {
                 )}
 
                 {/* Pagination */}
-                {movies.length > 9 && (
+                {filteredMovies.length > 9 && (
 
                     <Pagination data={filteredMovies} onPageChange={handlePageChange} />
                 )}

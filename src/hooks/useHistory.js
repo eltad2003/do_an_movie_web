@@ -25,8 +25,9 @@ export const useSaveHistory = () => {
             console.error('Error saving history:', error)
         }
     }
-    return { saveHistory }
+    return { saveHistory, user }
 }
+
 
 export const useHistory = () => {
     const [watchHistory, setWatchHistory] = useState([])

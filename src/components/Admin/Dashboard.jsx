@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
     Film, Users, Eye, TrendingUp, MessageSquare, Calendar,
-    Plus, BarChart3, Activity, Star, Clock, Award
+    Plus, BarChart3, Activity, Star, Clock, Award, AlertTriangle,
+    Zap, TrendingDown, Target, CheckCircle, XCircle, AlertCircle,
+    Video, UserPlus, PlayCircle, FileText, Lightbulb, ArrowRight
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
@@ -13,19 +15,34 @@ import Loading from '../UI/Loading'
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext)
+
     const [stats, setStats] = useState({
         totalMovies: 0,
         totalUsers: 0,
         totalViews: 0,
         newMoviesThisMonth: 0,
         totalEpisodes: 0,
-        totalReviews: 0
+        totalReviews: 0,
+        movieChange: 0,
+        userChange: 0,
+        viewChange: 0
     })
     const [topMovies, setTopMovies] = useState([])
     const [recentMovies, setRecentMovies] = useState([])
     const [recentUsers, setRecentUsers] = useState([])
     const [categoryStats, setCategoryStats] = useState([])
     const [viewsData, setViewsData] = useState([])
+    const [alerts, setAlerts] = useState([])
+    const [trendingMovies, setTrendingMovies] = useState([])
+    const [lowPerformingMovies, setLowPerformingMovies] = useState([])
+    const [categoryPerformance, setCategoryPerformance] = useState([])
+    const [roomStats, setRoomStats] = useState({
+        totalRooms: 0,
+        activeRooms: 0,
+        totalParticipants: 0,
+        topRooms: []
+    })
+
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -40,18 +57,23 @@ const Dashboard = () => {
             const [
                 moviesRes,
                 usersRes,
-                categoriesRes
+                categoriesRes,
+                roomsRes
             ] = await Promise.all([
                 fetch(`${import.meta.env.VITE_BE}/movies`),
                 fetch(`${import.meta.env.VITE_BE}/admin/users`, {
                     headers: { 'Authorization': `Bearer ${user.accessToken}` }
                 }),
-                fetch(`${import.meta.env.VITE_BE}/categories`)
+                fetch(`${import.meta.env.VITE_BE}/categories`),
+                fetch(`${import.meta.env.VITE_BE}/api/watch-rooms`, {
+                    headers: { 'Authorization': `Bearer ${user.accessToken}` }
+                })
             ])
 
             const movies = await moviesRes.json()
             const users = await usersRes.json()
             const categories = await categoriesRes.json()
+            const rooms = await roomsRes.json()
 
             // Calculate stats
             const totalViews = movies.reduce((sum, movie) => sum + (movie.views || 0), 0)
@@ -59,15 +81,79 @@ const Dashboard = () => {
                 sum + (movie.episodes?.length || 0), 0
             )
             const totalReviews = movies.reduce((sum, movie) =>
-                sum + (movie.reviews?.length || 0), 0
+                sum + (movie.comments?.length || 0), 0
             )
 
-            // New movies this month
+            // thang nay
             const now = new Date()
             const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+            //thang truoc
+            const firstDayOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+            const lastDayOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0)
+            // phim moi thang nay`
             const newMoviesThisMonth = movies.filter(movie =>
                 new Date(movie.createdAt) >= firstDayOfMonth
             ).length
+
+            //phim thang truoc
+            const moviesLastMonth = movies.filter(movie => {
+                const createdDate = new Date(movie.createdAt)
+                return createdDate >= firstDayOfLastMonth && createdDate <= lastDayOfLastMonth
+            }).length
+
+            const movieChange = moviesLastMonth > 0
+                ? Math.round(((newMoviesThisMonth - moviesLastMonth) / moviesLastMonth) * 100)
+                : 0
+
+            // Users this month
+            const usersThisMonth = users.filter(user =>
+                new Date(user.createdAt) >= firstDayOfMonth
+            ).length
+
+            // Users last month
+            const usersLastMonth = users.filter(user => {
+                const createdDate = new Date(user.createdAt)
+                return createdDate >= firstDayOfLastMonth && createdDate <= lastDayOfLastMonth
+            }).length
+            const userChange = usersLastMonth > 0
+                ? Math.round(((usersThisMonth - usersLastMonth) / usersLastMonth) * 100)
+                : 0
+
+            // Calculate views for last 7 days
+            const last7DaysViews = Array.from({ length: 7 }, (_, i) => {
+                const date = new Date()
+                date.setDate(date.getDate() - (6 - i))
+                date.setHours(0, 0, 0, 0)
+
+                const nextDate = new Date(date)
+                nextDate.setDate(nextDate.getDate() + 1)
+
+                // Count movies created on this day and sum their views
+                const dayViews = movies.filter(movie => {
+                    const movieDate = new Date(movie.updatedAt)
+                    return movieDate >= date && movieDate < nextDate
+                }).reduce((sum, movie) => sum + (movie.views || 0), 0)
+
+                return {
+                    date: date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
+                    views: dayViews
+                }
+            })
+
+            // Calculate total views for this month vs last month
+            const viewsThisMonth = movies.filter(movie =>
+                new Date(movie.createdAt) >= firstDayOfMonth
+            ).reduce((sum, movie) => sum + (movie.views || 0), 0)
+
+            const viewsLastMonth = movies.filter(movie => {
+                const createdDate = new Date(movie.createdAt)
+                return createdDate >= firstDayOfLastMonth && createdDate <= lastDayOfLastMonth
+            }).reduce((sum, movie) => sum + (movie.views || 0), 0)
+
+            // Calculate view change percentage
+            const viewChange = viewsLastMonth > 0
+                ? Math.round(((viewsThisMonth - viewsLastMonth) / viewsLastMonth) * 100)
+                : 0
 
             // Top 5 movies by views
             const top5 = movies
@@ -95,15 +181,112 @@ const Dashboard = () => {
                 }
             }).filter(cat => cat.value > 0)
 
-            // Views data for chart (last 7 days)
-            const last7Days = Array.from({ length: 7 }, (_, i) => {
-                const date = new Date()
-                date.setDate(date.getDate() - (6 - i))
+            // ============ ALERTS & ACTION ITEMS ============
+            const alertsList = []
+            const sevenDaysAgo = new Date()
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+            // 1. Low performing movies (created 7+ days ago with < 100 views)
+            const lowPerformMovies = movies.filter(movie => {
+                const createdDate = new Date(movie.createdAt)
+                const daysSinceCreation = (now - createdDate) / (1000 * 60 * 60 * 24)
+                return daysSinceCreation >= 7 && (movie.views || 0) < 100
+            })
+
+            if (lowPerformMovies.length > 0) {
+                alertsList.push({
+                    type: 'warning',
+                    icon: TrendingDown,
+                    title: `${lowPerformMovies.length} phim có lượt xem thấp`,
+                    description: 'Phim đã phát hành hơn 7 ngày nhưng có ít hơn 100 lượt xem',
+                    action: 'Xem chi tiết',
+                    link: null,
+                    color: 'orange'
+                })
+            }
+
+            // 2. Movies with incomplete info (no poster or description)
+            const incompleteMovies = movies.filter(movie =>
+                !movie.posterUrl || !movie.description || !movie.thumbUrl
+            )
+            if (incompleteMovies.length > 0) {
+                alertsList.push({
+                    type: 'error',
+                    icon: XCircle,
+                    title: `${incompleteMovies.length} phim thiếu thông tin`,
+                    description: 'Phim chưa có poster/thumbnail hoặc mô tả đầy đủ',
+                    action: 'Hoàn thiện ngay',
+                    link: null,
+                    color: 'red'
+                })
+            }
+
+            // 3. Movies without episodes
+            const moviesNoEpisodes = movies.filter(movie => movie.episodes.length === 0)
+
+            if (moviesNoEpisodes.length > 0) {
+                alertsList.push({
+                    type: 'info',
+                    icon: AlertCircle,
+                    title: `${moviesNoEpisodes.length} phim chưa có tập`,
+                    description: 'Phim đã tạo nhưng chưa upload tập nào',
+                    action: 'Upload tập',
+                    link: null,
+                    color: 'blue'
+                })
+            }
+
+
+
+            // ============ TRENDING & PERFORMANCE ============
+            // Trending movies (created in last 7 days with high views)
+            const trendingList = movies
+                .filter(movie => {
+                    const createdDate = new Date(movie.updatedAt)
+                    return createdDate >= sevenDaysAgo && (movie.views || 0) > 50
+                })
+                .sort((a, b) => (b.views || 0) - (a.views || 0))
+                .slice(0, 5)
+
+            // Category performance analysis
+            const categoryPerf = categories.map(cat => {
+                const categoryMovies = movies.filter(movie =>
+                    movie.categories?.some(c => c.id === cat.id)
+                )
+                const totalViews = categoryMovies.reduce((sum, m) => sum + (m.views || 0), 0)
+                const avgViews = categoryMovies.length > 0 ? totalViews / categoryMovies.length : 0
+                const totalReviews = categoryMovies.reduce((sum, m) => sum + (m.comments?.length || 0), 0)
+
                 return {
-                    date: date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
-                    views: Math.floor(Math.random() * 1000) + 500 // Mock data
+                    name: cat.name,
+                    movieCount: categoryMovies.length,
+                    totalViews,
+                    avgViews: Math.round(avgViews),
+                    totalReviews,
+                    engagementRate: totalViews > 0 ? ((totalReviews / totalViews) * 100).toFixed(2) : 0
                 }
             })
+                .filter(cat => cat.movieCount > 0)
+                .sort((a, b) => b.totalViews - a.totalViews)
+
+            // ============ ROOM STATISTICS ============
+            const roomsArray = Array.isArray(rooms) ? rooms : []
+            const activeRooms = roomsArray.filter(room => room.active)
+            const totalParticipants = roomsArray.reduce((sum, room) =>
+                sum + (room.currentViewers || 0), 0
+            )
+
+            // Top 5 rooms by participants
+            const topRoomsList = roomsArray
+                .sort((a, b) => {
+                    const aCount = a.participants?.length || a.memberCount || 0
+                    const bCount = b.participants?.length || b.memberCount || 0
+                    return bCount - aCount
+                })
+                .slice(0, 5)
+                .map(room => ({
+                    ...room,
+                    participantCount: room.participants?.length || room.memberCount || 0
+                }))
 
             setStats({
                 totalMovies: movies.length,
@@ -111,13 +294,28 @@ const Dashboard = () => {
                 totalViews,
                 newMoviesThisMonth,
                 totalEpisodes,
-                totalReviews
+                totalReviews,
+                movieChange,
+                userChange,
+                viewChange
             })
             setTopMovies(top5)
             setRecentMovies(recent)
             setRecentUsers(recentUsersList)
             setCategoryStats(categoryDistribution)
-            setViewsData(last7Days)
+            setViewsData(last7DaysViews)
+            setAlerts(alertsList)
+            setTrendingMovies(trendingList)
+            setLowPerformingMovies(lowPerformMovies.slice(0, 5))
+            setCategoryPerformance(categoryPerf)
+            setRoomStats({
+                totalRooms: roomsArray.length,
+                activeRooms: activeRooms.length,
+                totalParticipants,
+                topRooms: topRoomsList
+            })
+
+            console.log(alerts);
 
         } catch (error) {
             console.error('Error fetching dashboard data:', error)
@@ -161,32 +359,80 @@ const Dashboard = () => {
             </div>
 
             <div className='container mx-auto p-6'>
+                {/* Alerts & Action Items */}
+                {alerts.length > 0 && (
+                    <div className='mb-8'>
+                        <h2 className='text-2xl font-bold text-gray-800  flex items-center gap-2'>
+                            <AlertTriangle className='w-6 h-6 text-orange-600' />
+                            Cảnh báo
+                        </h2>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+                            {alerts.map((alert, index) => (
+                                <div
+                                    key={index}
+                                    className={`bg-white border-l-4 ${alert.color === 'red' ? 'border-red-500' :
+                                        alert.color === 'orange' ? 'border-orange-500' :
+                                            alert.color === 'blue' ? 'border-blue-500' :
+                                                'border-green-500'
+                                        } rounded-lg p-4 shadow`}
+                                >
+                                    <div className='flex items-start gap-3'>
+                                        <div className={`p-2 rounded-lg ${alert.color === 'red' ? 'bg-red-100' :
+                                            alert.color === 'orange' ? 'bg-orange-100' :
+                                                alert.color === 'blue' ? 'bg-blue-100' :
+                                                    'bg-green-100'
+                                            }`}>
+                                            <alert.icon className={`w-8 h-8 ${alert.color === 'red' ? 'text-red-600' :
+                                                alert.color === 'orange' ? 'text-orange-600' :
+                                                    alert.color === 'blue' ? 'text-blue-600' :
+                                                        'text-green-600'
+                                                }`} />
+                                        </div>
+                                        <div className='flex-1'>
+                                            <h3 className='font-bold text-gray-800 text-sm mb-1'>{alert.title}</h3>
+                                            <p className='text-xs text-gray-600 mb-2'>{alert.description}</p>
+                                            <button
+                                                className={`text-xs font-semibold ${alert.color === 'red' ? 'text-red-600' :
+                                                    alert.color === 'orange' ? 'text-orange-600' :
+                                                        alert.color === 'blue' ? 'text-blue-600' :
+                                                            'text-green-600'
+                                                    } hover:underline`}
+                                            >
+                                                {alert.action} →
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Statistics Grid */}
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8'>
+                    {/* rooms  */}
                     <StatCard
-                        icon={Film}
-                        title="Tổng số phim"
-                        value={stats.totalMovies}
-                        change={12}
-                        color="bg-purple-600"
-                        bgColor="bg-purple-50"
+                        icon={Video}
+                        title="Phòng xem chung"
+                        value={roomStats.totalRooms}
+                        color="bg-indigo-600"
+                        bgColor="bg-indigo-50"
                     />
                     <StatCard
-                        icon={Users}
-                        title="Người dùng"
-                        value={stats.totalUsers}
-                        change={8}
-                        color="bg-blue-600"
-                        bgColor="bg-blue-50"
+                        icon={PlayCircle}
+                        title="Phòng đang hoạt động"
+                        value={roomStats.activeRooms}
+                        color="bg-teal-600"
+                        bgColor="bg-teal-50"
                     />
                     <StatCard
-                        icon={Eye}
-                        title="Tổng lượt xem"
-                        value={stats.totalViews}
-                        change={23}
-                        color="bg-pink-600"
-                        bgColor="bg-pink-50"
+                        icon={UserPlus}
+                        title="Người đang xem chung"
+                        value={roomStats.totalParticipants}
+                        color="bg-cyan-600"
+                        bgColor="bg-cyan-50"
                     />
+                    {/* movíes */}
                     <StatCard
                         icon={TrendingUp}
                         title="Phim mới tháng này"
@@ -195,27 +441,30 @@ const Dashboard = () => {
                         bgColor="bg-green-50"
                     />
                     <StatCard
-                        icon={Calendar}
-                        title="Tổng số tập"
-                        value={stats.totalEpisodes}
+                        icon={MessageSquare}
+                        title="Tổng bình luận"
+                        value={stats.totalReviews}
+                        change={stats.reviewChange}
                         color="bg-orange-600"
                         bgColor="bg-orange-50"
                     />
                     <StatCard
-                        icon={MessageSquare}
-                        title="Tổng bình luận"
-                        value={stats.totalReviews}
-                        color="bg-red-600"
-                        bgColor="bg-red-50"
+                        icon={Eye}
+                        title="Tổng lượt xem"
+                        value={stats.totalViews}
+                        change={stats.viewChange}
+                        color="bg-pink-600"
+                        bgColor="bg-pink-50"
                     />
                 </div>
+
 
                 {/* Charts Row */}
                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8'>
                     {/* Views Chart */}
                     <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
-                            <Activity className='w-5 h-5 text-purple-600' />
+                            <Activity className='w-8 h-8 text-purple-600' />
                             Lượt xem 7 ngày qua
                         </h2>
                         <ResponsiveContainer width="100%" height={300}>
@@ -234,15 +483,25 @@ const Dashboard = () => {
                                 />
                             </LineChart>
                         </ResponsiveContainer>
+                        {/* <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={viewsData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="views" fill="#ec4899" name="Lượt xem" />
+                            </BarChart>
+                        </ResponsiveContainer> */}
                     </div>
 
                     {/* Category Distribution */}
                     <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
-                            <Award className='w-5 h-5 text-pink-600' />
+                            <Award className='w-8 h-8 text-pink-600' />
                             Phân bố thể loại
                         </h2>
-                        <ResponsiveContainer width="100%" height={300}>
+                        <ResponsiveContainer width="100%" height={320}>
                             <PieChart>
                                 <Pie
                                     data={categoryStats}
@@ -250,7 +509,7 @@ const Dashboard = () => {
                                     cy="50%"
                                     labelLine={false}
                                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                                    outerRadius={100}
+                                    outerRadius={120}
                                     fill="#8884d8"
                                     dataKey="value"
                                 >
@@ -261,6 +520,7 @@ const Dashboard = () => {
                                 <Tooltip />
                             </PieChart>
                         </ResponsiveContainer>
+
                     </div>
                 </div>
 
@@ -269,9 +529,10 @@ const Dashboard = () => {
                     {/* Top 5 Movies */}
                     <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
-                            <Star className='w-5 h-5 text-yellow-600' />
+                            <Star className='w-8 h-8 text-yellow-600' />
                             Top 5 phim xem nhiều
                         </h2>
+
                         <div className='space-y-3'>
                             {topMovies.map((movie, index) => (
                                 <div key={movie.id} className='flex items-center gap-3 p-3 hover:bg-gray-200 rounded-lg transition-colors'>
@@ -297,11 +558,10 @@ const Dashboard = () => {
                             ))}
                         </div>
                     </div>
-
                     {/* Recent Movies */}
                     <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
                         <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
-                            <Clock className='w-5 h-5 text-blue-600' />
+                            <Clock className='w-8 h-8 text-blue-600' />
                             Phim mới thêm
                         </h2>
                         <div className='space-y-3'>
@@ -328,11 +588,233 @@ const Dashboard = () => {
                             ))}
                         </div>
                     </div>
+
+
+                </div>
+
+                {/* Performance Analysis */}
+                <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8'>
+                    {/* Category Performance */}
+                    <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
+                        <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
+                            <Target className='w-8 h-8 text-purple-600' />
+                            Hiệu suất thể loại
+                        </h2>
+                        <div className='space-y-3 max-h-96 overflow-y-auto'>
+                            {categoryPerformance.map((cat, index) => (
+                                <div key={index} className='p-3  rounded-lg hover:bg-gray-200 transition-colors'>
+                                    <div className='flex justify-between items-start mb-2'>
+                                        <h3 className='font-semibold text-gray-800'>{cat.name}</h3>
+                                        <span className='text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full'>
+                                            {cat.movieCount} phim
+                                        </span>
+                                    </div>
+                                    <div className='grid grid-cols-3 gap-2 text-sm'>
+                                        <div>
+                                            <p className='text-gray-500 text-xs'>Tổng view</p>
+                                            <p className='font-semibold text-gray-700 inline-flex items-center gap-1'>
+                                                {cat.totalViews.toLocaleString()}
+                                                {cat.totalViews > 50000 && <TrendingUp className='w-4 h-4 text-green-500' />}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className='text-gray-500 text-xs'>TB/phim</p>
+                                            <p className='font-semibold text-gray-700'>{cat.avgViews.toLocaleString()}</p>
+                                        </div>
+                                        <div>
+                                            <p className='text-gray-500 text-xs'>Tương tác</p>
+                                            <p className='font-semibold text-gray-700'>{cat.engagementRate}%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Low Performing Movies */}
+                    <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
+                        <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
+                            <TrendingDown className='w-8 h-8 text-red-600' />
+                            Phim có lượt xem thấp
+                        </h2>
+                        {lowPerformingMovies.length > 0 ? (
+                            <div className='space-y-3'>
+                                {lowPerformingMovies.map(movie => (
+                                    <div key={movie.id} className='flex items-center gap-3 p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors'>
+                                        <img
+                                            src={movie.posterUrl}
+                                            alt={movie.name}
+                                            className='w-12 h-16 object-cover rounded'
+                                        />
+                                        <div className='flex-1 min-w-0'>
+                                            <h3 className='font-semibold text-gray-800 truncate'>{movie.name}</h3>
+                                            <div className='flex items-center gap-2 text-xs '>
+                                                <span className='text-gray-500 flex items-center gap-1'>
+                                                    <Eye className='w-4 h-4' />
+                                                    {movie.views || 0}
+                                                </span>
+                                                <span className='text-orange-500'>
+                                                    {Math.floor((new Date() - new Date(movie.createdAt)) / (1000 * 60 * 60 * 24))} ngày trước
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <Link
+                                            to={`/admin/quan-ly-phim/${movie.id}`}
+                                            className='px-2 py-1 bg-orange-500 text-white text-xs rounded hover:bg-orange-600 transition-colors'
+                                        >
+                                            Sửa
+                                        </Link>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className='text-gray-500 text-center py-8'>Tất cả phim đều có hiệu suất tốt!</p>
+                        )}
+                    </div>
+                </div>
+
+                {/* Recent Activities */}
+                <div className='grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8'>
+                    {/* Trending Movies */}
+                    <div className='lg:col-span-2 bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
+                        <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
+                            <Zap className='w-8 h-8 text-yellow-500' />
+                            Phim Trending (7 ngày)
+                        </h2>
+                        {trendingMovies.length > 0 ? (
+                            <div className='space-y-3'>
+                                {trendingMovies.map((movie, index) => (
+                                    <div key={movie.id} className='flex items-center gap-3 p-3 hover:bg-gray-200 rounded-lg transition-colors'>
+                                        <div className='bg-gradient-to-r from-yellow-400 to-orange-500 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white'>
+                                            {index + 1}
+                                        </div>
+                                        <img
+                                            src={movie.posterUrl}
+                                            alt={movie.name}
+                                            className='w-12 h-16 object-cover rounded'
+                                        />
+                                        <div className='flex-1 min-w-0'>
+                                            <h3 className='font-semibold text-gray-800 truncate'>{movie.name}</h3>
+                                            <div className='flex items-center gap-3 text-sm text-gray-500'>
+                                                <span className='flex items-center gap-1 text-black'>
+                                                    <Eye className='w-4 h-4' />
+                                                    {movie.views?.toLocaleString() || 0}
+                                                </span>
+                                                <span className='flex items-center gap-1'>
+                                                    <TrendingUp className='w-4 h-4 text-green-600' />
+                                                    Hot
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className='text-gray-500 text-center py-8'>Chưa có phim trending trong 7 ngày qua</p>
+                        )}
+                    </div>
+                    {/* Top Rooms */}
+                    <div className='lg:col-span-2 bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
+                        <h3 className='text-lg font-bold text-gray-800 mb-4 flex items-center gap-2'>
+                            <Video className='w-8 h-8 text-indigo-600' />
+                            Top 5 Phòng Đông Người
+                        </h3>
+                        {roomStats.topRooms.length > 0 ? (
+                            <div className='space-y-3'>
+                                {roomStats.topRooms.map((room, index) => (
+                                    <div key={room.id || index} className='flex items-center gap-3 p-3  hover:bg-gray-200 transition-colors rounded-lg'>
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white 
+                                        ${index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-blue-500' : index === 2 ? 'bg-red-500' : 'bg-gray-400'}`
+                                        }>
+                                            {index + 1}
+                                        </div>
+                                        <div className='flex-1 min-w-0'>
+                                            <h4 className='font-semibold text-gray-800 truncate' title={room.id}>{room.title}</h4>
+                                            <div className='flex items-center gap-3 text-sm text-gray-500 mt-1'>
+                                                <span className='flex items-center gap-1'>
+                                                    <Users className='w-4 h-4' />
+                                                    {room.currentViewers} người
+                                                </span>
+                                                {room.movie && (
+                                                    <span className='flex items-center gap-1'>
+                                                        <Film className='w-4 h-4' />
+                                                        {room.movie.name || room.movieName}
+                                                    </span>
+                                                )}
+                                                {(room.active) && (
+                                                    <span className='flex items-center gap-1'>
+                                                        <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
+                                                        <span className='text-green-600 font-medium'>Live</span>
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className='text-right'>
+                                            <p className='text-xs text-gray-500'>Chủ phòng</p>
+                                            <p className='text-sm font-medium text-gray-700'>
+                                                {room.hostName || 'Unknown'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className='text-center py-12'>
+                                <Video className='w-16 h-16 text-gray-300 mx-auto mb-3' />
+                                <p className='text-gray-500'>Chưa có phòng xem chung nào</p>
+                                <p className='text-sm text-gray-400 mt-1'>Người dùng có thể tạo phòng để xem cùng bạn bè</p>
+                            </div>
+                        )}
+                    </div>
+
+                </div>
+
+                {/* Watch Party Section */}
+                <div className='mb-8'>
+
+                    <div className='grid grid-cols-1 gap-6'>
+                        {/* Room Overview */}
+                        {/* Quick Stats */}
+                        <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
+                            <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
+                                <BarChart3 className='w-8 h-8 text-indigo-600' />
+                                Thống kê nhanh
+                            </h2>
+                            <div className='space-y-4'>
+                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg'>
+                                    <span className='text-gray-700 font-medium'>Trung bình view/phim</span>
+                                    <span className='text-2xl font-bold text-purple-600'>
+                                        {stats.totalMovies > 0 ? Math.round(stats.totalViews / stats.totalMovies).toLocaleString() : 0}
+                                    </span>
+                                </div>
+                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg'>
+                                    <span className='text-gray-700 font-medium'>Trung bình tập/phim</span>
+                                    <span className='text-2xl font-bold text-blue-600'>
+                                        {stats.totalMovies > 0 ? (stats.totalEpisodes / stats.totalMovies).toFixed(1) : 0}
+                                    </span>
+                                </div>
+                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg'>
+                                    <span className='text-gray-700 font-medium'>Tỷ lệ tương tác</span>
+                                    <span className='text-2xl font-bold text-green-600'>
+                                        {stats.totalViews > 0 ? ((stats.totalReviews / stats.totalViews) * 100).toFixed(2) : 0}%
+                                    </span>
+                                </div>
+                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg'>
+                                    <span className='text-gray-700 font-medium'>User active rate</span>
+                                    <span className='text-2xl font-bold text-orange-600'>
+                                        {stats.totalUsers > 0 ? ((stats.totalReviews / stats.totalUsers) * 100).toFixed(1) : 0}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
 
 
             </div>
-        </div>
+        </div >
     )
 }
 
