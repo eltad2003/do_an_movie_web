@@ -100,7 +100,7 @@ const MovieTrending = () => {
                                     <Link
                                         to={`/xem-phim/${detailMovie.slug}?ep=${detailMovie.episodes[0]?.slug}`}
                                         className='group/btn flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105'
-                                        onClick={() => user ? saveHistory(detailMovie.episodes[0]?.id) : increaseViewCount(detailMovie.id)}
+                                        onClick={() => user ? saveHistory(detailMovie.episodes[0]?.id) && increaseViewCount(detailMovie.id) : increaseViewCount(detailMovie.id)}
                                     >
                                         <Play size={20} className='fill-white ' />
                                         Xem ngay

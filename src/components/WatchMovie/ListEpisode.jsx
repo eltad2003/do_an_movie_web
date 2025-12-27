@@ -58,7 +58,7 @@ const ListEpisode = ({ episodes, detailMovie: { slug }, epSlug }) => {
                         key={idx}
                         className={`text-sm px-3 py-2 rounded-lg ${ep.slug === epSlug ? 'bg-yellow-700' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'} inline-flex gap-2 items-center justify-center  transition`}
                         disabled={ep.slug === epSlug}
-                        onClick={() => user ? saveHistory(ep.id) : increaseViewCount(ep.movieId)}
+                        onClick={() => user ? saveHistory(ep.id) && increaseViewCount(ep.movieId) : increaseViewCount(ep.movieId)}
                     >
                         <Play className='w-4 h-4' />
                         {ep.name}
