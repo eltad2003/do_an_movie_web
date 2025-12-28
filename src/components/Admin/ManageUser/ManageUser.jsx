@@ -15,12 +15,12 @@ import { toast } from 'react-toastify'
 const ManageUser = () => {
     const { user } = useContext(AuthContext)
     const [users, setUsers] = useState([])
+
     const [searchTerm, setSearchTerm] = useState('')
     const [filterRole, setFilterRole] = useState('ALL')
-    const [selectedUsers, setSelectedUsers] = useState([])
     const [pageData, setPageData] = useState([])
 
-    const handlePageChange = (currentData, currentPage) => {
+    const handlePageChange = (currentData) => {
         setPageData(currentData)
     }
 
@@ -61,11 +61,33 @@ const ManageUser = () => {
             }
         }
     }
+    const handleRoleAdmin = async (userData) => {
+        if (window.confirm('Bạn có chắc chắn muốn cập nhật vai trò người dùng này không?')) {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_BE}/admin/users/${userData.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.accessToken}`
+                    },
+                    body: JSON.stringify({ ...userData, roleName: 'ROLE_ADMIN' })
+                })
+                if (res.ok) {
+                    fetchAllUser()
+                    toast.success('Cập nhật vai trò thành công')
+                } else {
+                    console.error('Error updating user role:', await res.text())
+                }
+            } catch (error) {
+                console.error('Error updating user role:', error)
+            }
+        }
+    }
 
     // Filter 
     const filteredUsers = users.filter(user => {
         //search by username, email, name
-        const matchSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        const matchSearch = user.username?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase()))
         //filter by role
@@ -74,17 +96,6 @@ const ManageUser = () => {
         return matchSearch && matchRole
     })
 
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            setSelectedUsers(filteredUsers.map(user => user.id))
-        } else {
-            setSelectedUsers([])
-        }
-    }
-
-    const handleSelectUser = (userId) => {
-        setSelectedUsers(prev => prev.includes(userId) ? prev.filter(id => id !== userId) : [...prev, userId])
-    }
 
     const getRoleBadge = (roleName) => {
         if (roleName === 'ROLE_ADMIN') {
@@ -160,25 +171,6 @@ const ManageUser = () => {
 
                         </div>
                     </div>
-
-                    {/* Bulk Actions */}
-                    {selectedUsers.length > 0 && (
-                        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-blue-800">
-                                    Đã chọn {selectedUsers.length} người dùng
-                                </span>
-                                <div className="flex gap-2">
-                                    <button className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors">
-                                        Xóa
-                                    </button>
-                                    <button className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors">
-                                        Khóa tài khoản
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* Users Table */}
@@ -188,14 +180,7 @@ const ManageUser = () => {
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b border-gray-400">
                                 <tr>
-                                    <th className="px-4 py-3 text-left">
-                                        <input
-                                            type="checkbox"
-                                            onChange={handleSelectAll}
-                                            checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
-                                            className="border-gray-300 text-blue-600 focus:ring-blue-500"
-                                        />
-                                    </th>
+
                                     <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
                                         Người dùng
                                     </th>
@@ -215,16 +200,9 @@ const ManageUser = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-300">
-                                {filteredUsers.length > 0 && filteredUsers.map(user => (
+                                {filteredUsers.length > 0 && (filteredUsers.length <= 10 ? filteredUsers : pageData).map(user => (
                                     <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-4 py-4">
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedUsers.includes(user.id)}
-                                                onChange={() => handleSelectUser(user.id)}
-                                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                            />
-                                        </td>
+
                                         {/* avatar: "https://i.pravatar.cc/150?img={id}" */}
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
@@ -256,10 +234,14 @@ const ManageUser = () => {
 
                                         <td className="px-6 py-4 text-center">
                                             <div className="py-1">
-                                                <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 hover:rounded-lg">
-                                                    <Eye size={16} className="mr-2" />
-                                                    Xem chi tiết
-                                                </button>
+                                                {user.roleName !== 'ROLE_ADMIN' && (
+                                                    <button
+                                                        onClick={() => handleRoleAdmin(user)}
+                                                        className="flex items-center font-bold w-full px-4 py-2 text-sm text-indigo-700 cursor-pointer">
+                                                        <Shield size={16} className="mr-2 \" />
+                                                        Cấp quyền Admin
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => handleDeleteUser(user.id)}
                                                     className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-300 hover:rounded-lg">

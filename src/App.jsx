@@ -33,6 +33,7 @@ import { ROUTES } from './utils/constants'
 import ManageRooms from './components/Admin/ManageRooms'
 import ProtectedRouteAdmin from './components/ProtectedRouteAdmin'
 import ForgotPassword from './components/Auth/ForgotPassword'
+import LoginGGSuccess from './components/Pages/LoginGGSuccess'
 
 const App = () => {
   return (
@@ -60,6 +61,7 @@ const App = () => {
         </Route>
 
         <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route path='/login/oauth2/success' element={<LoginGGSuccess />} />
         <Route path={ROUTES.REGISTER} element={<Register />} />
         <Route path={ROUTES.ROOM} element={<WatchParty />} />
         <Route path={ROUTES.RESET_PASSWORD} element={<ForgotPassword />} />

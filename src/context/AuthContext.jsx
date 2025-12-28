@@ -207,7 +207,7 @@ const AuthProvider = ({ children }) => {
 
                         clearInterval(interval)
                         popup.close()
-
+                        // /login/oauth2/success
                         resolve({ success: true, message: 'Đăng nhập bằng Google thành công!' })
                     }
                 } catch (error) {
