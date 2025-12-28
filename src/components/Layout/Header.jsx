@@ -24,7 +24,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         setIsOpenProfile(false)
         await logout()
-       
+
         // window.location.replace('/')
     }
 

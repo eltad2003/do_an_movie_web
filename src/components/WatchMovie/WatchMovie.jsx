@@ -9,6 +9,7 @@ import VideoPlayer from './VideoPlayer'
 import Episodes from '../DetailMovie/Episodes'
 import ListEpisode from './ListEpisode'
 import VideoPlayer2 from './VideoPlayer2'
+import RecommendMovies from '../DetailMovie/RecommendMovies'
 
 
 const WatchMovie = () => {
@@ -45,6 +46,7 @@ const WatchMovie = () => {
             <Comment movieId={detailMovie.id} />
           </div>
 
+          <RecommendMovies movieId={detailMovie.id} />
         </div>
       )}
     </main>

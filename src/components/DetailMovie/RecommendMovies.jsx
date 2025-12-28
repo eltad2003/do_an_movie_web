@@ -15,7 +15,7 @@ const RecommendMovies = ({ movieId }) => {
                 <div className='mb-20'>
                     <h2 className='p-4 md:p-6'>Phim đề xuất</h2>
                     <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={3000} transitionDuration={500} removeArrowOnDeviceType={["tablet", "mobile"]} >
-                        {recommends.slice(0, 6).map(movie => (
+                        {recommends.map(movie => (
                             <MovieCard key={movie.id} movie={movie} />
                         ))}
                     </Carousel>

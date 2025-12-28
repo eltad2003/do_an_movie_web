@@ -24,8 +24,8 @@ const DetailMovie = () => {
                         <InfoMovie detailMovie={detailMovie} />
                         <Episodes episodes={episodes.sort((a, b) => a.name.localeCompare(b.name, "vi", { numeric: true }))} detailMovie={detailMovie} />
                         <Comment movieId={detailMovie.id} />
+                        <RecommendMovies movieId={detailMovie.id} />
                     </div>
-                    <RecommendMovies movieId={detailMovie.id} />
                 </div>
             )}
 
