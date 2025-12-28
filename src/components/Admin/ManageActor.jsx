@@ -152,7 +152,7 @@ const ManageActor = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-300'>
-                            {filterActors.length > 0 ? pageData.map((actor, index) => (
+                            {filterActors.length > 0 ? (filterActors.length <= 10 ? filterActors : pageData).map((actor, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{actor.id}</td>
                                     <td className='px-6 py-4'>{actor.name}</td>

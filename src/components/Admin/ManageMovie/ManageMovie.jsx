@@ -41,7 +41,7 @@ const ManageMovie = () => {
         return matchSearch && matchStatus && matchYear
     })
 
-    const handlePageChange = (currentData, currentPage) => {
+    const handlePageChange = (currentData) => {
         setPageData(currentData)
     }
 
@@ -193,7 +193,7 @@ const ManageMovie = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-300">
-                                {pageData.map((movie) => (
+                                {(filteredMovies.length <= 10 ? filteredMovies : pageData).map((movie) => (
                                     <tr key={movie.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-3">
                                             <div className="flex items-center gap-4">

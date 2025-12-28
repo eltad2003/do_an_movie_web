@@ -117,7 +117,7 @@ const ManageRooms = () => {
                                 </tr>
                             </thead>
                             <tbody className='divide-y divide-gray-200'>
-                                {filteredRooms.length > 0 ? pageData.map((room) => (
+                                {filteredRooms.length > 0 ? (filteredRooms.length <= 10 ? filteredRooms : pageData).map((room) => (
                                     <tr key={room.id} className='hover:bg-gray-50s'>
                                         {/* Room Info */}
                                         <td className='p-3'>

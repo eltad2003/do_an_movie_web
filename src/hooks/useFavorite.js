@@ -12,7 +12,7 @@ export const useFavorite = (movieId) => {
             const res = await fetch(`${import.meta.env.VITE_BE}/api/favorites/${movieId}`, {
                 method: 'POST',
                 headers: {
-                    'authorization': `Bearer ${user.accessToken}`
+                    'authorization': `Bearer ${user?.accessToken}`
                 }
             })
             if (res.ok) {
@@ -58,7 +58,7 @@ export const useFavorite = (movieId) => {
             const res = await fetch(`${import.meta.env.VITE_BE}/api/favorites/check/${movieId}`, {
                 method: 'GET',
                 headers: {
-                    'authorization': `Bearer ${user.accessToken}`
+                    'authorization': `Bearer ${user?.accessToken}`
                 }
             })
             if (res.ok) {
@@ -73,10 +73,8 @@ export const useFavorite = (movieId) => {
         }
     }
 
-
-
     useEffect(() => {
-        checkFavorite()
+        user && checkFavorite()
     }, [movieId, user])
 
     return { isFavorite, addFavorite, deleteFavorite }

@@ -22,7 +22,7 @@ const DropDown = ({ text, data, isDropdownOpen, onToggle, slug }) => {
                     {data && data.length > 0 ? (
                         data.map((item) => (
                             <Link
-                                key={item.slug}
+                                key={item.id}
                                 to={`/${slug}/${item.slug}`}
                                 className=' p-2 text-white/80 hover:text-light-100 hover:bg-gray-700/50 transition-colors rounded-lg'
                                 onClick={closeDropdown}

@@ -151,7 +151,7 @@ const ManageDirector = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-300'>
-                            {filteredDirectors.length > 0 ? pageData.map((director, index) => (
+                            {filteredDirectors.length > 0 ? (filteredDirectors.length <= 10 ? filteredDirectors : pageData).map((director, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{director.id}</td>
                                     <td className='px-6 py-4'>{director.name}</td>

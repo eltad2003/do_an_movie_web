@@ -152,7 +152,7 @@ const ManageCountry = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-300'>
-                            {filteredCountries.length > 0 ? pageData.map((country, index) => (
+                            {filteredCountries.length > 0 ? (filteredCountries.length <= 10 ? filteredCountries : pageData).map((country, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4'>{country.id}</td>
                                     <td className='px-6 py-4'>{country.name}</td>

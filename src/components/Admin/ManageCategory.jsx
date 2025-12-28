@@ -108,7 +108,6 @@ const ManageCategory = () => {
 
   const filterCategories = categories.filter(category => {
     const matchesSearch = category.name.toLowerCase().includes(searchQuery.toLowerCase())
-
     return matchesSearch
   })
 
@@ -154,7 +153,7 @@ const ManageCategory = () => {
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-300'>
-              {filterCategories.length > 0 ? pageData.map((category, index) => (
+              {filterCategories.length > 0 ? (filterCategories.length <= 10 ? filterCategories : pageData).map((category, index) => (
                 <tr key={index}>
                   <td className='px-6 py-4'>{category.id}</td>
                   <td className='px-6 py-4'>{category.name}</td>
