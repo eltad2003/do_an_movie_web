@@ -380,7 +380,6 @@ const AddMovie = ({ onBack }) => {
                                             min="1900"
                                             max="2030"
                                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                                            required
                                         />
                                     </div>
 
@@ -412,7 +411,8 @@ const AddMovie = ({ onBack }) => {
                                         >
                                             <option value="single">Phim lẻ</option>
                                             <option value="series">Phim bộ</option>
-                                            <option value="hoathinh">Hoạt hình</option>                                        </select>
+                                            <option value="hoathinh">Hoạt hình</option>
+                                        </select>
                                     </div>
 
                                     <div>

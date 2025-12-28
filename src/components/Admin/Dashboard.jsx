@@ -29,12 +29,13 @@ const Dashboard = () => {
     })
     const [topMovies, setTopMovies] = useState([])
     const [recentMovies, setRecentMovies] = useState([])
-    const [recentUsers, setRecentUsers] = useState([])
     const [categoryStats, setCategoryStats] = useState([])
     const [viewsData, setViewsData] = useState([])
     const [alerts, setAlerts] = useState([])
     const [trendingMovies, setTrendingMovies] = useState([])
     const [lowPerformingMovies, setLowPerformingMovies] = useState([])
+    const [incompleteMovies, setIncompleteMovies] = useState([])
+    const [moviesNoEpisodes, setMoviesNoEpisodes] = useState([])
     const [categoryPerformance, setCategoryPerformance] = useState([])
     const [roomStats, setRoomStats] = useState({
         totalRooms: 0,
@@ -44,6 +45,8 @@ const Dashboard = () => {
     })
 
     const [loading, setLoading] = useState(true)
+    const [showAlertModal, setShowAlertModal] = useState(false)
+    const [selectedAlert, setSelectedAlert] = useState(null)
 
     useEffect(() => {
         fetchDashboardData()
@@ -165,10 +168,7 @@ const Dashboard = () => {
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .slice(0, 5)
 
-            // Recent users (last 5)
-            const recentUsersList = users
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .slice(0, 5)
+
 
             // Category distribution
             const categoryDistribution = categories.map(cat => {
@@ -189,7 +189,7 @@ const Dashboard = () => {
             const lowPerformMovies = movies.filter(movie => {
                 const createdDate = new Date(movie.createdAt)
                 const daysSinceCreation = (now - createdDate) / (1000 * 60 * 60 * 24)
-                return daysSinceCreation >= 7 && (movie.views || 0) < 100
+                return daysSinceCreation >= 7 && (movie.views || 0) < 2000
             })
 
             if (lowPerformMovies.length > 0) {
@@ -197,41 +197,45 @@ const Dashboard = () => {
                     type: 'warning',
                     icon: TrendingDown,
                     title: `${lowPerformMovies.length} phim có lượt xem thấp`,
-                    description: 'Phim đã phát hành hơn 7 ngày nhưng có ít hơn 100 lượt xem',
+                    description: 'Phim đã phát hành hơn 7 ngày nhưng có ít hơn 2000 lượt xem',
                     action: 'Xem chi tiết',
                     link: null,
-                    color: 'orange'
+                    color: 'orange',
+                    alertType: 'lowPerforming'
                 })
             }
 
             // 2. Movies with incomplete info (no poster or description)
-            const incompleteMovies = movies.filter(movie =>
-                !movie.posterUrl || !movie.description || !movie.thumbUrl
+            const incompleteMoviesList = movies.filter(movie =>
+                !movie.posterUrl || !movie.description || !movie.thumbUrl || !movie.duration || !movie.year || !movie.name ||
+                !movie.trailerUrl
             )
-            if (incompleteMovies.length > 0) {
+            if (incompleteMoviesList.length > 0) {
                 alertsList.push({
                     type: 'error',
                     icon: XCircle,
-                    title: `${incompleteMovies.length} phim thiếu thông tin`,
-                    description: 'Phim chưa có poster/thumbnail hoặc mô tả đầy đủ',
+                    title: `${incompleteMoviesList.length} phim thiếu thông tin`,
+                    description: 'Phim chưa đầy đủ thông tin',
                     action: 'Hoàn thiện ngay',
                     link: null,
-                    color: 'red'
+                    color: 'red',
+                    alertType: 'incomplete'
                 })
             }
 
             // 3. Movies without episodes
-            const moviesNoEpisodes = movies.filter(movie => movie.episodes.length === 0)
+            const moviesNoEpisodesList = movies.filter(movie => movie.episodes.length === 0)
 
-            if (moviesNoEpisodes.length > 0) {
+            if (moviesNoEpisodesList.length > 0) {
                 alertsList.push({
                     type: 'info',
                     icon: AlertCircle,
-                    title: `${moviesNoEpisodes.length} phim chưa có tập`,
+                    title: `${moviesNoEpisodesList.length} phim chưa có tập`,
                     description: 'Phim đã tạo nhưng chưa upload tập nào',
                     action: 'Upload tập',
                     link: null,
-                    color: 'blue'
+                    color: 'blue',
+                    alertType: 'noEpisodes'
                 })
             }
 
@@ -301,12 +305,13 @@ const Dashboard = () => {
             })
             setTopMovies(top5)
             setRecentMovies(recent)
-            setRecentUsers(recentUsersList)
             setCategoryStats(categoryDistribution)
             setViewsData(last7DaysViews)
             setAlerts(alertsList)
             setTrendingMovies(trendingList)
-            setLowPerformingMovies(lowPerformMovies.slice(0, 5))
+            setLowPerformingMovies(lowPerformMovies)
+            setIncompleteMovies(incompleteMoviesList)
+            setMoviesNoEpisodes(moviesNoEpisodesList)
             setCategoryPerformance(categoryPerf)
             setRoomStats({
                 totalRooms: roomsArray.length,
@@ -325,6 +330,25 @@ const Dashboard = () => {
     }
 
     const COLORS = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#ef4444']
+
+    const handleAlertClick = (alert) => {
+        setSelectedAlert(alert)
+        setShowAlertModal(true)
+    }
+
+    const getAlertMovies = () => {
+        if (!selectedAlert) return []
+        switch (selectedAlert.alertType) {
+            case 'lowPerforming':
+                return lowPerformingMovies
+            case 'incomplete':
+                return incompleteMovies
+            case 'noEpisodes':
+                return moviesNoEpisodes
+            default:
+                return []
+        }
+    }
 
     const StatCard = ({ icon: Icon, title, value, change, color, bgColor }) => (
         <div className={`${bgColor} rounded-xl p-3 border border-gray-300 shadow-lg`}>
@@ -392,11 +416,12 @@ const Dashboard = () => {
                                             <h3 className='font-bold text-gray-800 text-sm mb-1'>{alert.title}</h3>
                                             <p className='text-xs text-gray-600 mb-2'>{alert.description}</p>
                                             <button
+                                                onClick={() => handleAlertClick(alert)}
                                                 className={`text-xs font-semibold ${alert.color === 'red' ? 'text-red-600' :
                                                     alert.color === 'orange' ? 'text-orange-600' :
                                                         alert.color === 'blue' ? 'text-blue-600' :
                                                             'text-green-600'
-                                                    } hover:underline`}
+                                                    } hover:underline cursor-pointer`}
                                             >
                                                 {alert.action} →
                                             </button>
@@ -600,9 +625,9 @@ const Dashboard = () => {
                             <Target className='w-8 h-8 text-purple-600' />
                             Hiệu suất thể loại
                         </h2>
-                        <div className='space-y-3 max-h-96 overflow-y-auto'>
+                        <div className='space-y-3 max-h-120 overflow-y-auto'>
                             {categoryPerformance.map((cat, index) => (
-                                <div key={index} className='p-3  rounded-lg hover:bg-gray-200 transition-colors'>
+                                <div key={index} className='p-3 rounded-lg hover:bg-gray-200 transition-colors'>
                                     <div className='flex justify-between items-start mb-2'>
                                         <h3 className='font-semibold text-gray-800'>{cat.name}</h3>
                                         <span className='text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full'>
@@ -639,7 +664,7 @@ const Dashboard = () => {
                         </h2>
                         {lowPerformingMovies.length > 0 ? (
                             <div className='space-y-3'>
-                                {lowPerformingMovies.map(movie => (
+                                {lowPerformingMovies.sort((a, b) => a.views - b.views).slice(0, 5).map(movie => (
                                     <div key={movie.id} className='flex items-center gap-3 p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors'>
                                         <img
                                             src={movie.posterUrl}
@@ -769,49 +794,104 @@ const Dashboard = () => {
 
                 </div>
 
-                {/* Watch Party Section */}
-                <div className='mb-8'>
+                {/* Alert Modal */}
+                {showAlertModal && selectedAlert && (
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+                            <div className={`p-2 border-l-4 rounded-t-xl ${selectedAlert.color === 'red' ? 'border-red-500 bg-red-50' :
+                                selectedAlert.color === 'orange' ? 'border-orange-500 bg-orange-50' :
+                                    selectedAlert.color === 'blue' ? 'border-blue-500 bg-blue-50' :
+                                        'border-green-500 bg-green-50'
+                                }`}>
 
-                    <div className='grid grid-cols-1 gap-6'>
-                        {/* Room Overview */}
-                        {/* Quick Stats */}
-                        <div className='bg-white border border-gray-300 rounded-xl shadow-lg p-6'>
-                            <h2 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
-                                <BarChart3 className='w-8 h-8 text-indigo-600' />
-                                Thống kê nhanh
-                            </h2>
-                            <div className='space-y-4'>
-                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg'>
-                                    <span className='text-gray-700 font-medium'>Trung bình view/phim</span>
-                                    <span className='text-2xl font-bold text-purple-600'>
-                                        {stats.totalMovies > 0 ? Math.round(stats.totalViews / stats.totalMovies).toLocaleString() : 0}
-                                    </span>
+                                <div className='flex items-start gap-3'>
+                                    <div className={`rounded-lg ${selectedAlert.color === 'red' ? 'bg-red-100' :
+                                        selectedAlert.color === 'orange' ? 'bg-orange-100' :
+                                            selectedAlert.color === 'blue' ? 'bg-blue-100' :
+                                                'bg-green-100'
+                                        }`}>
+                                        <selectedAlert.icon className={`w-8 h-8 ${selectedAlert.color === 'red' ? 'text-red-600' :
+                                            selectedAlert.color === 'orange' ? 'text-orange-600' :
+                                                selectedAlert.color === 'blue' ? 'text-blue-600' :
+                                                    'text-green-600'
+                                            }`} />
+                                    </div>
+                                    <div>
+                                        <h2 className='text-2xl font-bold text-gray-800'>{selectedAlert.title}</h2>
+                                        <p className='text-gray-600 text-sm'>{selectedAlert.description}</p>
+                                    </div>
                                 </div>
-                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg'>
-                                    <span className='text-gray-700 font-medium'>Trung bình tập/phim</span>
-                                    <span className='text-2xl font-bold text-blue-600'>
-                                        {stats.totalMovies > 0 ? (stats.totalEpisodes / stats.totalMovies).toFixed(1) : 0}
-                                    </span>
-                                </div>
-                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg'>
-                                    <span className='text-gray-700 font-medium'>Tỷ lệ tương tác</span>
-                                    <span className='text-2xl font-bold text-green-600'>
-                                        {stats.totalViews > 0 ? ((stats.totalReviews / stats.totalViews) * 100).toFixed(2) : 0}%
-                                    </span>
-                                </div>
-                                <div className='flex justify-between items-center p-3 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg'>
-                                    <span className='text-gray-700 font-medium'>User active rate</span>
-                                    <span className='text-2xl font-bold text-orange-600'>
-                                        {stats.totalUsers > 0 ? ((stats.totalReviews / stats.totalUsers) * 100).toFixed(1) : 0}%
-                                    </span>
+
+
+                            </div>
+
+                            <div className='flex-1 overflow-y-auto p-6'>
+                                <div className='space-y-3'>
+                                    {getAlertMovies().map((movie, index) => (
+                                        <div key={movie.id} className='flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-200 transition-colors'>
+                                            <div className='text-gray-400 font-semibold min-w-[30px]'>#{index + 1}</div>
+                                            <img
+                                                src={movie.posterUrl || '/placeholder.jpg'}
+                                                alt={movie.name}
+                                                className='w-16 h-20 object-cover rounded'
+                                                onError={(e) => e.target.src = '/placeholder.jpg'}
+                                            />
+                                            <div className='flex-1 min-w-0'>
+                                                <h3 className='font-semibold text-gray-800 truncate mb-1'>{movie.name}</h3>
+                                                <div className='flex flex-wrap items-center gap-3 text-sm text-gray-600'>
+                                                    <span className='flex items-center gap-1'>
+                                                        <Eye className='w-4 h-4' />
+                                                        {movie.views?.toLocaleString() || 0} lượt xem
+                                                    </span>
+                                                    <span className='flex items-center gap-1'>
+                                                        <Calendar className='w-4 h-4' />
+                                                        {new Date(movie.createdAt).toLocaleDateString('vi-VN')}
+                                                    </span>
+                                                    {selectedAlert.alertType === 'noEpisodes' && (
+                                                        <span className='text-blue-600 font-medium'>Chưa có tập</span>
+                                                    )}
+                                                    {selectedAlert.alertType === 'incomplete' && (
+                                                        <span className='text-red-600 font-medium'>
+                                                            Thiếu: {!movie.posterUrl && 'Poster '}
+                                                            {!movie.thumbUrl && 'Thumbnail '}
+                                                            {!movie.description && 'Mô tả'}
+                                                            {!movie.duration && 'Thời lượng '}
+                                                            {!movie.trailerUrl && 'Trailer '}
+                                                        </span>
+                                                    )}
+                                                    {selectedAlert.alertType === 'lowPerforming' && (
+                                                        <span className='text-orange-600 font-medium'>
+                                                            {Math.floor((new Date() - new Date(movie.createdAt)) / (1000 * 60 * 60 * 24))} ngày trước
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <Link
+                                                to={`/admin/quan-ly-phim/${movie.id}`}
+                                                className={`px-4 py-2 text-white text-sm rounded-lg transition-colors ${selectedAlert.color === 'red' ? 'bg-red-500 hover:bg-red-600' :
+                                                    selectedAlert.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' :
+                                                        selectedAlert.color === 'blue' ? 'bg-blue-500 hover:bg-blue-600' :
+                                                            'bg-green-500 hover:bg-green-600'
+                                                    }`}
+                                            >
+                                                Sửa ngay
+                                            </Link>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
+
+                            <div className='p-4 border-t flex justify-end'>
+                                <button
+                                    onClick={() => setShowAlertModal(false)}
+                                    className='px-6 py-2 bg-gray-200 rounded-lg font-semibold'
+                                >
+                                    Đóng
+                                </button>
+                            </div>
                         </div>
-
-
                     </div>
-                </div>
-
+                )}
 
             </div>
         </div >
