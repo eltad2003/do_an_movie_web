@@ -58,10 +58,10 @@ const MovieTrending = () => {
                     <div className='absolute bottom-2 xl:bottom-15 left-0 flex items-center '>
                         <div className='container mx-auto px-5'>
                             <div className='max-w-2xl space-y-2 md:space-y-6'>
-                                <h1 className='text-start md:text-3xl lg:text-4xl'>
+                                <h1 className='text-start md:text-3xl lg:text-4xl text-shadow-lg/70'>
                                     {detailMovie.name}
                                 </h1>
-                                <p className='text-sm md:text-xl text-yellow-400'>
+                                <p className='text-sm md:text-xl text-yellow-400 text-shadow-lg/50'>
                                     {detailMovie.originName}
                                 </p>
                                 <div className='flex flex-wrap items-center gap-4 text-gray-300'>

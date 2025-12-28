@@ -213,7 +213,7 @@ const ManageMovie = () => {
                                         <td className="px-6 py-3">
                                             <div className="flex items-center">
                                                 <Star size={16} className="text-yellow-400 fill-current mr-1" />
-                                                {movie.rating.toFixed(1) || 'N/A'}
+                                                {movie.rating?.toFixed(1) || 'N/A'}
                                             </div>
                                         </td>
                                         <td className="px-6 py-3">
@@ -232,7 +232,7 @@ const ManageMovie = () => {
                                                 <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">+{movie.categories.length - 2}</span>
                                             )} */}
                                         </td>
-                                        <td className="px-6 py-3 text-gray-900" title={`${movie.views} lượt xem`}>{formatViews(movie.views || 0)}</td>
+                                        <td className="px-6 py-3 text-gray-900" title={`${movie.views} lượt xem`}>{formatViews(movie?.views || 0)}</td>
                                         <td>{getStatusBadge(movie.status)}</td>
                                         <td className="px-6 py-3 text-center">
                                             <div className="flex items-center justify-center gap-2">

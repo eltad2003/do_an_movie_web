@@ -412,7 +412,7 @@ const AddMovie = ({ onBack }) => {
                                         >
                                             <option value="single">Phim lẻ</option>
                                             <option value="series">Phim bộ</option>
-                                        </select>
+                                            <option value="hoathinh">Hoạt hình</option>                                        </select>
                                     </div>
 
                                     <div>

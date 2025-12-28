@@ -21,7 +21,7 @@ const Episodes = ({ episodes, detailMovie: { slug } }) => {
         return (
             <div className='mb-20 bg-dark-100 text-white p-5 rounded-lg'>
                 <h3 className='text-xl font-bold mb-3'>Danh sách tập</h3>
-                <p className='text-gray-400'>Không có tập phim nào</p>
+                <p className='text-gray-400 italic'>Không có tập phim nào</p>
             </div>
         )
     }

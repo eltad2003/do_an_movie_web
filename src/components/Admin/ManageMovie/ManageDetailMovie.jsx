@@ -393,6 +393,7 @@ const ManageDetailMovie = () => {
                                             >
                                                 <option value="single">Phim lẻ</option>
                                                 <option value="series">Phim bộ</option>
+                                                <option value="hoathinh">Hoạt hình</option>
                                             </select>
                                         </div>
 

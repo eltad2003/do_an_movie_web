@@ -14,7 +14,20 @@ const Header = ({ detailMovie, episodes, movieId }) => {
     const [modalIsOpen, setIsOpen] = useState(false);
     const { saveHistory } = useSaveHistory()
     const { isFavorite, addFavorite, deleteFavorite } = useFavorite(movieId)
+    const getStatusBadge = (status) => {
+        const statusConfig = {
+            'RELEASED': { bg: 'bg-green-900', text: 'text-green-100', label: 'Đã phát hành' },
+            'COMING_SOON': { bg: 'bg-red-900', text: 'text-red-100', label: 'Sắp chiếu' },
+            'UPDATING': { bg: 'bg-yellow-900', text: 'text-yellow-100', label: 'Đang cập nhật' }
+        }
 
+        const config = statusConfig[status] || statusConfig['UPDATING']
+        return (
+            <span className={`inline-block  px-3 py-1 rounded-lg text-sm font-semibold ${config.bg} ${config.text} `}>
+                {config.label}
+            </span>
+        )
+    }
 
     return (
         <div
@@ -45,8 +58,8 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                     {/* movie info */}
                     <div className="space-y-5 mb-0 md:mb-8">
                         <div className=''>
-                            <h1 className='md:text-start'>{detailMovie.name}</h1>
-                            <h2 className='font-semibold text-yellow-400 text-center md:text-start line-clamp-1'>{detailMovie.originName}</h2>
+                            <h1 className='md:text-start text-shadow-lg/70'>{detailMovie.name}</h1>
+                            <h2 className='text-yellow-400 text-center md:text-start line-clamp-1 text-shadow-lg/50'>{detailMovie.originName}</h2>
                         </div>
 
                         {/* Rating & Info badges */}
@@ -55,7 +68,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 <Star className="w-4 h-4 fill-current" />
                                 {detailMovie.rating ? (
                                     <>
-                                        <b>{detailMovie.rating.toFixed(1)}/10</b>
+                                        <b>{detailMovie.rating?.toFixed(1)}/10</b>
                                     </>
                                 ) : 'N/A'}
                             </span>
@@ -64,15 +77,18 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 {detailMovie.year}
                             </span>
 
-                            <span className="px-3 py-1 rounded-lg bg-green-900/80 text-green-100 text-sm font-semibold">
+                            <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-green-100 text-sm font-semibold">
                                 {detailMovie.type === 'single' ? 'Phim lẻ' : 'Phim bộ'}
                             </span>
 
                             {detailMovie.episodes.length > 0 && (
-                                <span className="px-3 py-1 rounded-lg bg-purple-900/80 text-purple-100 text-sm font-semibold">
+                                <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-purple-100 text-sm font-semibold">
                                     {detailMovie.episodes.length} tập
                                 </span>
                             )}
+
+                            {getStatusBadge(detailMovie.status)}
+
                         </div>
 
                         {/* Action buttons */}
