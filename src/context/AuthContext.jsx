@@ -25,9 +25,9 @@ const AuthProvider = ({ children }) => {
         }
     }, [])
 
-    // Refresh access token - Dùng useCallback để stabilize function
+    //Dùng useCallback để stabilize function
     const refreshAccessToken = useCallback(async () => {
-        // ✅ Kiểm tra nếu đang refresh thì không gọi lại
+        //nếu đang refresh thì không gọi lại
         if (isRefreshingRef.current) {
             console.log('⏳ Đang refresh token, bỏ qua request...')
             return null
@@ -91,9 +91,8 @@ const AuthProvider = ({ children }) => {
         } finally {
             isRefreshingRef.current = false // ✅ Clear flag
         }
-    }, []) // ✅ Empty deps - function chỉ tạo 1 lần
+    }, []) 
 
-    // Schedule refresh token - Dùng useCallback
     const scheduleTokenRefresh = useCallback((token) => {
         // ✅ Clear timeout cũ trước khi schedule mới
         if (refreshTokenTimeoutRef.current) {
@@ -121,7 +120,7 @@ const AuthProvider = ({ children }) => {
         }
     }, [getTokenExpirationTime, refreshAccessToken])
 
-    // ✅ Effect riêng để schedule - CHỈ chạy 1 lần khi mount hoặc token thay đổi
+    //chạy 1 lần khi mount hoặc token thay đổi
     useEffect(() => {
         if (user?.accessToken) {
             scheduleTokenRefresh(user.accessToken)
@@ -213,7 +212,7 @@ const AuthProvider = ({ children }) => {
                 } catch (error) {
                     console.log(error)
                 }
-            }, 1000)
+            }, 2000)
         })
     }
 
@@ -234,6 +233,7 @@ const AuthProvider = ({ children }) => {
             }
             setUser(null)
             localStorage.removeItem('user')
+            window.location.href = '/'
             toast.info('Đã đăng xuất')
 
         } catch (error) {
