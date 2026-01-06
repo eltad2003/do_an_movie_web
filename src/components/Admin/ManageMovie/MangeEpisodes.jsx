@@ -3,14 +3,21 @@ import React, { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../../context/AuthContext'
 import { generateSlug } from '../../../utils/helpers'
+import Pagination from '../../UI/Pagination'
 
 const MangeEpisodes = ({ episodes, movieId }) => {
+    episodes.sort((a, b) => a.slug.localeCompare(b.slug, 'vi', { numeric: true }))
     const { user } = useContext(AuthContext)
     const [showModal, setShowModal] = useState(false)
     const [editingEpisode, setEditingEpisode] = useState(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
     const [uploadProgress, setUploadProgress] = useState(0)
+    const [pageData, setPageData] = useState([])
+
+    const handlePageChange = (data) => {
+        setPageData(data)
+    }
 
     // State mới: chọn kiểu nhập video
     const [videoInputType, setVideoInputType] = useState('upload') // 'upload' hoặc 'url'
@@ -285,7 +292,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-300">
-                        {episodes && episodes.length > 0 ? episodes.sort((a, b) => a.name.localeCompare(b.name)).map((episode) => (
+                        {episodes.length > 0 ? (episodes.length <= 10 ? episodes : pageData).map((episode) => (
                             <tr key={episode.id} className='hover:bg-gray-50'>
                                 <td className="px-6 py-4 text-sm">{episode.id}</td>
                                 <td className="px-6 py-4 font-medium">{episode.name}</td>
@@ -340,7 +347,9 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                     </tbody>
                 </table>
             </div>
-
+            {episodes.length > 10 && (
+                <Pagination data={episodes} onPageChange={handlePageChange} />
+            )}
             {/* Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -523,7 +532,7 @@ const MangeEpisodes = ({ episodes, movieId }) => {
                                         value={episodeData.videoUrl}
                                         onChange={handleInputChange}
                                         className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        placeholder="https://example.com/video.m3u8 hoặc https://example.com/video.mp4"
+                                        placeholder="https://example.com/video.m3u8..."
                                         required={!editingEpisode}
                                     />
                                     <div className="mt-2 text-xs text-gray-500 space-y-1">

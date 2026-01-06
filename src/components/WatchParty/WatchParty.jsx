@@ -19,7 +19,7 @@ const WatchParty = () => {
         isHost,
         messages,
         newMessage,
-        views,
+        viewers,
         handleUserAction,
         sendRequestSync,
         setNewMessage,
@@ -100,7 +100,7 @@ const WatchParty = () => {
                             isHost={isHost}
                             sendRequestSync={sendRequestSync}
                             videoRef={videoRef}
-                            views={views}
+                            viewers={viewers}
                         />
                     </div>
 

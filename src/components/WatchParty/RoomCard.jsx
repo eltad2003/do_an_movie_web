@@ -1,16 +1,15 @@
 import { Clock, Crown, Globe, Lock, LockIcon, Play, Users, X } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { formatDate } from '../../utils/helpers'
-import ReactModal from 'react-modal'
 import { toast } from 'react-toastify'
-import { useSocket } from '../../hooks/useSocket'
+
 
 const RoomCard = ({ room }) => {
+
     const [password, setPassword] = useState('')
     const [typePassword, setTypePassword] = useState(false);
     const navigate = useNavigate()
-    const {views} = useSocket(room, {}); // Dummy user object to get views
 
     const getStatusColor = (active) => {
         switch (active) {
@@ -37,9 +36,8 @@ const RoomCard = ({ room }) => {
             setPassword('')
             setTypePassword(false)
         }
-
-
     }
+
 
     return (
         <div className={`bg-dark-200 ${!room.active && 'opacity-50'} rounded-lg mb-10`}>
@@ -145,17 +143,17 @@ const RoomCard = ({ room }) => {
                     ) : (
                         <>
                             {/* Show participants when NOT typing password */}
-                            {room.active && views > 0 ? (
+                            {/* {room.active && viewers > 0 ? (
                                 <div className="flex items-center gap-2 flex-1">
                                     <Users className="w-4 h-4 text-gray-400" />
                                     <span className="text-gray-400 text-sm">
-                                        {views} đang xem
+                                        {viewers} đang xem
                                     </span>
                                 </div>
                             ) : (
                                 <div></div>
-                            )}
-
+                            )} */}
+                            <div></div>
                             {/* Join button */}
                             {room.hasPassword ? (
                                 <button

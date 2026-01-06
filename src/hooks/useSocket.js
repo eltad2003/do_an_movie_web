@@ -9,7 +9,7 @@ export const useSocket = (room, user) => {
     const [isConnected, setIsConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState();
-    const [views, setViews] = useState(0);
+    const [viewers, setViewers] = useState(0);
     //  {id: '',
     //     senderName: '',
     //     message: '',
@@ -62,7 +62,6 @@ export const useSocket = (room, user) => {
                     roomId: room.id,
                     senderId: String(user.id),
                     senderName: user.name,
-                    currentViewers: views
                 })
             });
         }
@@ -76,7 +75,6 @@ export const useSocket = (room, user) => {
                     roomId: room.id,
                     senderId: String(user.id),
                     senderName: user.name,
-                    currentViewers: views
                 })
             });
         }
@@ -104,7 +102,7 @@ export const useSocket = (room, user) => {
             stompClientRef.current.publish({
                 destination: `/app/room/${room.id}/action`,
                 body: JSON.stringify({
-                    type: 'REQUEST_SYNC', // Gửi tín hiệu "Cho tôi xin thời gian chuẩn"
+                    type: 'REQUEST_SYNC',
                     roomId: room.id,
                     senderId: String(user.id),
                     senderName: user.name
@@ -118,6 +116,9 @@ export const useSocket = (room, user) => {
         const video = videoRef.current;
 
         switch (action.type) {
+            case 'UPDATE_COUNT':
+                setViewers(action.currentViewers);
+                break;
             case 'JOIN':
                 setMessages(prev => [...prev, {
                     id: String(action.senderId),
@@ -125,14 +126,13 @@ export const useSocket = (room, user) => {
                     message: 'đã tham gia phòng',
                     time: new Date().toLocaleTimeString('vi-VN')
                 }])
-                setViews(prev => prev + 1);
-                console.log(views);
 
                 if (isHost) {
                     console.log("Host đang gửi dữ liệu đồng bộ...");
                     sendSyncSignal();
                 }
                 break;
+
             case 'LEAVE':
                 setMessages(prev => [...prev, {
                     id: String(action.senderId),
@@ -140,8 +140,6 @@ export const useSocket = (room, user) => {
                     message: 'đã rời phòng',
                     time: new Date().toLocaleTimeString('vi-VN')
                 }])
-                setViews(prev => Math.max(0, prev - 1));
-                console.log(views);
 
                 break;
             case 'REQUEST_SYNC':
@@ -253,7 +251,7 @@ export const useSocket = (room, user) => {
         isHost,
         messages,
         newMessage,
-        views,
+        viewers,
         handleUserAction,
         sendRequestSync,
         setNewMessage,

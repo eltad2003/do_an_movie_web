@@ -30,7 +30,7 @@ const Navbar = () => {
 
     const Type = ({ to, label }) => {
         return (
-            <Link to={to} className='text-white hover:text-light-200 transition-colors'>
+            <Link to={to} className={`${label.toLowerCase() === 'xem chung' ? 'text-gradient text-lg' : 'text-white'}  hover:text-light-200 transition-colors `}>
                 {label}
             </Link>
         )

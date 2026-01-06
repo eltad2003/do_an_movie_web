@@ -64,7 +64,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
 
                         {/* Rating & Info badges */}
                         <div className="hidden md:flex flex-wrap items-center gap-3">
-                            <span className="px-3 py-1 rounded-lg bg-yellow-900/80 text-yellow-100 inline-flex items-center gap-1 text-sm font-semibold">
+                            <span className="px-3 py-1 rounded-lg bg-yellow-900/80 text-yellow-400 inline-flex items-center gap-1 text-sm font-semibold">
                                 <Star className="w-4 h-4 fill-current" />
                                 {detailMovie.rating ? (
                                     <>
@@ -73,16 +73,16 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 ) : 'N/A'}
                             </span>
 
-                            <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-blue-100 text-sm font-semibold">
+                            <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-white text-sm font-semibold">
                                 {detailMovie.year}
                             </span>
 
-                            <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-green-100 text-sm font-semibold">
-                                {detailMovie.type === 'single' ? 'Phim lẻ' : 'Phim bộ'}
+                            <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-white text-sm font-semibold">
+                                {detailMovie.type === 'single' ? 'Phim lẻ' : detailMovie.type === 'series' ? 'Phim bộ' : 'Hoạt hình'}
                             </span>
 
                             {detailMovie.episodes.length > 0 && (
-                                <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-purple-100 text-sm font-semibold">
+                                <span className="px-3 py-1 rounded-lg bg-blue-900/80 text-white text-sm font-semibold">
                                     {detailMovie.episodes.length} tập
                                 </span>
                             )}
@@ -102,9 +102,11 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                 </button>
                             </Link>
 
-                            <button onClick={() => setIsOpen(true)} className='bg-yellow-700 text-white'>
-                                <Play className="w-5 h-5" /> Xem Trailer
-                            </button>
+                            {detailMovie.trailerUrl && (
+                                <button onClick={() => setIsOpen(true)} className='bg-yellow-700 text-white'>
+                                    <Play className="w-5 h-5" /> Xem Trailer
+                                </button>
+                            )}
 
                             <button
                                 onClick={() => {
