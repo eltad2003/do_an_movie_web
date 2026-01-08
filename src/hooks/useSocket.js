@@ -37,7 +37,6 @@ export const useSocket = (room, user) => {
                 console.log('Disconnected');
                 setIsConnected(false);
             },
-            // Tự động kết nối lại nếu rớt mạng
             reconnectDelay: 5000,
         });
 
@@ -52,7 +51,7 @@ export const useSocket = (room, user) => {
         };
     }, [room?.id, user?.id]);
 
-    // Hàm gửi tín hiệu JOIN
+  
     const sendJoinSignal = (client) => {
         if (client && client.connected) {
             client.publish({

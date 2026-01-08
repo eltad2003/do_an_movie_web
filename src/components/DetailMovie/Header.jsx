@@ -93,6 +93,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
 
                         {/* Action buttons */}
                         <div className="action-button">
+
                             <Link
                                 to={`/xem-phim/${detailMovie.slug}?ep=${episodes[0]?.slug}`}
                                 onClick={() => user ? saveHistory(episodes[0]?.id) && increaseViewCount(detailMovie.id) : increaseViewCount(detailMovie.id)}
@@ -101,6 +102,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                                     <Play className="w-5 h-5 fill-current" />Xem ngay
                                 </button>
                             </Link>
+
 
                             {detailMovie.trailerUrl && (
                                 <button onClick={() => setIsOpen(true)} className='bg-yellow-700 text-white'>
@@ -117,7 +119,7 @@ const Header = ({ detailMovie, episodes, movieId }) => {
                             </button>
 
                             {user ? (
-                                <Link to={`/xem-chung/tao-phong/${episodes[0].id}`}>
+                                <Link to={`/xem-chung/tao-phong/${episodes[0]?.id}`}>
                                     <button className="bg-blue-700 text-white disabled:opacity-50">
                                         <Tv className="w-5 h-5 fill-blue-700" />Xem chung
                                     </button>

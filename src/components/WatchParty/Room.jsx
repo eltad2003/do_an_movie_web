@@ -84,7 +84,7 @@ const Room = () => {
                 <section >
                     {filteredRooms.length > 0 ? (
                         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                            {filteredRooms.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((room) => (
+                            {filteredRooms.slice(0, roomPerPage).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((room) => (
                                 <RoomCard key={room.id} room={room} />
                             ))}
                         </ul>
